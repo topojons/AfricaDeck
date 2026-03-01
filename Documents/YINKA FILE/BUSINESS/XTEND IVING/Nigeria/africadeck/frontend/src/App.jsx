@@ -219,11 +219,11 @@ const Widget = ({ title, icon: Icon, children, className = "", span = 1, color =
         </div>
         <div className="flex items-center gap-1">
           {onRefresh && (
-            <button onClick={onRefresh} className="p-1 hover:bg-gray-800 rounded text-gray-500 hover:text-gray-300 transition-colors">
+            <button onClick={onRefresh} className="p-1 hover:bg-gray-800 rounded text-gray-500 hover:text-gray-300 transition-colors cursor-pointer" style={{ position: "relative", zIndex: 10 }}>
               <RefreshCw size={12} />
             </button>
           )}
-          <button onClick={() => setCollapsed(!collapsed)} className="p-1 hover:bg-gray-800 rounded text-gray-500 hover:text-gray-300 transition-colors">
+          <button onClick={() => setCollapsed(!collapsed)} className="p-1 hover:bg-gray-800 rounded text-gray-500 hover:text-gray-300 transition-colors cursor-pointer" style={{ position: "relative", zIndex: 10 }}>
             {collapsed ? <ChevronDown size={12} /> : <ChevronUp size={12} />}
           </button>
         </div>
@@ -322,6 +322,8 @@ export default function AfricaDeck() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [expandedNews, setExpandedNews] = useState(null);
 
   // Data states
   const [conflicts, setConflicts] = useState(generateConflictEvents());
@@ -455,7 +457,7 @@ export default function AfricaDeck() {
                 <Clock size={10} />
                 <span>{lastUpdate.toLocaleTimeString()}</span>
               </div>
-              <button onClick={refreshAll} className="p-1.5 hover:bg-gray-800 rounded-lg text-gray-400 hover:text-white transition-colors" title="Refresh all data">
+              <button onClick={refreshAll} className="p-1.5 hover:bg-gray-800 rounded-lg text-gray-400 hover:text-white transition-colors cursor-pointer" style={{ position: "relative", zIndex: 10 }} title="Refresh all data">
                 <RefreshCw size={14} />
               </button>
               <button onClick={() => setShowMobileMenu(!showMobileMenu)} className="md:hidden p-1.5 hover:bg-gray-800 rounded-lg text-gray-400">
@@ -470,11 +472,12 @@ export default function AfricaDeck() {
               <button
                 key={cat.id}
                 onClick={() => setActiveFilter(cat.id)}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium whitespace-nowrap transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium whitespace-nowrap transition-all cursor-pointer ${
                   activeFilter === cat.id
                     ? "bg-blue-500/20 text-blue-400 border border-blue-500/30"
                     : "text-gray-500 hover:text-gray-300 hover:bg-gray-800/50 border border-transparent"
                 }`}
+                style={{ position: "relative", zIndex: 10 }}
               >
                 <cat.icon size={11} />
                 {cat.label}
@@ -486,7 +489,7 @@ export default function AfricaDeck() {
 
       {/* ─── ALERT BANNER ────────────────────────────── */}
       {criticalEvents > 0 && (
-        <div className="bg-red-500/10 border-b border-red-500/20 px-4 py-1.5">
+        <div className="bg-red-500/10 border-b border-red-500/20 px-4 py-1.5 pointer-events-none" style={{ position: "relative", zIndex: 1 }}>
           <div className="max-w-[1920px] mx-auto flex items-center gap-2 text-[11px]">
             <AlertTriangle size={12} className="text-red-400 flex-shrink-0" />
             <div className="overflow-hidden">
@@ -533,7 +536,7 @@ export default function AfricaDeck() {
             <Widget title="Conflict & Security Feed" icon={Shield} color="#ef4444" badge={`${totalConflicts} EVENTS`} onRefresh={() => setConflicts(generateConflictEvents())}>
               <div className="space-y-2 max-h-80 overflow-y-auto pr-1 scrollbar-thin">
                 {conflicts.sort((a, b) => a.time - b.time).map(event => (
-                  <div key={event.id} className="bg-gray-800/40 rounded-lg p-2.5 border border-gray-700/30 hover:border-gray-600/50 transition-colors">
+                  <div key={event.id} onClick={() => setSelectedEvent(selectedEvent?.id === event.id ? null : event)} className="bg-gray-800/40 rounded-lg p-2.5 border border-gray-700/30 hover:border-gray-600/50 transition-colors cursor-pointer">
                     <div className="flex items-start justify-between gap-2 mb-1">
                       <div className="flex items-center gap-1.5">
                         <SeverityBadge severity={event.severity} />
@@ -552,6 +555,13 @@ export default function AfricaDeck() {
                         <span className="text-[9px] text-gray-600">{event.source}</span>
                       </div>
                     </div>
+                    {selectedEvent?.id === event.id && (
+                      <div className="mt-2 pt-2 border-t border-gray-700/50 text-[10px] text-gray-400 space-y-1">
+                        <div className="flex gap-4"><span>Lat: {event.lat.toFixed(2)}</span><span>Lng: {event.lng.toFixed(2)}</span></div>
+                        <div>Source: <span className="text-blue-400">{event.source}</span></div>
+                        <div>Status: {event.verified ? <span className="text-green-400">Verified by multiple sources</span> : <span className="text-yellow-400">Awaiting verification</span>}</div>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -957,6 +967,10 @@ export default function AfricaDeck() {
           100% { transform: translateX(-50%); }
         }
         .animate-marquee { animation: marquee 30s linear infinite; }
+        button { cursor: pointer; position: relative; z-index: 2; }
+        input { position: relative; z-index: 2; }
+        .pointer-events-none { pointer-events: none; }
+        [class*="hover:"] { cursor: pointer; }
       `}</style>
     </div>
   );
