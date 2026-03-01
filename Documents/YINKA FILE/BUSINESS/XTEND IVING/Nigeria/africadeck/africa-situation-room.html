@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AFRICA SITUATION ROOM — Middle East Conflict Impact</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg-primary: #0a0e17;
+    --bg-secondary: #111827;
+    --bg-card: #1a2235;
+    --bg-card-hover: #1f2a40;
+    --accent-red: #ef4444;
+    --accent-orange: #f97316;
+    --accent-amber: #f59e0b;
+    --accent-green: #22c55e;
+    --accent-cyan: #06b6d4;
+    --accent-blue: #3b82f6;
+    --accent-purple: #a855f7;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --border: #1e293b;
+    --glow-red: rgba(239, 68, 68, 0.3);
+    --glow-cyan: rgba(6, 182, 212, 0.2);
+    --glow-amber: rgba(245, 158, 11, 0.2);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* Scanline overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.03) 2px,
+      rgba(0, 0, 0, 0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0.98) 0%, rgba(10, 14, 23, 0.95) 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(20px);
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .status-beacon {
+    width: 10px; height: 10px;
+    background: var(--accent-red);
+    border-radius: 50%;
+    animation: pulse-beacon 2s ease-in-out infinite;
+    box-shadow: 0 0 10px var(--accent-red), 0 0 20px rgba(239,68,68,0.3);
+  }
+
+  @keyframes pulse-beacon {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .header-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .header-subtitle {
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .live-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--accent-red);
+    letter-spacing: 2px;
+  }
+
+  .live-dot {
+    width: 6px; height: 6px;
+    background: var(--accent-red);
+    border-radius: 50%;
+    animation: pulse-beacon 1.5s ease-in-out infinite;
+  }
+
+  .clock {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--accent-cyan);
+    letter-spacing: 1px;
+  }
+
+  /* THREAT LEVEL BAR */
+  .threat-bar {
+    background: linear-gradient(90deg, rgba(239,68,68,0.1), rgba(245,158,11,0.1));
+    border-bottom: 1px solid var(--border);
+    padding: 8px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+  }
+
+  .threat-level {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 600;
+    letter-spacing: 2px;
+    font-size: 10px;
+  }
+
+  .threat-indicator {
+    display: flex; gap: 3px;
+  }
+
+  .threat-segment {
+    width: 20px; height: 8px;
+    border-radius: 2px;
+    background: var(--border);
+    transition: background 0.3s;
+  }
+
+  .threat-segment.active-red { background: var(--accent-red); box-shadow: 0 0 6px var(--glow-red); }
+  .threat-segment.active-orange { background: var(--accent-orange); }
+  .threat-segment.active-amber { background: var(--accent-amber); }
+
+  .ticker {
+    flex: 1;
+    margin: 0 24px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .ticker-content {
+    display: inline-block;
+    animation: ticker-scroll 60s linear infinite;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-secondary);
+  }
+
+  .ticker-content .highlight { color: var(--accent-amber); font-weight: 600; }
+  .ticker-content .sep { color: var(--text-muted); margin: 0 16px; }
+
+  @keyframes ticker-scroll {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+  }
+
+  /* NAV TABS */
+  .nav-tabs {
+    display: flex;
+    gap: 0;
+    padding: 0 24px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-tab {
+    padding: 12px 24px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s;
+    background: none;
+    border-top: none; border-left: none; border-right: none;
+  }
+
+  .nav-tab:hover { color: var(--text-secondary); background: rgba(255,255,255,0.02); }
+  .nav-tab.active {
+    color: var(--accent-cyan);
+    border-bottom-color: var(--accent-cyan);
+    background: rgba(6, 182, 212, 0.05);
+  }
+
+  /* MAIN LAYOUT */
+  .main-layout {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 0;
+    min-height: calc(100vh - 140px);
+  }
+
+  /* MAP SECTION */
+  .map-section {
+    padding: 20px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .map-container {
+    flex: 1;
+    position: relative;
+    background: radial-gradient(ellipse at center, rgba(6,182,212,0.03) 0%, transparent 70%);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    min-height: 500px;
+  }
+
+  .map-container svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .map-grid {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+      linear-gradient(rgba(6,182,212,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(6,182,212,0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  /* Country paths */
+  .country {
+    fill: #1a2744;
+    stroke: #2a3a5c;
+    stroke-width: 0.5;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .country:hover {
+    fill: #253557;
+    stroke: var(--accent-cyan);
+    stroke-width: 1;
+  }
+
+  .country.impact-critical {
+    fill: rgba(239, 68, 68, 0.25);
+    stroke: var(--accent-red);
+  }
+  .country.impact-high {
+    fill: rgba(245, 158, 11, 0.2);
+    stroke: var(--accent-amber);
+  }
+  .country.impact-moderate {
+    fill: rgba(249, 115, 22, 0.15);
+    stroke: var(--accent-orange);
+  }
+  .country.impact-low {
+    fill: rgba(34, 197, 94, 0.1);
+    stroke: var(--accent-green);
+  }
+
+  /* Hotspot markers */
+  .hotspot {
+    cursor: pointer;
+  }
+
+  .hotspot-ring {
+    fill: none;
+    stroke: var(--accent-red);
+    stroke-width: 1.5;
+    animation: ring-pulse 2s ease-out infinite;
+  }
+
+  @keyframes ring-pulse {
+    0% { r: 6; opacity: 1; }
+    100% { r: 18; opacity: 0; }
+  }
+
+  .hotspot-core {
+    fill: var(--accent-red);
+    filter: drop-shadow(0 0 4px var(--accent-red));
+  }
+
+  /* Shipping route */
+  .shipping-route {
+    fill: none;
+    stroke: var(--accent-amber);
+    stroke-width: 1.5;
+    stroke-dasharray: 6 4;
+    animation: dash-flow 1.5s linear infinite;
+    opacity: 0.6;
+  }
+
+  @keyframes dash-flow {
+    to { stroke-dashoffset: -10; }
+  }
+
+  /* Map legend */
+  .map-legend {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    background: rgba(10, 14, 23, 0.9);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 16px;
+    backdrop-filter: blur(10px);
+  }
+
+  .legend-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .legend-items { display: flex; flex-direction: column; gap: 5px; }
+
+  .legend-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 10px; color: var(--text-secondary);
+  }
+
+  .legend-color {
+    width: 12px; height: 12px; border-radius: 2px;
+  }
+
+  /* Map info tooltip */
+  .map-tooltip {
+    display: none;
+    position: absolute;
+    background: rgba(10, 14, 23, 0.95);
+    border: 1px solid var(--accent-cyan);
+    border-radius: 6px;
+    padding: 12px 16px;
+    max-width: 280px;
+    z-index: 50;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.1);
+  }
+
+  .map-tooltip.visible { display: block; }
+
+  .tooltip-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent-cyan);
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+  }
+
+  .tooltip-text {
+    font-size: 11px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .tooltip-stat {
+    display: flex; justify-content: space-between;
+    padding: 3px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 11px;
+  }
+
+  .tooltip-stat-label { color: var(--text-muted); }
+  .tooltip-stat-value { color: var(--text-primary); font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+  .tooltip-stat-value.critical { color: var(--accent-red); }
+  .tooltip-stat-value.warning { color: var(--accent-amber); }
+
+  /* SIDEBAR */
+  .sidebar {
+    border-left: 1px solid var(--border);
+    background: var(--bg-secondary);
+    overflow-y: auto;
+    max-height: calc(100vh - 140px);
+  }
+
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-track { background: var(--bg-secondary); }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  /* Data panels */
+  .panel {
+    border-bottom: 1px solid var(--border);
+    padding: 16px 20px;
+  }
+
+  .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .panel-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .panel-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    letter-spacing: 1px;
+  }
+
+  .badge-critical { background: rgba(239,68,68,0.15); color: var(--accent-red); border: 1px solid rgba(239,68,68,0.3); }
+  .badge-warning { background: rgba(245,158,11,0.15); color: var(--accent-amber); border: 1px solid rgba(245,158,11,0.3); }
+  .badge-info { background: rgba(6,182,212,0.15); color: var(--accent-cyan); border: 1px solid rgba(6,182,212,0.3); }
+
+  /* Stat cards */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+    transition: all 0.3s;
+  }
+
+  .stat-card:hover {
+    border-color: rgba(6, 182, 212, 0.3);
+    background: var(--bg-card-hover);
+  }
+
+  .stat-label {
+    font-size: 9px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .stat-value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .stat-value.red { color: var(--accent-red); }
+  .stat-value.amber { color: var(--accent-amber); }
+  .stat-value.cyan { color: var(--accent-cyan); }
+  .stat-value.green { color: var(--accent-green); }
+
+  .stat-change {
+    font-size: 10px;
+    margin-top: 2px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .stat-change.up { color: var(--accent-red); }
+  .stat-change.down { color: var(--accent-green); }
+
+  /* Event feed */
+  .event-feed { display: flex; flex-direction: column; gap: 8px; }
+
+  .event-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+    border-left: 3px solid;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+
+  .event-item:hover { background: var(--bg-card-hover); }
+
+  .event-item.critical { border-left-color: var(--accent-red); }
+  .event-item.warning { border-left-color: var(--accent-amber); }
+  .event-item.info { border-left-color: var(--accent-cyan); }
+
+  .event-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+
+  .event-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 1px 6px;
+    border-radius: 2px;
+  }
+
+  .event-tag.econ { background: rgba(245,158,11,0.15); color: var(--accent-amber); }
+  .event-tag.security { background: rgba(239,68,68,0.15); color: var(--accent-red); }
+  .event-tag.humanitarian { background: rgba(168,85,247,0.15); color: var(--accent-purple); }
+  .event-tag.diplomatic { background: rgba(6,182,212,0.15); color: var(--accent-cyan); }
+
+  .event-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--text-muted);
+  }
+
+  .event-title {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-primary);
+    line-height: 1.4;
+  }
+
+  .event-region {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 3px;
+  }
+
+  /* Bar chart */
+  .bar-chart { display: flex; flex-direction: column; gap: 8px; }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .bar-label {
+    width: 80px;
+    font-size: 10px;
+    color: var(--text-secondary);
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 8px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1s ease;
+  }
+
+  .bar-fill.red { background: linear-gradient(90deg, var(--accent-red), #f87171); }
+  .bar-fill.amber { background: linear-gradient(90deg, var(--accent-amber), #fbbf24); }
+  .bar-fill.orange { background: linear-gradient(90deg, var(--accent-orange), #fb923c); }
+  .bar-fill.cyan { background: linear-gradient(90deg, var(--accent-cyan), #22d3ee); }
+
+  .bar-value {
+    width: 40px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+
+  /* CONTENT SECTIONS (tabbed) */
+  .tab-content {
+    display: none;
+  }
+  .tab-content.active {
+    display: block;
+  }
+
+  /* DETAIL PANELS (below map) */
+  .detail-section {
+    padding: 20px;
+  }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .detail-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    transition: all 0.3s;
+  }
+
+  .detail-card:hover {
+    border-color: rgba(6,182,212,0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+
+  .detail-card-icon {
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+
+  .detail-card-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--accent-cyan);
+    margin-bottom: 8px;
+  }
+
+  .detail-card-text {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .detail-card-stat {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin: 6px 0;
+  }
+
+  /* Key figures ribbon */
+  .key-figures {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    padding: 16px 24px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .key-figure {
+    text-align: center;
+    padding: 8px;
+  }
+
+  .key-figure-value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .key-figure-label {
+    font-size: 9px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* Sources footer */
+  .sources-footer {
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border);
+    padding: 16px 24px;
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+
+  .sources-footer a {
+    color: var(--accent-cyan);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .sources-footer a:hover { color: var(--accent-blue); text-decoration: underline; }
+
+  .sources-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 9px;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    color: var(--text-muted);
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .main-layout { grid-template-columns: 1fr; }
+    .sidebar { max-height: none; border-left: none; border-top: 1px solid var(--border); }
+    .detail-grid { grid-template-columns: 1fr; }
+    .key-figures { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  @media (max-width: 640px) {
+    .header { padding: 8px 12px; }
+    .header-title { font-size: 11px; letter-spacing: 1px; }
+    .key-figures { grid-template-columns: repeat(2, 1fr); }
+    .nav-tab { padding: 10px 12px; font-size: 8px; }
+  }
+
+  /* Animations */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-in {
+    animation: fadeInUp 0.5s ease forwards;
+  }
+
+  .delay-1 { animation-delay: 0.1s; opacity: 0; }
+  .delay-2 { animation-delay: 0.2s; opacity: 0; }
+  .delay-3 { animation-delay: 0.3s; opacity: 0; }
+  .delay-4 { animation-delay: 0.4s; opacity: 0; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-left">
+    <div class="status-beacon"></div>
+    <div>
+      <div class="header-title">Africa Situation Room</div>
+      <div class="header-subtitle">Middle East Conflict Impact Monitor</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+    <div class="clock" id="clock">--:--:-- UTC</div>
+  </div>
+</header>
+
+<!-- THREAT LEVEL BAR -->
+<div class="threat-bar">
+  <div class="threat-level">
+    <span style="color: var(--accent-red);">THREAT LEVEL: ELEVATED</span>
+    <div class="threat-indicator">
+      <div class="threat-segment active-red"></div>
+      <div class="threat-segment active-red"></div>
+      <div class="threat-segment active-red"></div>
+      <div class="threat-segment active-orange"></div>
+      <div class="threat-segment"></div>
+    </div>
+  </div>
+  <div class="ticker">
+    <div class="ticker-content">
+      <span class="highlight">BREAKING:</span> Houthi attacks surpass 190+ incidents in Red Sea &mdash; shipping down 65%
+      <span class="sep">|</span>
+      <span class="highlight">ECONOMIC:</span> Brent crude +$7.5 geopolitical risk premium &mdash; $100+ if Strait of Hormuz blockaded
+      <span class="sep">|</span>
+      <span class="highlight">HUMANITARIAN:</span> 307 million Africans face hunger in 2024/2025
+      <span class="sep">|</span>
+      <span class="highlight">SECURITY:</span> Arms smuggling intercepted at East African ports &mdash; drone components seized
+      <span class="sep">|</span>
+      <span class="highlight">DIPLOMATIC:</span> Israel recognizes Somaliland (Dec 2025) &mdash; regional tensions escalate
+      <span class="sep">|</span>
+      <span class="highlight">TRADE:</span> Shipping rerouted via Cape of Good Hope &mdash; voyage times +10-14 days, costs +30%
+    </div>
+  </div>
+</div>
+
+<!-- KEY FIGURES -->
+<div class="key-figures">
+  <div class="key-figure animate-in delay-1">
+    <div class="key-figure-value" style="color: var(--accent-red);">307M</div>
+    <div class="key-figure-label">Africans facing hunger</div>
+  </div>
+  <div class="key-figure animate-in delay-2">
+    <div class="key-figure-value" style="color: var(--accent-amber);">-65%</div>
+    <div class="key-figure-label">Red Sea shipping decline</div>
+  </div>
+  <div class="key-figure animate-in delay-3">
+    <div class="key-figure-value" style="color: var(--accent-orange);">+30%</div>
+    <div class="key-figure-label">Shipping cost increase</div>
+  </div>
+  <div class="key-figure animate-in delay-4">
+    <div class="key-figure-value" style="color: var(--accent-cyan);">190+</div>
+    <div class="key-figure-label">Houthi attacks (2023-25)</div>
+  </div>
+  <div class="key-figure animate-in delay-4">
+    <div class="key-figure-value" style="color: var(--accent-purple);">80%</div>
+    <div class="key-figure-label">Sub-Saharan food imported</div>
+  </div>
+</div>
+
+<!-- NAV TABS -->
+<div class="nav-tabs">
+  <button class="nav-tab active" data-tab="overview" onclick="switchTab('overview')">Overview</button>
+  <button class="nav-tab" data-tab="economic" onclick="switchTab('economic')">Economic</button>
+  <button class="nav-tab" data-tab="humanitarian" onclick="switchTab('humanitarian')">Humanitarian</button>
+  <button class="nav-tab" data-tab="security" onclick="switchTab('security')">Security &amp; Geopolitics</button>
+</div>
+
+<!-- ===== OVERVIEW TAB ===== -->
+<div class="tab-content active" id="tab-overview">
+  <div class="main-layout">
+    <!-- MAP -->
+    <div class="map-section">
+      <div class="map-container" id="mapContainer">
+        <div class="map-grid"></div>
+        <svg viewBox="80 50 700 700" xmlns="http://www.w3.org/2000/svg" id="africaMap">
+          <!-- Simplified Africa map paths -->
+          <!-- North Africa -->
+          <path class="country impact-moderate" data-name="Morocco" data-info="Oil import dependency rising. Phosphate exports disrupted." d="M200,160 L240,145 L270,150 L265,175 L250,195 L225,200 L210,190 L195,175 Z"/>
+          <path class="country impact-moderate" data-name="Algeria" data-info="Energy exporter but food import costs rising sharply." d="M270,150 L330,135 L360,155 L355,200 L340,230 L300,230 L265,210 L265,175 Z"/>
+          <path class="country impact-moderate" data-name="Tunisia" data-info="Food price inflation hitting consumers. Wheat imports affected." d="M340,140 L355,135 L360,155 L350,160 L340,155 Z"/>
+          <path class="country impact-moderate" data-name="Libya" data-info="Oil production fluctuations. Competing factions realigning." d="M360,155 L420,140 L450,155 L445,195 L410,210 L370,210 L355,200 Z"/>
+          <path class="country impact-high" data-name="Egypt" data-info="Suez Canal revenue hit. Gaza border crisis. Food subsidies strained." d="M450,155 L485,145 L500,160 L495,200 L480,230 L460,245 L445,220 L445,195 Z"/>
+
+          <!-- West Africa -->
+          <path class="country impact-moderate" data-name="Mauritania" data-info="Rising fuel costs. Fishing sector disrupted." d="M195,200 L225,200 L250,210 L260,245 L240,275 L210,280 L195,255 Z"/>
+          <path class="country impact-low" data-name="Mali" data-info="Landlocked. Indirect trade cost increases via ports." d="M260,245 L300,230 L340,240 L345,280 L320,300 L280,295 L255,285 Z"/>
+          <path class="country impact-low" data-name="Niger" data-info="Food insecurity worsening. Aid diversion concerns." d="M340,240 L390,235 L415,250 L410,280 L385,295 L345,290 L345,280 Z"/>
+          <path class="country impact-critical" data-name="Nigeria" data-info="Africa's largest economy faces severe inflation from oil price volatility. 80%+ food import dependency. Naira depreciation accelerating. 133M+ in multidimensional poverty. Political instability risk heightened. Fuel subsidy removal compounded by global energy shocks." d="M320,295 L360,280 L400,290 L415,320 L405,355 L385,370 L355,375 L330,360 L310,335 L310,315 Z" style="stroke-width: 1.5;"/>
+          <path class="country impact-low" data-name="Senegal" data-info="Port disruptions minimal but food costs rising." d="M175,275 L210,280 L215,295 L195,305 L175,295 Z"/>
+          <path class="country impact-low" data-name="Guinea" data-info="Mining exports stable but consumer prices up." d="M185,305 L215,295 L230,310 L220,330 L195,325 Z"/>
+          <path class="country impact-low" data-name="Ivory Coast" data-info="Cocoa exports stable. Import costs rising." d="M230,320 L265,310 L280,330 L265,350 L240,345 L230,335 Z"/>
+          <path class="country impact-low" data-name="Ghana" data-info="Cedi under pressure. Fuel subsidy strain." d="M280,320 L305,315 L310,340 L295,355 L280,345 Z"/>
+          <path class="country impact-low" data-name="Cameroon" data-info="Oil revenues fluctuating. Food import costs up." d="M365,355 L390,350 L405,370 L395,400 L375,395 L365,375 Z"/>
+
+          <!-- Central Africa -->
+          <path class="country impact-low" data-name="Chad" data-info="Landlocked. Fuel and food costs rising." d="M410,280 L450,265 L470,290 L465,330 L440,345 L410,340 L405,310 Z"/>
+          <path class="country impact-low" data-name="Central African Rep." data-info="Humanitarian crisis compounded by aid diversion." d="M410,340 L450,335 L475,350 L470,375 L440,385 L415,375 Z"/>
+          <path class="country impact-moderate" data-name="DR Congo" data-info="Arms flow concerns. Mineral export disruptions. Proxy conflict risks." d="M415,385 L470,375 L500,400 L510,450 L490,480 L455,485 L430,460 L415,430 Z"/>
+
+          <!-- East Africa -->
+          <path class="country impact-critical" data-name="Sudan" data-info="Civil war + Iran proxy links. Aid diverted to Middle East. Famine conditions." d="M460,245 L510,235 L530,260 L525,300 L505,325 L475,330 L465,310 L465,280 Z"/>
+          <path class="country impact-high" data-name="Ethiopia" data-info="Red Sea access dispute. Eritrea tensions. Food insecurity for 20M+." d="M505,310 L545,300 L560,325 L550,360 L520,370 L500,350 L500,330 Z"/>
+          <path class="country impact-critical" data-name="Somalia" data-info="Houthi weapon routes. Al-Shabaab resurgence. Israel-Somaliland recognition crisis." d="M560,310 L590,305 L600,330 L585,365 L560,380 L550,360 L555,330 Z"/>
+          <path class="country impact-high" data-name="Eritrea" data-info="Red Sea militarization. Ethiopia tensions. Strategic corridor." d="M510,270 L545,265 L550,280 L535,290 L510,285 Z"/>
+          <path class="country impact-high" data-name="Djibouti" data-info="Critical port. Military bases. Shipping rerouting impact." d="M555,295 L570,290 L575,305 L560,310 Z"/>
+          <path class="country impact-high" data-name="Kenya" data-info="Mombasa port traffic down. Small arms influx. Food prices up 15%." d="M520,370 L555,380 L560,415 L540,430 L510,420 L505,395 Z"/>
+          <path class="country impact-moderate" data-name="Uganda" data-info="Landlocked. Rising transport costs via Kenya." d="M490,370 L520,370 L515,400 L495,405 L480,390 Z"/>
+          <path class="country impact-moderate" data-name="Tanzania" data-info="Dar es Salaam port affected. Cargo traffic down." d="M510,420 L545,430 L555,470 L530,490 L500,475 L495,445 Z"/>
+          <path class="country impact-low" data-name="Rwanda" data-info="Indirect effects via regional trade." d="M490,400 L505,398 L508,415 L495,418 Z"/>
+
+          <!-- Southern Africa -->
+          <path class="country impact-moderate" data-name="Mozambique" data-info="LNG exports affected. Shipping rerouting benefits Cape route." d="M530,490 L560,480 L570,530 L555,570 L535,555 L525,520 Z"/>
+          <path class="country impact-low" data-name="Zimbabwe" data-info="Fuel price increases. Food import costs rising." d="M490,500 L525,495 L530,530 L510,545 L490,535 Z"/>
+          <path class="country impact-moderate" data-name="South Africa" data-info="Cape shipping route boom. Rand volatility. ICJ involvement." d="M420,560 L470,545 L520,555 L535,590 L510,625 L465,635 L425,610 L410,585 Z"/>
+          <path class="country impact-low" data-name="Zambia" data-info="Copper exports stable but fuel costs rising." d="M460,460 L500,455 L510,485 L490,500 L465,495 Z"/>
+          <path class="country impact-low" data-name="Angola" data-info="Oil exporter. Price volatility creates budget uncertainty." d="M380,420 L430,415 L460,450 L455,490 L425,505 L395,480 Z"/>
+          <path class="country impact-low" data-name="Namibia" data-info="Uranium exports. Minor shipping disruption." d="M385,510 L425,505 L440,545 L420,570 L390,560 Z"/>
+          <path class="country impact-low" data-name="Botswana" data-info="Diamond exports stable. Fuel cost passthrough." d="M440,520 L475,510 L480,545 L460,555 L440,545 Z"/>
+          <path class="country impact-low" data-name="Madagascar" data-info="Vanilla exports stable. Shipping detours affect imports." d="M580,490 L605,485 L615,530 L600,560 L585,545 L575,510 Z"/>
+
+          <!-- Shipping routes (Red Sea & Cape) -->
+          <path class="shipping-route" d="M570,290 L590,240 L600,200 L580,170" title="Red Sea Route (Disrupted)"/>
+          <path class="shipping-route" style="stroke: var(--accent-green); opacity: 0.4;" d="M410,625 L380,610 L350,580 L330,530 L310,470 L300,400 L290,350" title="Cape Route (Alternative)"/>
+
+          <!-- Hotspot markers -->
+          <g class="hotspot" data-name="Red Sea Crisis Zone" data-info="190+ Houthi attacks since Nov 2023. Shipping down 65%.">
+            <circle class="hotspot-ring" cx="575" cy="260" r="6"/>
+            <circle class="hotspot-ring" cx="575" cy="260" r="6" style="animation-delay: 0.7s;"/>
+            <circle class="hotspot-core" cx="575" cy="260" r="4"/>
+          </g>
+
+          <g class="hotspot" data-name="Suez Canal" data-info="Revenue declining. 30% of global container trade affected.">
+            <circle class="hotspot-ring" cx="490" cy="175" r="6"/>
+            <circle class="hotspot-ring" cx="490" cy="175" r="6" style="animation-delay: 0.7s;"/>
+            <circle class="hotspot-core" cx="490" cy="175" r="4"/>
+          </g>
+
+          <g class="hotspot" data-name="Bab el-Mandeb Strait" data-info="Critical chokepoint. 8.8M barrels/day transit. Record low transits June 2025.">
+            <circle class="hotspot-ring" cx="560" cy="310" r="6"/>
+            <circle class="hotspot-ring" cx="560" cy="310" r="6" style="animation-delay: 0.7s;"/>
+            <circle class="hotspot-core" cx="560" cy="310" r="4"/>
+          </g>
+
+          <g class="hotspot" data-name="Horn of Africa Arms Corridor" data-info="Rising interceptions of small arms and drone components at East African ports.">
+            <circle class="hotspot-ring" cx="545" cy="365" r="5" style="stroke: var(--accent-amber);"/>
+            <circle class="hotspot-ring" cx="545" cy="365" r="5" style="stroke: var(--accent-amber); animation-delay: 0.7s;"/>
+            <circle class="hotspot-core" cx="545" cy="365" r="3" style="fill: var(--accent-amber);"/>
+          </g>
+
+          <g class="hotspot" data-name="Cape of Good Hope" data-info="Alternative shipping route. +10-14 days voyage. +30% operational costs.">
+            <circle class="hotspot-ring" cx="420" cy="620" r="5" style="stroke: var(--accent-green);"/>
+            <circle class="hotspot-ring" cx="420" cy="620" r="5" style="stroke: var(--accent-green); animation-delay: 0.7s;"/>
+            <circle class="hotspot-core" cx="420" cy="620" r="3" style="fill: var(--accent-green);"/>
+          </g>
+
+          <!-- Nigeria spotlight -->
+          <g class="hotspot" data-name="Nigeria — Critical Impact" data-info="Africa's largest economy. 133M+ in multidimensional poverty. Inflation rate 33%+. Naira lost 70% value since 2023. 80% food imported. Fuel subsidy removal + global energy shock = compounding crisis. Oil revenue volatility threatens federal budget. Political instability risk elevated.">
+            <circle class="hotspot-ring" cx="360" cy="330" r="6"/>
+            <circle class="hotspot-ring" cx="360" cy="330" r="6" style="animation-delay: 0.7s;"/>
+            <circle class="hotspot-core" cx="360" cy="330" r="5"/>
+          </g>
+          <text x="330" y="320" fill="var(--accent-red)" font-size="9" font-family="Orbitron, sans-serif" font-weight="700" letter-spacing="1">NIGERIA</text>
+
+          <!-- Labels for major hotspots -->
+          <text x="590" y="258" fill="var(--accent-red)" font-size="8" font-family="Orbitron, sans-serif" letter-spacing="1">RED SEA</text>
+          <text x="495" y="170" fill="var(--accent-red)" font-size="7" font-family="Orbitron, sans-serif" letter-spacing="1">SUEZ</text>
+          <text x="430" y="635" fill="var(--accent-green)" font-size="7" font-family="Orbitron, sans-serif" letter-spacing="1">CAPE ROUTE</text>
+        </svg>
+
+        <!-- Legend -->
+        <div class="map-legend">
+          <div class="legend-title">Impact Level</div>
+          <div class="legend-items">
+            <div class="legend-item"><div class="legend-color" style="background: rgba(239,68,68,0.4); border: 1px solid var(--accent-red);"></div>Critical</div>
+            <div class="legend-item"><div class="legend-color" style="background: rgba(245,158,11,0.3); border: 1px solid var(--accent-amber);"></div>High</div>
+            <div class="legend-item"><div class="legend-color" style="background: rgba(249,115,22,0.25); border: 1px solid var(--accent-orange);"></div>Moderate</div>
+            <div class="legend-item"><div class="legend-color" style="background: rgba(34,197,94,0.15); border: 1px solid var(--accent-green);"></div>Low</div>
+            <div class="legend-item" style="margin-top: 4px;"><div class="legend-color" style="background: var(--accent-red); border-radius: 50; width:8px; height:8px;"></div>Crisis Hotspot</div>
+            <div class="legend-item"><div class="legend-color" style="background: var(--accent-amber); border-radius: 50; width:8px; height:8px;"></div>Arms Corridor</div>
+          </div>
+        </div>
+
+        <!-- Tooltip -->
+        <div class="map-tooltip" id="mapTooltip">
+          <div class="tooltip-title" id="tooltipTitle"></div>
+          <div class="tooltip-text" id="tooltipText"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <!-- Conflict Overview -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Conflict Status</div>
+          <span class="panel-badge badge-critical">ACTIVE</span>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-label">Active Theaters</div>
+            <div class="stat-value red">4</div>
+            <div class="stat-change up">Gaza, Lebanon, Yemen, Iran</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">African Nations Affected</div>
+            <div class="stat-value amber">40+</div>
+            <div class="stat-change up">Direct &amp; indirect</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Conflict Duration</div>
+            <div class="stat-value cyan" id="conflictDays">--</div>
+            <div class="stat-change">Since Oct 7, 2023</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Escalation Risk</div>
+            <div class="stat-value red">HIGH</div>
+            <div class="stat-change up">Strait of Hormuz threat</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Events Feed -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Impact Feed</div>
+          <span class="panel-badge badge-info">LATEST</span>
+        </div>
+        <div class="event-feed">
+          <div class="event-item critical">
+            <div class="event-meta">
+              <span class="event-tag security">SECURITY</span>
+              <span class="event-time">FEB 2026</span>
+            </div>
+            <div class="event-title">Israel-US preemptive strikes on Iranian targets escalate conflict</div>
+            <div class="event-region">Global / Africa-wide impact</div>
+          </div>
+          <div class="event-item critical">
+            <div class="event-meta">
+              <span class="event-tag econ">NIGERIA</span>
+              <span class="event-time">2025-26</span>
+            </div>
+            <div class="event-title">Nigeria inflation 33%+ — Naira lost 70% value — 133M in poverty as global shocks compound local crisis</div>
+            <div class="event-region">Nigeria — Africa's largest economy</div>
+          </div>
+          <div class="event-item warning">
+            <div class="event-meta">
+              <span class="event-tag econ">ECONOMIC</span>
+              <span class="event-time">2025 H2</span>
+            </div>
+            <div class="event-title">Brent crude carries $7.5 geopolitical risk premium — $100+ if Hormuz blockaded</div>
+            <div class="event-region">Sub-Saharan Africa oil importers</div>
+          </div>
+          <div class="event-item critical">
+            <div class="event-meta">
+              <span class="event-tag humanitarian">HUMANITARIAN</span>
+              <span class="event-time">2025</span>
+            </div>
+            <div class="event-title">Humanitarian aid diverted from Africa to Middle East — Palestine appeal 3rd largest globally</div>
+            <div class="event-region">Sudan, Somalia, DRC, Ethiopia</div>
+          </div>
+          <div class="event-item warning">
+            <div class="event-meta">
+              <span class="event-tag diplomatic">DIPLOMATIC</span>
+              <span class="event-time">DEC 2025</span>
+            </div>
+            <div class="event-title">Israel recognizes Somaliland — Somalia and regional tensions escalate</div>
+            <div class="event-region">Horn of Africa</div>
+          </div>
+          <div class="event-item warning">
+            <div class="event-meta">
+              <span class="event-tag security">SECURITY</span>
+              <span class="event-time">2025</span>
+            </div>
+            <div class="event-title">Small arms &amp; drone components intercepted at East African ports</div>
+            <div class="event-region">Somalia, Sudan, Kenya, DRC</div>
+          </div>
+          <div class="event-item info">
+            <div class="event-meta">
+              <span class="event-tag econ">TRADE</span>
+              <span class="event-time">2025</span>
+            </div>
+            <div class="event-title">Cape of Good Hope shipping surges as Red Sea rerouting adds 10-14 days</div>
+            <div class="event-region">East &amp; Southern Africa</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Most Affected Regions -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Most Affected</div>
+          <span class="panel-badge badge-warning">RISK INDEX</span>
+        </div>
+        <div class="bar-chart">
+          <div class="bar-row">
+            <div class="bar-label">Horn of Africa</div>
+            <div class="bar-track"><div class="bar-fill red" style="width: 92%;"></div></div>
+            <div class="bar-value">92</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">North Africa</div>
+            <div class="bar-track"><div class="bar-fill amber" style="width: 74%;"></div></div>
+            <div class="bar-value">74</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">East Africa</div>
+            <div class="bar-track"><div class="bar-fill amber" style="width: 78%;"></div></div>
+            <div class="bar-value">78</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">West Africa</div>
+            <div class="bar-track"><div class="bar-fill orange" style="width: 55%;"></div></div>
+            <div class="bar-value">55</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Central Africa</div>
+            <div class="bar-track"><div class="bar-fill orange" style="width: 48%;"></div></div>
+            <div class="bar-value">48</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Southern Africa</div>
+            <div class="bar-track"><div class="bar-fill cyan" style="width: 35%;"></div></div>
+            <div class="bar-value">35</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ECONOMIC TAB ===== -->
+<div class="tab-content" id="tab-economic">
+  <div class="detail-section">
+    <div class="detail-grid">
+      <div class="detail-card">
+        <div class="detail-card-icon">&#9981;</div>
+        <div class="detail-card-title">Oil &amp; Energy</div>
+        <div class="detail-card-stat" style="color: var(--accent-red);">+$7.5</div>
+        <div class="detail-card-text">Geopolitical risk premium per barrel of Brent crude (J.P. Morgan). If the Strait of Hormuz is blockaded, oil could surge past $100/barrel. Africa's oil-importing nations — including Kenya, Ethiopia, Tanzania — face crippling fuel cost increases that cascade into food and transport prices.</div>
+      </div>
+      <div class="detail-card">
+        <div class="detail-card-icon">&#128674;</div>
+        <div class="detail-card-title">Shipping &amp; Trade</div>
+        <div class="detail-card-stat" style="color: var(--accent-amber);">-65%</div>
+        <div class="detail-card-text">Decline in Bab el-Mandeb transits by June 2025. Rerouting via the Cape of Good Hope adds 10-14 days and over 30% in operational costs. East African ports (Mombasa, Djibouti, Dar es Salaam) face declining cargo, reduced customs revenue, and rising unemployment.</div>
+      </div>
+      <div class="detail-card">
+        <div class="detail-card-icon">&#127854;</div>
+        <div class="detail-card-title">Food Prices &amp; Inflation</div>
+        <div class="detail-card-stat" style="color: var(--accent-orange);">80%</div>
+        <div class="detail-card-text">Of Sub-Saharan Africa's food is imported. Rising energy and shipping costs directly inflate food prices. Countries like Nigeria and Sudan — already battling high inflation — face renewed price surges that threaten political stability. The IMF's forecast of falling inflation by 2026 is at risk.</div>
+      </div>
+      <div class="detail-card">
+        <div class="detail-card-icon">&#128200;</div>
+        <div class="detail-card-title">Investment &amp; Growth</div>
+        <div class="detail-card-stat" style="color: var(--accent-amber);">&#8595;</div>
+        <div class="detail-card-text">Declining FDI and remittance inflows due to global risk aversion. Diaspora investment waning. Both Israel and Iran have stalled diplomatic and economic overtures to Africa — aid and investment that the continent was banking on. Pro-growth policies are being sidelined.</div>
+      </div>
+      <div class="detail-card">
+        <div class="detail-card-icon">&#9875;</div>
+        <div class="detail-card-title">Port Economics</div>
+        <div class="detail-card-stat" style="color: var(--accent-red);">5x</div>
+        <div class="detail-card-text">Spot freight rates on Asia-to-Europe routes increased fivefold in 2024. Insurance and security premiums for East African shipping have skyrocketed. Djibouti, a critical logistics hub with military bases, faces complex pressures from multiple stakeholders.</div>
+      </div>
+      <div class="detail-card" style="border: 1px solid rgba(239,68,68,0.3); background: linear-gradient(135deg, var(--bg-card), rgba(239,68,68,0.05));">
+        <div class="detail-card-icon">&#127475;&#127468;</div>
+        <div class="detail-card-title" style="color: var(--accent-red);">Nigeria Spotlight</div>
+        <div class="detail-card-stat" style="color: var(--accent-red);">33%+</div>
+        <div class="detail-card-text">Africa's largest economy is a pressure point. Inflation above 33%. The Naira has lost ~70% of its value since 2023. 133M+ Nigerians live in multidimensional poverty. Fuel subsidy removal (June 2023) tripled petrol prices — then global energy shocks from the Israel-Iran conflict compounded the crisis. 80%+ of food is imported. Oil revenue — Nigeria's fiscal lifeline — swings wildly with geopolitical risk premiums. Political instability risk is elevated.</div>
+      </div>
+      <div class="detail-card">
+        <div class="detail-card-icon">&#128176;</div>
+        <div class="detail-card-title">Currency Pressure</div>
+        <div class="detail-card-stat" style="color: var(--accent-amber);">&#8595;&#8595;</div>
+        <div class="detail-card-text">African currencies face depreciation pressure as dollar-denominated oil imports rise. Nigeria's naira, Kenya's shilling, and Egypt's pound are especially vulnerable. Foreign reserve depletion accelerates as nations scramble to cover import bills.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== HUMANITARIAN TAB ===== -->
+<div class="tab-content" id="tab-humanitarian">
+  <div class="detail-section">
+    <div class="detail-grid">
+      <div class="detail-card">
+        <div class="detail-card-icon">&#127859;</div>
+        <div class="detail-card-title">Food Insecurity</div>
+        <div class="detail-card-stat" style="color: var(--accent-red);">307M</div>
+        <div class="detail-card-text">Africans faced hunger in 2024 according to the UN's State of Food Security report. Higher energy prices translate to increased costs for food production, processing, and transportation. Africa is caught between rising domestic needs and a global food system under strain.</div>
+      </div>
+      <div class="detail-card">
+        <div class="detail-card-icon">&#127973;</div>
+        <div class="detail-card-title">Aid Diversion</div>
+        <div class="detail-card-stat" style="color: var(--accent-amber);">3rd</div>
+        <div class="detail-card-text">The Occupied Palestinian Territory Flash Appeal is the third largest worldwide, demanding enormous humanitarian funding. This intense focus diverts resources from Africa — Sudan, DRC, Somalia, and Ethiopia compete for a shrinking pool of international aid.</div>
+      </div>
+      <div class="detail-card">
+        <div class="detail-card-icon">&#128694;</div>
+        <div class="detail-card-title">Displacement</div>
+        <div class="detail-card-stat" style="color: var(--accent-orange);">20M+</div>
+        <div class="detail-card-text">Ethiopians face food insecurity. Sudan's civil war — compounded by alleged Iran-faction ties — has produced one of the world's largest displacement crises. Regional spillover into Chad, South Sudan, and Egypt strains host communities already under economic pressure.</div>
+      </div>
+      <div class="detail-card">
+        <div class="detail-card-icon">&#9888;</div>
+        <div class="detail-card-title">Sudan Crisis</div>
+        <div class="detail-card-stat" style="color: var(--accent-red);">FAMINE</div>
+        <div class="detail-card-text">Sudan faces famine conditions as civil war rages and international attention shifts to the Middle East. Alleged ties between Iran and Sudanese military factions risk drawing the country deeper into the broader Israel-Iran confrontation. Humanitarian access remains severely limited.</div>
+      </div>
+      <div class="detail-card">
+        <div class="detail-card-icon">&#128138;</div>
+        <div class="detail-card-title">Health Systems</div>
+        <div class="detail-card-stat" style="color: var(--accent-amber);">&#8595;</div>
+        <div class="detail-card-text">Rising costs for pharmaceutical imports and medical supplies. Shipping disruptions delay critical medication deliveries. Countries already dealing with malaria, HIV/AIDS, and TB outbreaks face compounded challenges as health budgets are squeezed by rising import costs.</div>
+      </div>
+      <div class="detail-card">
+        <div class="detail-card-icon">&#127758;</div>
+        <div class="detail-card-title">Climate + Conflict</div>
+        <div class="detail-card-stat" style="color: var(--accent-orange);">COMPOUND</div>
+        <div class="detail-card-text">Food insecurity is no longer tied to one failed harvest or one conflict — it is overlapping crises hitting vulnerable communities hardest. Droughts, floods, and climate shocks combine with trade disruptions and war to create compounding humanitarian emergencies across the continent.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECURITY & GEOPOLITICS TAB ===== -->
+<div class="tab-content" id="tab-security">
+  <div class="detail-section">
+    <div class="detail-grid">
+      <div class="detail-card">
+        <div class="detail-card-icon">&#128163;</div>
+        <div class="detail-card-title">Arms Proliferation</div>
+        <div class="detail-card-stat" style="color: var(--accent-red);">&#8593;&#8593;</div>
+        <div class="detail-card-text">Rising interceptions of small arms and drone components at East African ports as Red Sea arms corridors are rerouted. In South Sudan and northern Kenya, this trend complicates disarmament efforts and risks revitalizing dormant militant networks.</div>
+      </div>
+      <div class="detail-card">
+        <div class="detail-card-icon">&#9872;</div>
+        <div class="detail-card-title">Proxy Networks</div>
+        <div class="detail-card-stat" style="color: var(--accent-red);">EXPANDING</div>
+        <div class="detail-card-text">Houthis and Hezbollah, backed by Iran, leverage the Red Sea and Arabian Sea as corridors for arms and ideological influence. This intensifies the threat of militant resurgence across Somalia, Sudan, and the eastern DRC. State-aligned and autonomous proxy forces are spreading.</div>
+      </div>
+      <div class="detail-card">
+        <div class="detail-card-icon">&#127987;</div>
+        <div class="detail-card-title">Somaliland Recognition</div>
+        <div class="detail-card-stat" style="color: var(--accent-amber);">CRISIS</div>
+        <div class="detail-card-text">Israel's recognition of Somaliland (Dec 26, 2025) has created a new fault line. Israel has aligned with the UAE-led axis supporting separatist actors across the Horn of Africa. Somalia maintains Somaliland is sovereign territory — regional diplomatic order is destabilized.</div>
+      </div>
+      <div class="detail-card">
+        <div class="detail-card-icon">&#128274;</div>
+        <div class="detail-card-title">Ethiopia-Eritrea Tensions</div>
+        <div class="detail-card-stat" style="color: var(--accent-amber);">CRITICAL</div>
+        <div class="detail-card-text">Ethiopia's push for Red Sea access stokes fears of war with Eritrea. Addis Ababa's claims over Eritrea's port of Assab in 2025 prompted both countries to mobilize forces and back rebel groups along their shared border. A new Horn of Africa war looms.</div>
+      </div>
+      <div class="detail-card">
+        <div class="detail-card-icon">&#127760;</div>
+        <div class="detail-card-title">Diplomatic Realignment</div>
+        <div class="detail-card-stat" style="color: var(--accent-cyan);">40 vs 20</div>
+        <div class="detail-card-text">Israel has diplomatic ties with 40 African nations vs Iran's 20. Both countries' diplomatic overtures into Africa are stalled for the conflict's duration. African governments are reassessing alliances — the war forces uncomfortable choices between competing powers.</div>
+      </div>
+      <div class="detail-card">
+        <div class="detail-card-icon">&#128736;</div>
+        <div class="detail-card-title">Red Sea Militarization</div>
+        <div class="detail-card-stat" style="color: var(--accent-red);">190+</div>
+        <div class="detail-card-text">Houthi attacks since November 2023 have hit roughly 100 vessels. Houthi strikes on Israeli soil surged 120% in 2025. Israel responded with airstrikes on Houthi infrastructure. The Red Sea has become one of the world's most dangerous waterways — with Africa caught in the crossfire.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SOURCES FOOTER -->
+<div class="sources-footer">
+  <div class="sources-title">Data Sources &amp; References</div>
+  <p style="line-height: 1.8;">
+    <a href="https://www.tandfonline.com/doi/full/10.1080/25765949.2025.2553258" target="_blank">Beyond the Battlefield: Economic and Geopolitical Reverberations (Taylor & Francis)</a> &bull;
+    <a href="https://masharikirpc.org/israel-iran-war-and-its-implications-on-future-security-in-the-eastern-africa-region/" target="_blank">Israel-Iran War: Implications on Eastern Africa (Mashariki RPC)</a> &bull;
+    <a href="https://trendtype.com/insights/israel-iran-war-impact-on-africa/" target="_blank">Israel-Iran Crisis Impact on African Consumer Markets (Trendtype)</a> &bull;
+    <a href="https://www.inonafrica.com/2025/07/16/the-iran-israel-conflict-brings-strategic-and-economic-problems-to-africa/" target="_blank">Iran-Israel Conflict: Strategic Problems for Africa (IN ON Africa)</a> &bull;
+    <a href="https://www.geopoliticalmonitor.com/how-the-iran-israel-war-impacts-north-africa/" target="_blank">How the Iran-Israel War Impacts North Africa (Geopolitical Monitor)</a> &bull;
+    <a href="https://acleddata.com/report/regional-power-struggles-fuel-simmering-tensions-across-red-sea" target="_blank">Red Sea Tensions (ACLED)</a> &bull;
+    <a href="https://africanarguments.org/2026/01/the-horn-and-the-gulf-how-a-new-geopolitical-confluence-is-emerging/" target="_blank">The Horn and the Gulf (African Arguments)</a> &bull;
+    <a href="https://www.brookings.edu/articles/the-middle-east-conflict-is-threatening-to-cripple-a-fragile-global-economy/" target="_blank">Middle East Conflict Threatens Global Economy (Brookings)</a> &bull;
+    <a href="https://www.atlanticcouncil.org/blogs/menasource/what-will-2026-bring-for-the-middle-east-and-north-africa/" target="_blank">What Will 2026 Bring (Atlantic Council)</a>
+  </p>
+  <p style="margin-top: 8px; color: var(--text-muted);">Africa Situation Room &copy; 2026. Built for awareness and analysis. Data compiled from open-source intelligence and research institutions.</p>
+  <p style="margin-top: 4px; color: var(--text-muted);">All data is from publicly available research reports. This is an informational resource — not investment or policy advice.</p>
+</div>
+
+<script>
+  // Clock
+  function updateClock() {
+    const now = new Date();
+    const utc = now.toUTCString().split(' ')[4];
+    document.getElementById('clock').textContent = utc + ' UTC';
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  // Conflict days counter
+  function updateConflictDays() {
+    const start = new Date('2023-10-07');
+    const now = new Date();
+    const days = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+    document.getElementById('conflictDays').textContent = days + 'd';
+  }
+  updateConflictDays();
+
+  // Tab switching
+  function switchTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+    document.getElementById('tab-' + tabId).classList.add('active');
+    document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+  }
+
+  // Map tooltip
+  const tooltip = document.getElementById('mapTooltip');
+  const tooltipTitle = document.getElementById('tooltipTitle');
+  const tooltipText = document.getElementById('tooltipText');
+  const mapContainer = document.getElementById('mapContainer');
+
+  function showTooltip(e, name, info) {
+    tooltipTitle.textContent = name;
+    tooltipText.textContent = info;
+    tooltip.classList.add('visible');
+
+    const rect = mapContainer.getBoundingClientRect();
+    let x = e.clientX - rect.left + 15;
+    let y = e.clientY - rect.top - 10;
+
+    if (x + 280 > rect.width) x = x - 300;
+    if (y + 100 > rect.height) y = y - 100;
+
+    tooltip.style.left = x + 'px';
+    tooltip.style.top = y + 'px';
+  }
+
+  function hideTooltip() {
+    tooltip.classList.remove('visible');
+  }
+
+  // Country hover
+  document.querySelectorAll('.country').forEach(path => {
+    path.addEventListener('mousemove', (e) => {
+      showTooltip(e, path.dataset.name, path.dataset.info);
+    });
+    path.addEventListener('mouseleave', hideTooltip);
+  });
+
+  // Hotspot hover
+  document.querySelectorAll('.hotspot').forEach(g => {
+    g.addEventListener('mousemove', (e) => {
+      showTooltip(e, g.dataset.name, g.dataset.info);
+    });
+    g.addEventListener('mouseleave', hideTooltip);
+  });
+
+  // Animate bars on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.bar-fill').forEach(bar => {
+          const width = bar.style.width;
+          bar.style.width = '0%';
+          setTimeout(() => { bar.style.width = width; }, 100);
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+
+  document.querySelectorAll('.bar-chart').forEach(chart => observer.observe(chart));
+</script>
+
+</body>
+</html>
