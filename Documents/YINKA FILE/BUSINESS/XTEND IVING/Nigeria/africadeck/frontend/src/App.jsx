@@ -87,6 +87,14 @@ const generateConflictEvents = () => {
     time: randomInt(1, 720),
     source: ["ACLED", "UN OCHA", "Reuters", "AFP", "Local Media"][randomInt(0, 5)],
     verified: Math.random() > 0.3,
+    actors: [
+      ["Military Forces", "Non-State Armed Group"],
+      ["Protest Movement", "Police Forces"],
+      ["Unknown Armed Group", "Civilians"],
+      ["Rebel Forces", "Government Forces"],
+    ][randomInt(0, 4)],
+    affectedPop: randomInt(500, 50000),
+    responseStatus: ["UN Monitoring", "Peacekeepers Deployed", "Humanitarian Corridor Requested", "Ceasefire Negotiations", "No Response"][randomInt(0, 5)],
     description: [
       "Armed engagement reported between military forces and non-state actors",
       "Civilian protests escalating in urban center",
@@ -116,36 +124,43 @@ const generateEarthquakes = () => {
     depth: randomInt(5, 150),
     time: randomInt(1, 4320),
     tsunami: Math.random() > 0.95,
+    intensity: ["I", "II", "III", "IV", "V", "VI"][randomInt(0, 6)],
+    feltReports: randomInt(0, 500),
+    nearestCity: ["Dodoma", "Algiers", "Goma", "Djibouti City", "Douala", "Maputo", "Marrakech", "Hawassa"][i],
+    distanceKm: randomInt(10, 200),
+    tectonicPlate: ["East African Rift", "African Plate", "Nubian Plate", "Somalian Plate"][randomInt(0, 4)],
+    aftershocks: randomInt(0, 12),
+    status: ["Reviewed", "Automatic", "Confirmed"][randomInt(0, 3)],
   }));
 };
 
 const generateDiseaseOutbreaks = () => {
   const outbreaks = [
-    { disease: "Cholera", country: "Zambia", cases: randomInt(500, 5000), deaths: randomInt(10, 200), trend: "rising" },
-    { disease: "Mpox", country: "DRC", cases: randomInt(1000, 15000), deaths: randomInt(50, 500), trend: "rising" },
-    { disease: "Malaria", country: "Nigeria", cases: randomInt(50000, 200000), deaths: randomInt(200, 2000), trend: "stable" },
-    { disease: "Ebola", country: "Uganda", cases: randomInt(10, 200), deaths: randomInt(5, 50), trend: "declining" },
-    { disease: "Yellow Fever", country: "Sudan", cases: randomInt(100, 2000), deaths: randomInt(10, 100), trend: "rising" },
-    { disease: "Meningitis", country: "Niger", cases: randomInt(200, 5000), deaths: randomInt(20, 300), trend: "stable" },
-    { disease: "Lassa Fever", country: "Nigeria", cases: randomInt(100, 1000), deaths: randomInt(10, 100), trend: "declining" },
-    { disease: "Dengue", country: "Kenya", cases: randomInt(200, 3000), deaths: randomInt(5, 50), trend: "rising" },
+    { disease: "Cholera", country: "Zambia", cases: randomInt(500, 5000), deaths: randomInt(10, 200), trend: "rising", newCases24h: randomInt(20, 200), recoveries: randomInt(100, 3000), whoAlert: true, vaccineAvailable: true, responseTeams: randomInt(2, 15) },
+    { disease: "Mpox", country: "DRC", cases: randomInt(1000, 15000), deaths: randomInt(50, 500), trend: "rising", newCases24h: randomInt(50, 500), recoveries: randomInt(200, 8000), whoAlert: true, vaccineAvailable: false, responseTeams: randomInt(5, 25) },
+    { disease: "Malaria", country: "Nigeria", cases: randomInt(50000, 200000), deaths: randomInt(200, 2000), trend: "stable", newCases24h: randomInt(500, 5000), recoveries: randomInt(10000, 100000), whoAlert: false, vaccineAvailable: true, responseTeams: randomInt(10, 50) },
+    { disease: "Ebola", country: "Uganda", cases: randomInt(10, 200), deaths: randomInt(5, 50), trend: "declining", newCases24h: randomInt(0, 5), recoveries: randomInt(5, 100), whoAlert: true, vaccineAvailable: true, responseTeams: randomInt(8, 30) },
+    { disease: "Yellow Fever", country: "Sudan", cases: randomInt(100, 2000), deaths: randomInt(10, 100), trend: "rising", newCases24h: randomInt(5, 100), recoveries: randomInt(50, 1000), whoAlert: false, vaccineAvailable: true, responseTeams: randomInt(2, 10) },
+    { disease: "Meningitis", country: "Niger", cases: randomInt(200, 5000), deaths: randomInt(20, 300), trend: "stable", newCases24h: randomInt(10, 200), recoveries: randomInt(50, 3000), whoAlert: false, vaccineAvailable: true, responseTeams: randomInt(3, 12) },
+    { disease: "Lassa Fever", country: "Nigeria", cases: randomInt(100, 1000), deaths: randomInt(10, 100), trend: "declining", newCases24h: randomInt(2, 30), recoveries: randomInt(30, 500), whoAlert: false, vaccineAvailable: false, responseTeams: randomInt(3, 15) },
+    { disease: "Dengue", country: "Kenya", cases: randomInt(200, 3000), deaths: randomInt(5, 50), trend: "rising", newCases24h: randomInt(10, 150), recoveries: randomInt(50, 1500), whoAlert: false, vaccineAvailable: false, responseTeams: randomInt(2, 8) },
   ];
   return outbreaks;
 };
 
 const generateNewsItems = () => [
-  { title: "AU Summit concludes with landmark digital trade agreement", source: "African Union", category: "Politics", time: randomInt(1, 60), priority: "high" },
-  { title: "AfCFTA trade volume hits record quarterly high", source: "Reuters Africa", time: randomInt(30, 180), category: "Economy", priority: "high" },
-  { title: "Sahel alliance announces joint military operation", source: "AFP", time: randomInt(10, 120), category: "Security", priority: "critical" },
-  { title: "Kenya launches largest geothermal expansion project", source: "Bloomberg Africa", time: randomInt(60, 300), category: "Energy", priority: "medium" },
-  { title: "DRC mining reform bill passes parliamentary review", source: "Mining Weekly", time: randomInt(120, 480), category: "Economy", priority: "medium" },
-  { title: "South Africa load-shedding reaches Stage 6", source: "News24", time: randomInt(5, 60), category: "Infrastructure", priority: "high" },
-  { title: "WHO declares end to cholera outbreak in Malawi", source: "WHO Africa", time: randomInt(30, 240), category: "Health", priority: "medium" },
-  { title: "Nigeria's fintech sector attracts $2B in Q1 funding", source: "TechCrunch Africa", time: randomInt(60, 360), category: "Tech", priority: "medium" },
-  { title: "UN peacekeeping mandate extended in Central African Republic", source: "UN News", time: randomInt(120, 600), category: "Security", priority: "high" },
-  { title: "Morocco-Nigeria gas pipeline project enters Phase 2", source: "Energy Voice", time: randomInt(180, 720), category: "Energy", priority: "medium" },
-  { title: "Ethiopian Airlines reports record annual revenue", source: "Aviation Week", time: randomInt(240, 960), category: "Economy", priority: "low" },
-  { title: "Floods displace 50,000 in South Sudan", source: "OCHA", time: randomInt(30, 180), category: "Disaster", priority: "critical" },
+  { id: 0, title: "AU Summit concludes with landmark digital trade agreement", source: "African Union", category: "Politics", time: randomInt(1, 60), priority: "high", summary: "African Union member states signed a comprehensive digital trade framework covering data governance, e-commerce regulations, and cross-border digital payments. The agreement is expected to boost intra-African digital trade by 35% over the next five years.", relatedCountries: ["Ethiopia", "South Africa", "Nigeria", "Kenya"] },
+  { id: 1, title: "AfCFTA trade volume hits record quarterly high", source: "Reuters Africa", time: randomInt(30, 180), category: "Economy", priority: "high", summary: "The African Continental Free Trade Area recorded $28.4 billion in intra-continental trade for Q4, representing a 22% year-over-year increase. Key growth sectors include automotive parts, processed foods, and textiles.", relatedCountries: ["Nigeria", "South Africa", "Kenya", "Ghana", "Egypt"] },
+  { id: 2, title: "Sahel alliance announces joint military operation", source: "AFP", time: randomInt(10, 120), category: "Security", priority: "critical", summary: "Mali, Burkina Faso, and Niger have launched a coordinated military operation targeting armed groups in the tri-border region. An estimated 5,000 troops have been deployed across multiple fronts.", relatedCountries: ["Mali", "Burkina Faso", "Niger"] },
+  { id: 3, title: "Kenya launches largest geothermal expansion project", source: "Bloomberg Africa", time: randomInt(60, 300), category: "Energy", priority: "medium", summary: "Kenya Power announced a $2.3 billion investment to add 1,600 MW of geothermal capacity in the Rift Valley by 2028, aiming to reach 90% renewable energy generation.", relatedCountries: ["Kenya"] },
+  { id: 4, title: "DRC mining reform bill passes parliamentary review", source: "Mining Weekly", time: randomInt(120, 480), category: "Economy", priority: "medium", summary: "The National Assembly approved amendments increasing state royalties on cobalt and copper exports while introducing new environmental compliance requirements for mining operations.", relatedCountries: ["DRC"] },
+  { id: 5, title: "South Africa load-shedding reaches Stage 6", source: "News24", time: randomInt(5, 60), category: "Infrastructure", priority: "high", summary: "Eskom implemented Stage 6 load-shedding after three generation units tripped simultaneously. Industrial output is expected to drop 12% this week with rolling 6-hour blackouts across all provinces.", relatedCountries: ["South Africa"] },
+  { id: 6, title: "WHO declares end to cholera outbreak in Malawi", source: "WHO Africa", time: randomInt(30, 240), category: "Health", priority: "medium", summary: "After 14 months and over 58,000 cases, the WHO officially declared the Malawi cholera outbreak over. The response involved 2,400 health workers and $45M in emergency funding.", relatedCountries: ["Malawi"] },
+  { id: 7, title: "Nigeria's fintech sector attracts $2B in Q1 funding", source: "TechCrunch Africa", time: randomInt(60, 360), category: "Tech", priority: "medium", summary: "Nigerian fintech companies secured over $2 billion in venture funding in Q1, led by mega-rounds in payments, lending, and crypto infrastructure. Lagos remains the continent's top fintech hub.", relatedCountries: ["Nigeria"] },
+  { id: 8, title: "UN peacekeeping mandate extended in Central African Republic", source: "UN News", time: randomInt(120, 600), category: "Security", priority: "high", summary: "The UN Security Council unanimously voted to extend MINUSCA's mandate for 12 months with an expanded civilian protection role. The mission's troop ceiling has been raised to 14,400.", relatedCountries: ["Central African Republic"] },
+  { id: 9, title: "Morocco-Nigeria gas pipeline project enters Phase 2", source: "Energy Voice", time: randomInt(180, 720), category: "Energy", priority: "medium", summary: "Phase 2 construction of the 5,660 km pipeline has begun, connecting 15 West African nations. The $25 billion project is expected to deliver first gas by 2029.", relatedCountries: ["Morocco", "Nigeria", "Senegal", "Ghana"] },
+  { id: 10, title: "Ethiopian Airlines reports record annual revenue", source: "Aviation Week", time: randomInt(240, 960), category: "Economy", priority: "low", summary: "Ethiopian Airlines Group posted $7.8 billion in annual revenue, a 19% increase, driven by expanded routes to Asia and new cargo operations. The carrier now serves 137 international destinations.", relatedCountries: ["Ethiopia"] },
+  { id: 11, title: "Floods displace 50,000 in South Sudan", source: "OCHA", time: randomInt(30, 180), category: "Disaster", priority: "critical", summary: "Torrential rains have displaced 50,000 people in Upper Nile state. OCHA has launched a $12M flash appeal for emergency shelter, food, and medical supplies. Roads to affected areas remain impassable.", relatedCountries: ["South Sudan"] },
 ];
 
 const generateCurrencyData = () => AFRICAN_CURRENCIES.map(c => ({
@@ -160,6 +175,11 @@ const generateCurrencyData = () => AFRICAN_CURRENCIES.map(c => ({
        randomBetween(2400, 2600),
   change: randomBetween(-3, 3),
   volume: randomInt(100, 5000),
+  high24h: 0,
+  low24h: 0,
+  weekChange: randomBetween(-5, 5),
+  monthChange: randomBetween(-10, 10),
+  sparkline: Array.from({ length: 14 }, () => randomBetween(0.9, 1.1)),
 }));
 
 const generateExchangeData = () => AFRICAN_EXCHANGES.map(e => ({
@@ -168,26 +188,33 @@ const generateExchangeData = () => AFRICAN_EXCHANGES.map(e => ({
   change: randomBetween(-4, 4),
   volume: `${randomBetween(0.5, 15).toFixed(1)}B`,
   sparkline: Array.from({ length: 20 }, () => randomBetween(80, 120)),
+  marketCap: `${randomBetween(10, 1200).toFixed(0)}B`,
+  topGainer: ["Safaricom", "Dangote Cement", "MTN Group", "Commercial Intl Bank", "GoldFields", "Sonatel", "Maroc Telecom", "CRDB Bank"][AFRICAN_EXCHANGES.indexOf(e) % 8],
+  topGainerPct: randomBetween(1, 8),
+  topLoser: ["Naspers", "Access Bank", "KCB Group", "EFG Hermes", "Tullow Oil", "Orange CI", "Attijariwafa", "NMB Bank"][AFRICAN_EXCHANGES.indexOf(e) % 8],
+  topLoserPct: randomBetween(-8, -1),
+  tradingStatus: Math.random() > 0.3 ? "Open" : "Closed",
+  listedCompanies: randomInt(20, 400),
 }));
 
 const generateCommodityData = () => [
-  { name: "Gold", price: randomBetween(2800, 3200), change: randomBetween(-2, 2), unit: "$/oz", icon: "🥇" },
-  { name: "Crude Oil (Brent)", price: randomBetween(70, 90), change: randomBetween(-3, 3), unit: "$/bbl", icon: "🛢️" },
-  { name: "Cocoa", price: randomBetween(8000, 12000), change: randomBetween(-5, 5), unit: "$/ton", icon: "🍫" },
-  { name: "Coffee (Robusta)", price: randomBetween(3000, 5000), change: randomBetween(-3, 3), unit: "$/ton", icon: "☕" },
-  { name: "Platinum", price: randomBetween(900, 1100), change: randomBetween(-2, 2), unit: "$/oz", icon: "💎" },
-  { name: "Cobalt", price: randomBetween(25000, 35000), change: randomBetween(-4, 4), unit: "$/ton", icon: "⚡" },
-  { name: "Copper", price: randomBetween(8000, 10000), change: randomBetween(-2, 2), unit: "$/ton", icon: "🔶" },
-  { name: "Natural Gas", price: randomBetween(2.5, 4.5), change: randomBetween(-5, 5), unit: "$/MMBtu", icon: "🔥" },
+  { name: "Gold", price: randomBetween(2800, 3200), change: randomBetween(-2, 2), unit: "$/oz", icon: "🥇", topProducers: ["Ghana", "South Africa", "Sudan", "Mali"], globalShare: "25%", ytdChange: randomBetween(-5, 15), volume: `${randomBetween(150, 300).toFixed(0)}K contracts` },
+  { name: "Crude Oil (Brent)", price: randomBetween(70, 90), change: randomBetween(-3, 3), unit: "$/bbl", icon: "🛢️", topProducers: ["Nigeria", "Angola", "Libya", "Algeria"], globalShare: "8%", ytdChange: randomBetween(-10, 10), volume: `${randomBetween(500, 900).toFixed(0)}K contracts` },
+  { name: "Cocoa", price: randomBetween(8000, 12000), change: randomBetween(-5, 5), unit: "$/ton", icon: "🍫", topProducers: ["Côte d'Ivoire", "Ghana", "Nigeria", "Cameroon"], globalShare: "75%", ytdChange: randomBetween(5, 40), volume: `${randomBetween(30, 80).toFixed(0)}K contracts` },
+  { name: "Coffee (Robusta)", price: randomBetween(3000, 5000), change: randomBetween(-3, 3), unit: "$/ton", icon: "☕", topProducers: ["Ethiopia", "Uganda", "Tanzania", "Kenya"], globalShare: "12%", ytdChange: randomBetween(-5, 20), volume: `${randomBetween(20, 60).toFixed(0)}K contracts` },
+  { name: "Platinum", price: randomBetween(900, 1100), change: randomBetween(-2, 2), unit: "$/oz", icon: "💎", topProducers: ["South Africa", "Zimbabwe"], globalShare: "72%", ytdChange: randomBetween(-8, 8), volume: `${randomBetween(40, 100).toFixed(0)}K contracts` },
+  { name: "Cobalt", price: randomBetween(25000, 35000), change: randomBetween(-4, 4), unit: "$/ton", icon: "⚡", topProducers: ["DRC", "Madagascar", "South Africa"], globalShare: "70%", ytdChange: randomBetween(-15, 15), volume: `${randomBetween(5, 20).toFixed(0)}K contracts` },
+  { name: "Copper", price: randomBetween(8000, 10000), change: randomBetween(-2, 2), unit: "$/ton", icon: "🔶", topProducers: ["DRC", "Zambia", "South Africa"], globalShare: "12%", ytdChange: randomBetween(-5, 10), volume: `${randomBetween(100, 250).toFixed(0)}K contracts` },
+  { name: "Natural Gas", price: randomBetween(2.5, 4.5), change: randomBetween(-5, 5), unit: "$/MMBtu", icon: "🔥", topProducers: ["Algeria", "Nigeria", "Egypt", "Mozambique"], globalShare: "6%", ytdChange: randomBetween(-10, 15), volume: `${randomBetween(200, 400).toFixed(0)}K contracts` },
 ];
 
 const generateWeatherAlerts = () => [
-  { type: "Tropical Cyclone", region: "Mozambique Channel", severity: "critical", detail: "Category 3 cyclone approaching Mozambican coast" },
-  { type: "Extreme Heat", region: "Sahel Region", severity: "high", detail: "Temperatures exceeding 47°C expected for 5+ days" },
-  { type: "Flooding", region: "Niger River Basin", severity: "high", detail: "River levels rising above flood stage" },
-  { type: "Drought", region: "Horn of Africa", severity: "medium", detail: "Below-average rainfall for 3rd consecutive season" },
-  { type: "Dust Storm", region: "Northern Sahara", severity: "medium", detail: "Visibility reduced to <500m across desert regions" },
-  { type: "Locust Swarm", region: "East Africa", severity: "high", detail: "Desert locust swarms detected moving southward" },
+  { id: 0, type: "Tropical Cyclone", region: "Mozambique Channel", severity: "critical", detail: "Category 3 cyclone approaching Mozambican coast", windSpeed: "185 km/h", affectedPop: "2.3M", evacuations: "45,000", landfall: "Expected in 18 hours", agencies: ["WMO", "INGC Mozambique", "OCHA"] },
+  { id: 1, type: "Extreme Heat", region: "Sahel Region", severity: "high", detail: "Temperatures exceeding 47°C expected for 5+ days", peakTemp: "49°C", affectedPop: "12M", healthRisk: "Extreme — heat stroke risk for vulnerable populations", agencies: ["WMO", "WHO"] },
+  { id: 2, type: "Flooding", region: "Niger River Basin", severity: "high", detail: "River levels rising above flood stage", riverLevel: "8.2m (flood stage: 6.5m)", affectedPop: "1.8M", displacement: "320,000", agencies: ["OCHA", "Niger Basin Authority"] },
+  { id: 3, type: "Drought", region: "Horn of Africa", severity: "medium", detail: "Below-average rainfall for 3rd consecutive season", rainfallDeficit: "45% below normal", affectedPop: "23M", foodInsecurity: "IPC Phase 3-4", agencies: ["FEWS NET", "FAO", "WFP"] },
+  { id: 4, type: "Dust Storm", region: "Northern Sahara", severity: "medium", detail: "Visibility reduced to <500m across desert regions", visibility: "<500m", affectedPop: "4M", flightsAffected: 23, agencies: ["WMO"] },
+  { id: 5, type: "Locust Swarm", region: "East Africa", severity: "high", detail: "Desert locust swarms detected moving southward", swarmSize: "~2,500 km²", cropThreat: "Critical — 800,000 hectares at risk", affectedPop: "8.5M", agencies: ["FAO", "DLCO-EA"] },
 ];
 
 const generateWeatherCities = () => [
@@ -202,6 +229,14 @@ const generateWeatherCities = () => [
 ];
 
 // ─── COMPONENTS ─────────────────────────────────────────
+
+// Expandable detail row
+const DetailRow = ({ label, value, color }) => (
+  <div className="flex items-center justify-between py-0.5">
+    <span className="text-[10px] text-gray-500">{label}</span>
+    <span className="text-[10px] font-medium" style={{ color: color || "#d1d5db" }}>{value}</span>
+  </div>
+);
 
 // Widget wrapper
 const Widget = ({ title, icon: Icon, children, className = "", span = 1, color = "#3b82f6", onRefresh, badge }) => {
@@ -219,11 +254,11 @@ const Widget = ({ title, icon: Icon, children, className = "", span = 1, color =
         </div>
         <div className="flex items-center gap-1">
           {onRefresh && (
-            <button onClick={onRefresh} className="p-1 hover:bg-gray-800 rounded text-gray-500 hover:text-gray-300 transition-colors cursor-pointer" style={{ position: "relative", zIndex: 10 }}>
+            <button onClick={onRefresh} className="p-1 hover:bg-gray-800 rounded text-gray-500 hover:text-gray-300 transition-colors cursor-pointer">
               <RefreshCw size={12} />
             </button>
           )}
-          <button onClick={() => setCollapsed(!collapsed)} className="p-1 hover:bg-gray-800 rounded text-gray-500 hover:text-gray-300 transition-colors cursor-pointer" style={{ position: "relative", zIndex: 10 }}>
+          <button onClick={() => setCollapsed(!collapsed)} className="p-1 hover:bg-gray-800 rounded text-gray-500 hover:text-gray-300 transition-colors cursor-pointer">
             {collapsed ? <ChevronDown size={12} /> : <ChevronUp size={12} />}
           </button>
         </div>
@@ -282,20 +317,16 @@ const AfricaMapWidget = ({ conflicts, earthquakes }) => {
   return (
     <div className="relative w-full" style={{ height: "320px" }}>
       <svg viewBox="0 0 100 100" className="w-full h-full" style={{ filter: "drop-shadow(0 0 8px rgba(59,130,246,0.1))" }}>
-        {/* Simplified Africa outline */}
         <path d="M45,5 L55,3 L62,5 L68,10 L70,15 L72,20 L68,25 L65,22 L62,20 L60,22 L58,28 L60,32 L62,35 L65,38 L67,42 L68,48 L67,52 L65,55 L62,58 L60,62 L58,65 L55,68 L52,72 L48,75 L45,78 L42,82 L40,85 L38,88 L35,90 L32,88 L30,85 L28,80 L27,75 L25,70 L23,65 L22,60 L20,55 L18,50 L17,45 L16,40 L18,35 L20,30 L22,25 L25,20 L28,18 L30,15 L32,12 L35,10 L38,8 L42,6 Z"
               fill="#1e293b" stroke="#334155" strokeWidth="0.5" />
-        {/* Madagascar */}
         <path d="M72,60 L74,58 L75,62 L74,66 L72,68 L71,65 L71,62 Z"
               fill="#1e293b" stroke="#334155" strokeWidth="0.3" />
-        {/* Grid lines */}
         {[20, 40, 60, 80].map(y => (
           <line key={`h${y}`} x1="10" y1={y} x2="80" y2={y} stroke="#1e293b" strokeWidth="0.2" strokeDasharray="1,2" />
         ))}
         {[20, 40, 60].map(x => (
           <line key={`v${x}`} x1={x} y1="0" x2={x} y2="100" stroke="#1e293b" strokeWidth="0.2" strokeDasharray="1,2" />
         ))}
-        {/* Markers */}
         {markers.map((m, i) => (
           <g key={i}>
             <circle cx={m.x} cy={m.y} r="1.5" fill={m.color} opacity="0.3">
@@ -306,7 +337,6 @@ const AfricaMapWidget = ({ conflicts, earthquakes }) => {
           </g>
         ))}
       </svg>
-      {/* Legend */}
       <div className="absolute bottom-2 left-2 flex gap-3 text-[10px] text-gray-500">
         <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-red-500 inline-block"></span> Conflict</span>
         <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-purple-500 inline-block"></span> Seismic</span>
@@ -322,8 +352,16 @@ export default function AfricaDeck() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+
+  // Expanded item states for each widget
   const [selectedEvent, setSelectedEvent] = useState(null);
-  const [expandedNews, setExpandedNews] = useState(null);
+  const [selectedQuake, setSelectedQuake] = useState(null);
+  const [selectedNews, setSelectedNews] = useState(null);
+  const [selectedCurrency, setSelectedCurrency] = useState(null);
+  const [selectedExchange, setSelectedExchange] = useState(null);
+  const [selectedCommodity, setSelectedCommodity] = useState(null);
+  const [selectedDisease, setSelectedDisease] = useState(null);
+  const [selectedWeatherAlert, setSelectedWeatherAlert] = useState(null);
 
   // Data states
   const [conflicts, setConflicts] = useState(generateConflictEvents());
@@ -336,11 +374,19 @@ export default function AfricaDeck() {
   const [weatherAlerts, setWeatherAlerts] = useState(generateWeatherAlerts());
   const [weatherCities, setWeatherCities] = useState(generateWeatherCities());
 
+  // Set high/low after initial generation
+  useEffect(() => {
+    setCurrencies(prev => prev.map(c => ({
+      ...c,
+      high24h: +(c.rate * (1 + Math.abs(c.change) / 100)).toFixed(2),
+      low24h: +(c.rate * (1 - Math.abs(c.change) / 100)).toFixed(2),
+    })));
+  }, []);
+
   // Simulated live updates
   useEffect(() => {
     const interval = setInterval(() => {
       setLastUpdate(new Date());
-      // Rotate some data to simulate live updates
       setCurrencies(generateCurrencyData());
       setCommodities(generateCommodityData());
       setWeatherCities(generateWeatherCities());
@@ -359,7 +405,19 @@ export default function AfricaDeck() {
     setWeatherAlerts(generateWeatherAlerts());
     setWeatherCities(generateWeatherCities());
     setLastUpdate(new Date());
+    // Reset selections
+    setSelectedEvent(null);
+    setSelectedQuake(null);
+    setSelectedNews(null);
+    setSelectedCurrency(null);
+    setSelectedExchange(null);
+    setSelectedCommodity(null);
+    setSelectedDisease(null);
+    setSelectedWeatherAlert(null);
   };
+
+  // Toggle helper
+  const toggle = (setter, current, id) => setter(current === id ? null : id);
 
   // Stats
   const totalConflicts = conflicts.length;
@@ -369,7 +427,6 @@ export default function AfricaDeck() {
   const activeOutbreaks = diseases.length;
   const criticalOutbreaks = diseases.filter(d => d.trend === "rising").length;
 
-  // Category filter
   const categories = [
     { id: "all", label: "All Widgets", icon: Globe },
     { id: "security", label: "Security", icon: Shield },
@@ -379,7 +436,6 @@ export default function AfricaDeck() {
     { id: "weather", label: "Weather", icon: Cloud },
   ];
 
-  // Trend data for charts
   const conflictTrend = Array.from({ length: 12 }, (_, i) => ({
     month: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][i],
     events: randomInt(80, 250),
@@ -409,7 +465,6 @@ export default function AfricaDeck() {
       <header className="sticky top-0 z-50 bg-gray-950/95 backdrop-blur border-b border-gray-800">
         <div className="max-w-[1920px] mx-auto px-4 py-2">
           <div className="flex items-center justify-between">
-            {/* Logo & Title */}
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-green-500 via-yellow-500 to-red-500 flex items-center justify-center">
                 <Globe size={18} className="text-white" />
@@ -423,7 +478,6 @@ export default function AfricaDeck() {
               </div>
             </div>
 
-            {/* Center - Search & Stats */}
             <div className="hidden md:flex items-center gap-4">
               <div className="relative">
                 <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-500" />
@@ -448,7 +502,6 @@ export default function AfricaDeck() {
               </div>
             </div>
 
-            {/* Right - Status & Actions */}
             <div className="flex items-center gap-3">
               <div className="hidden sm:flex items-center gap-2 text-[10px] text-gray-500">
                 <LiveDot />
@@ -457,7 +510,7 @@ export default function AfricaDeck() {
                 <Clock size={10} />
                 <span>{lastUpdate.toLocaleTimeString()}</span>
               </div>
-              <button onClick={refreshAll} className="p-1.5 hover:bg-gray-800 rounded-lg text-gray-400 hover:text-white transition-colors cursor-pointer" style={{ position: "relative", zIndex: 10 }} title="Refresh all data">
+              <button onClick={refreshAll} className="p-1.5 hover:bg-gray-800 rounded-lg text-gray-400 hover:text-white transition-colors cursor-pointer" title="Refresh all data">
                 <RefreshCw size={14} />
               </button>
               <button onClick={() => setShowMobileMenu(!showMobileMenu)} className="md:hidden p-1.5 hover:bg-gray-800 rounded-lg text-gray-400">
@@ -466,7 +519,6 @@ export default function AfricaDeck() {
             </div>
           </div>
 
-          {/* Category Filters */}
           <div className="flex items-center gap-1 mt-2 pb-1 overflow-x-auto scrollbar-hide">
             {categories.map(cat => (
               <button
@@ -477,7 +529,6 @@ export default function AfricaDeck() {
                     ? "bg-blue-500/20 text-blue-400 border border-blue-500/30"
                     : "text-gray-500 hover:text-gray-300 hover:bg-gray-800/50 border border-transparent"
                 }`}
-                style={{ position: "relative", zIndex: 10 }}
               >
                 <cat.icon size={11} />
                 {cat.label}
@@ -489,7 +540,7 @@ export default function AfricaDeck() {
 
       {/* ─── ALERT BANNER ────────────────────────────── */}
       {criticalEvents > 0 && (
-        <div className="bg-red-500/10 border-b border-red-500/20 px-4 py-1.5 pointer-events-none" style={{ position: "relative", zIndex: 1 }}>
+        <div className="bg-red-500/10 border-b border-red-500/20 px-4 py-1.5">
           <div className="max-w-[1920px] mx-auto flex items-center gap-2 text-[11px]">
             <AlertTriangle size={12} className="text-red-400 flex-shrink-0" />
             <div className="overflow-hidden">
@@ -536,13 +587,18 @@ export default function AfricaDeck() {
             <Widget title="Conflict & Security Feed" icon={Shield} color="#ef4444" badge={`${totalConflicts} EVENTS`} onRefresh={() => setConflicts(generateConflictEvents())}>
               <div className="space-y-2 max-h-80 overflow-y-auto pr-1 scrollbar-thin">
                 {conflicts.sort((a, b) => a.time - b.time).map(event => (
-                  <div key={event.id} onClick={() => setSelectedEvent(selectedEvent?.id === event.id ? null : event)} className="bg-gray-800/40 rounded-lg p-2.5 border border-gray-700/30 hover:border-gray-600/50 transition-colors cursor-pointer">
+                  <div key={event.id}
+                    onClick={() => toggle(setSelectedEvent, selectedEvent, event.id)}
+                    className={`bg-gray-800/40 rounded-lg p-2.5 border transition-all cursor-pointer ${selectedEvent === event.id ? "border-red-500/40 bg-gray-800/60" : "border-gray-700/30 hover:border-gray-600/50"}`}>
                     <div className="flex items-start justify-between gap-2 mb-1">
                       <div className="flex items-center gap-1.5">
                         <SeverityBadge severity={event.severity} />
                         <span className="text-[11px] font-medium text-gray-300">{event.type}</span>
                       </div>
-                      <span className="text-[10px] text-gray-600 whitespace-nowrap">{timeAgo(event.time)}</span>
+                      <div className="flex items-center gap-1">
+                        <span className="text-[10px] text-gray-600 whitespace-nowrap">{timeAgo(event.time)}</span>
+                        {selectedEvent === event.id ? <ChevronUp size={10} className="text-gray-500" /> : <ChevronDown size={10} className="text-gray-500" />}
+                      </div>
                     </div>
                     <p className="text-[11px] text-gray-400 mb-1">{event.description}</p>
                     <div className="flex items-center justify-between">
@@ -555,11 +611,15 @@ export default function AfricaDeck() {
                         <span className="text-[9px] text-gray-600">{event.source}</span>
                       </div>
                     </div>
-                    {selectedEvent?.id === event.id && (
-                      <div className="mt-2 pt-2 border-t border-gray-700/50 text-[10px] text-gray-400 space-y-1">
-                        <div className="flex gap-4"><span>Lat: {event.lat.toFixed(2)}</span><span>Lng: {event.lng.toFixed(2)}</span></div>
-                        <div>Source: <span className="text-blue-400">{event.source}</span></div>
-                        <div>Status: {event.verified ? <span className="text-green-400">Verified by multiple sources</span> : <span className="text-yellow-400">Awaiting verification</span>}</div>
+                    {/* EXPANDED DETAILS */}
+                    {selectedEvent === event.id && (
+                      <div className="mt-2 pt-2 border-t border-gray-700/50 space-y-0.5 animate-fadeIn">
+                        <DetailRow label="Coordinates" value={`${event.lat.toFixed(2)}°N, ${event.lng.toFixed(2)}°E`} />
+                        <DetailRow label="Actors" value={event.actors?.join(" vs ") || "Unknown"} color="#f97316" />
+                        <DetailRow label="Affected Population" value={`~${event.affectedPop?.toLocaleString()}`} color="#eab308" />
+                        <DetailRow label="Response" value={event.responseStatus} color="#3b82f6" />
+                        <DetailRow label="Verification" value={event.verified ? "Multi-source confirmed" : "Pending verification"} color={event.verified ? "#22c55e" : "#eab308"} />
+                        <DetailRow label="Source" value={event.source} color="#06b6d4" />
                       </div>
                     )}
                   </div>
@@ -572,18 +632,34 @@ export default function AfricaDeck() {
           {(activeFilter === "all") && (
             <Widget title="Africa News Wire" icon={Newspaper} color="#06b6d4" badge="BREAKING" onRefresh={() => setNews(generateNewsItems())}>
               <div className="space-y-2 max-h-80 overflow-y-auto pr-1 scrollbar-thin">
-                {news.sort((a, b) => a.time - b.time).map((item, i) => (
-                  <div key={i} className="flex items-start gap-2 py-2 border-b border-gray-800/50 last:border-0">
-                    <div className={`w-1 h-1 rounded-full mt-1.5 flex-shrink-0 ${
-                      item.priority === "critical" ? "bg-red-500" : item.priority === "high" ? "bg-orange-500" : "bg-blue-500"
-                    }`} />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-[11px] text-gray-300 leading-relaxed">{item.title}</p>
-                      <div className="flex items-center gap-2 mt-0.5 text-[10px] text-gray-600">
-                        <span>{item.source}</span>
-                        <span>•</span>
-                        <span>{timeAgo(item.time)}</span>
-                        <span className="px-1 py-0 bg-gray-800 rounded text-[9px] text-gray-500">{item.category}</span>
+                {news.sort((a, b) => a.time - b.time).map((item) => (
+                  <div key={item.id}
+                    onClick={() => toggle(setSelectedNews, selectedNews, item.id)}
+                    className={`py-2 border-b border-gray-800/50 last:border-0 cursor-pointer transition-all rounded px-2 ${selectedNews === item.id ? "bg-gray-800/40" : "hover:bg-gray-800/20"}`}>
+                    <div className="flex items-start gap-2">
+                      <div className={`w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0 ${
+                        item.priority === "critical" ? "bg-red-500" : item.priority === "high" ? "bg-orange-500" : "bg-blue-500"
+                      }`} />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[11px] text-gray-300 leading-relaxed">{item.title}</p>
+                        <div className="flex items-center gap-2 mt-0.5 text-[10px] text-gray-600">
+                          <span>{item.source}</span>
+                          <span>•</span>
+                          <span>{timeAgo(item.time)}</span>
+                          <span className="px-1 py-0 bg-gray-800 rounded text-[9px] text-gray-500">{item.category}</span>
+                          {selectedNews === item.id ? <ChevronUp size={9} /> : <ChevronDown size={9} />}
+                        </div>
+                        {/* EXPANDED DETAILS */}
+                        {selectedNews === item.id && (
+                          <div className="mt-2 pt-2 border-t border-gray-700/50 animate-fadeIn">
+                            <p className="text-[10px] text-gray-400 leading-relaxed mb-2">{item.summary}</p>
+                            <div className="flex flex-wrap gap-1">
+                              {item.relatedCountries?.map((c, j) => (
+                                <span key={j} className="text-[9px] px-1.5 py-0.5 bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 rounded">{c}</span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -597,23 +673,41 @@ export default function AfricaDeck() {
             <Widget title="Seismic Activity Monitor" icon={Activity} color="#8b5cf6" badge={`${totalEarthquakes} EVENTS`} onRefresh={() => setEarthquakes(generateEarthquakes())}>
               <div className="space-y-2 max-h-80 overflow-y-auto pr-1 scrollbar-thin">
                 {earthquakes.sort((a, b) => b.magnitude - a.magnitude).map(eq => (
-                  <div key={eq.id} className="flex items-center gap-3 py-2 border-b border-gray-800/50 last:border-0">
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold text-sm ${
-                      eq.magnitude >= 5.0 ? "bg-red-500/20 text-red-400 border border-red-500/30" :
-                      eq.magnitude >= 4.0 ? "bg-orange-500/20 text-orange-400 border border-orange-500/30" :
-                      "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30"
-                    }`}>
-                      {eq.magnitude}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-[11px] text-gray-300 truncate">{eq.place}</p>
-                      <div className="flex items-center gap-2 text-[10px] text-gray-600">
-                        <span>Depth: {eq.depth}km</span>
-                        <span>•</span>
-                        <span>{timeAgo(eq.time)}</span>
-                        {eq.tsunami && <span className="text-red-400 font-bold">⚠ TSUNAMI</span>}
+                  <div key={eq.id}
+                    onClick={() => toggle(setSelectedQuake, selectedQuake, eq.id)}
+                    className={`flex flex-col gap-1 py-2 border-b border-gray-800/50 last:border-0 cursor-pointer transition-all rounded px-1 ${selectedQuake === eq.id ? "bg-gray-800/40" : "hover:bg-gray-800/20"}`}>
+                    <div className="flex items-center gap-3">
+                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold text-sm flex-shrink-0 ${
+                        eq.magnitude >= 5.0 ? "bg-red-500/20 text-red-400 border border-red-500/30" :
+                        eq.magnitude >= 4.0 ? "bg-orange-500/20 text-orange-400 border border-orange-500/30" :
+                        "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30"
+                      }`}>
+                        {eq.magnitude}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[11px] text-gray-300 truncate">{eq.place}</p>
+                        <div className="flex items-center gap-2 text-[10px] text-gray-600">
+                          <span>Depth: {eq.depth}km</span>
+                          <span>•</span>
+                          <span>{timeAgo(eq.time)}</span>
+                          {eq.tsunami && <span className="text-red-400 font-bold">⚠ TSUNAMI</span>}
+                          {selectedQuake === eq.id ? <ChevronUp size={9} /> : <ChevronDown size={9} />}
+                        </div>
                       </div>
                     </div>
+                    {/* EXPANDED DETAILS */}
+                    {selectedQuake === eq.id && (
+                      <div className="ml-13 mt-1 pt-2 border-t border-gray-700/50 space-y-0.5 animate-fadeIn" style={{ marginLeft: "52px" }}>
+                        <DetailRow label="Coordinates" value={`${eq.lat.toFixed(2)}°, ${eq.lng.toFixed(2)}°`} />
+                        <DetailRow label="Nearest City" value={`${eq.nearestCity} (${eq.distanceKm} km)`} />
+                        <DetailRow label="Intensity (MMI)" value={eq.intensity} color="#8b5cf6" />
+                        <DetailRow label="Felt Reports" value={eq.feltReports} />
+                        <DetailRow label="Tectonic Plate" value={eq.tectonicPlate} color="#06b6d4" />
+                        <DetailRow label="Aftershocks" value={eq.aftershocks} color={eq.aftershocks > 5 ? "#f97316" : "#22c55e"} />
+                        <DetailRow label="Status" value={eq.status} color="#3b82f6" />
+                        {eq.tsunami && <DetailRow label="Tsunami Warning" value="ACTIVE" color="#ef4444" />}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -625,20 +719,38 @@ export default function AfricaDeck() {
             <Widget title="African Currencies vs USD" icon={DollarSign} color="#22c55e" onRefresh={() => setCurrencies(generateCurrencyData())}>
               <div className="space-y-1.5 max-h-80 overflow-y-auto pr-1 scrollbar-thin">
                 {currencies.map((c, i) => (
-                  <div key={i} className="flex items-center justify-between py-1.5 border-b border-gray-800/30 last:border-0">
-                    <div className="flex items-center gap-2">
-                      <span className="text-base">{c.flag}</span>
-                      <div>
-                        <span className="text-[11px] font-semibold text-gray-200">{c.code}</span>
-                        <p className="text-[9px] text-gray-600">{c.name}</p>
+                  <div key={i}
+                    onClick={() => toggle(setSelectedCurrency, selectedCurrency, c.code)}
+                    className={`py-1.5 border-b border-gray-800/30 last:border-0 cursor-pointer transition-all rounded px-2 ${selectedCurrency === c.code ? "bg-gray-800/40" : "hover:bg-gray-800/20"}`}>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="text-base">{c.flag}</span>
+                        <div>
+                          <span className="text-[11px] font-semibold text-gray-200">{c.code}</span>
+                          <p className="text-[9px] text-gray-600">{c.name}</p>
+                        </div>
+                      </div>
+                      <div className="text-right flex items-center gap-2">
+                        <div>
+                          <span className="text-[11px] font-mono text-gray-300">{c.rate.toFixed(2)}</span>
+                          <p className={`text-[10px] font-medium ${c.change >= 0 ? "text-green-400" : "text-red-400"}`}>
+                            {c.change >= 0 ? "▲" : "▼"} {Math.abs(c.change).toFixed(2)}%
+                          </p>
+                        </div>
+                        {selectedCurrency === c.code ? <ChevronUp size={10} className="text-gray-500" /> : <ChevronDown size={10} className="text-gray-500" />}
                       </div>
                     </div>
-                    <div className="text-right">
-                      <span className="text-[11px] font-mono text-gray-300">{c.rate.toFixed(2)}</span>
-                      <p className={`text-[10px] font-medium ${c.change >= 0 ? "text-green-400" : "text-red-400"}`}>
-                        {c.change >= 0 ? "▲" : "▼"} {Math.abs(c.change).toFixed(2)}%
-                      </p>
-                    </div>
+                    {/* EXPANDED DETAILS */}
+                    {selectedCurrency === c.code && (
+                      <div className="mt-2 pt-2 border-t border-gray-700/50 space-y-0.5 animate-fadeIn">
+                        <DetailRow label="24h High" value={c.high24h?.toFixed(2) || (c.rate * 1.02).toFixed(2)} color="#22c55e" />
+                        <DetailRow label="24h Low" value={c.low24h?.toFixed(2) || (c.rate * 0.98).toFixed(2)} color="#ef4444" />
+                        <DetailRow label="7-Day Change" value={`${c.weekChange >= 0 ? "+" : ""}${c.weekChange?.toFixed(2) || "0.00"}%`} color={c.weekChange >= 0 ? "#22c55e" : "#ef4444"} />
+                        <DetailRow label="30-Day Change" value={`${c.monthChange >= 0 ? "+" : ""}${c.monthChange?.toFixed(2) || "0.00"}%`} color={c.monthChange >= 0 ? "#22c55e" : "#ef4444"} />
+                        <DetailRow label="Volume (24h)" value={`$${c.volume}M`} />
+                        <DetailRow label="Country" value={c.country} color="#06b6d4" />
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -650,7 +762,9 @@ export default function AfricaDeck() {
             <Widget title="African Stock Exchanges" icon={BarChart3} color="#f59e0b" onRefresh={() => setExchanges(generateExchangeData())}>
               <div className="space-y-2 max-h-80 overflow-y-auto pr-1 scrollbar-thin">
                 {exchanges.map((ex, i) => (
-                  <div key={i} className="bg-gray-800/30 rounded-lg p-2 border border-gray-700/20">
+                  <div key={i}
+                    onClick={() => toggle(setSelectedExchange, selectedExchange, ex.name)}
+                    className={`bg-gray-800/30 rounded-lg p-2 border cursor-pointer transition-all ${selectedExchange === ex.name ? "border-yellow-500/30 bg-gray-800/50" : "border-gray-700/20 hover:border-gray-600/30"}`}>
                     <div className="flex items-center justify-between mb-1">
                       <div className="flex items-center gap-1.5">
                         <span className="text-sm">{ex.flag}</span>
@@ -659,11 +773,14 @@ export default function AfricaDeck() {
                           <p className="text-[9px] text-gray-600">{ex.full}</p>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <span className="text-[11px] font-mono text-gray-300">{ex.index.toFixed(0)}</span>
-                        <p className={`text-[10px] font-medium ${ex.change >= 0 ? "text-green-400" : "text-red-400"}`}>
-                          {ex.change >= 0 ? "+" : ""}{ex.change.toFixed(2)}%
-                        </p>
+                      <div className="text-right flex items-center gap-1">
+                        <div>
+                          <span className="text-[11px] font-mono text-gray-300">{ex.index.toFixed(0)}</span>
+                          <p className={`text-[10px] font-medium ${ex.change >= 0 ? "text-green-400" : "text-red-400"}`}>
+                            {ex.change >= 0 ? "+" : ""}{ex.change.toFixed(2)}%
+                          </p>
+                        </div>
+                        {selectedExchange === ex.name ? <ChevronUp size={10} className="text-gray-500" /> : <ChevronDown size={10} className="text-gray-500" />}
                       </div>
                     </div>
                     <div className="h-8">
@@ -674,6 +791,17 @@ export default function AfricaDeck() {
                       </ResponsiveContainer>
                     </div>
                     <div className="text-[9px] text-gray-600 mt-0.5">Vol: {ex.volume}</div>
+                    {/* EXPANDED DETAILS */}
+                    {selectedExchange === ex.name && (
+                      <div className="mt-2 pt-2 border-t border-gray-700/50 space-y-0.5 animate-fadeIn">
+                        <DetailRow label="Market Cap" value={`$${ex.marketCap}`} />
+                        <DetailRow label="Listed Companies" value={ex.listedCompanies} />
+                        <DetailRow label="Trading Status" value={ex.tradingStatus} color={ex.tradingStatus === "Open" ? "#22c55e" : "#ef4444"} />
+                        <DetailRow label="Top Gainer" value={`${ex.topGainer} (+${ex.topGainerPct.toFixed(1)}%)`} color="#22c55e" />
+                        <DetailRow label="Top Loser" value={`${ex.topLoser} (${ex.topLoserPct.toFixed(1)}%)`} color="#ef4444" />
+                        <DetailRow label="Country" value={ex.country} color="#06b6d4" />
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -685,17 +813,40 @@ export default function AfricaDeck() {
             <Widget title="Commodities — Africa Key Exports" icon={TrendingUp} color="#f97316" onRefresh={() => setCommodities(generateCommodityData())}>
               <div className="space-y-1.5 max-h-80 overflow-y-auto pr-1 scrollbar-thin">
                 {commodities.map((c, i) => (
-                  <div key={i} className="flex items-center justify-between py-1.5 border-b border-gray-800/30 last:border-0">
-                    <div className="flex items-center gap-2">
-                      <span className="text-base">{c.icon}</span>
-                      <span className="text-[11px] text-gray-300">{c.name}</span>
+                  <div key={i}
+                    onClick={() => toggle(setSelectedCommodity, selectedCommodity, c.name)}
+                    className={`py-1.5 border-b border-gray-800/30 last:border-0 cursor-pointer transition-all rounded px-2 ${selectedCommodity === c.name ? "bg-gray-800/40" : "hover:bg-gray-800/20"}`}>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="text-base">{c.icon}</span>
+                        <span className="text-[11px] text-gray-300">{c.name}</span>
+                      </div>
+                      <div className="text-right flex items-center gap-2">
+                        <div>
+                          <span className="text-[11px] font-mono text-gray-200">{c.price.toLocaleString()} <span className="text-[9px] text-gray-600">{c.unit}</span></span>
+                          <p className={`text-[10px] font-medium ${c.change >= 0 ? "text-green-400" : "text-red-400"}`}>
+                            {c.change >= 0 ? "▲" : "▼"} {Math.abs(c.change).toFixed(2)}%
+                          </p>
+                        </div>
+                        {selectedCommodity === c.name ? <ChevronUp size={10} className="text-gray-500" /> : <ChevronDown size={10} className="text-gray-500" />}
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <span className="text-[11px] font-mono text-gray-200">{c.price.toLocaleString()} <span className="text-[9px] text-gray-600">{c.unit}</span></span>
-                      <p className={`text-[10px] font-medium ${c.change >= 0 ? "text-green-400" : "text-red-400"}`}>
-                        {c.change >= 0 ? "▲" : "▼"} {Math.abs(c.change).toFixed(2)}%
-                      </p>
-                    </div>
+                    {/* EXPANDED DETAILS */}
+                    {selectedCommodity === c.name && (
+                      <div className="mt-2 pt-2 border-t border-gray-700/50 space-y-0.5 animate-fadeIn">
+                        <DetailRow label="YTD Change" value={`${c.ytdChange >= 0 ? "+" : ""}${c.ytdChange.toFixed(1)}%`} color={c.ytdChange >= 0 ? "#22c55e" : "#ef4444"} />
+                        <DetailRow label="Africa's Global Share" value={c.globalShare} color="#f59e0b" />
+                        <DetailRow label="Volume" value={c.volume} />
+                        <div className="pt-1">
+                          <span className="text-[9px] text-gray-500">Top African Producers:</span>
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {c.topProducers.map((p, j) => (
+                              <span key={j} className="text-[9px] px-1.5 py-0.5 bg-orange-500/10 text-orange-400 border border-orange-500/20 rounded">{p}</span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -707,16 +858,21 @@ export default function AfricaDeck() {
             <Widget title="Disease Outbreak Tracker" icon={Heart} color="#eab308" badge={`${criticalOutbreaks} RISING`} onRefresh={() => setDiseases(generateDiseaseOutbreaks())}>
               <div className="space-y-2 max-h-80 overflow-y-auto pr-1 scrollbar-thin">
                 {diseases.sort((a, b) => b.cases - a.cases).map((d, i) => (
-                  <div key={i} className="bg-gray-800/30 rounded-lg p-2 border border-gray-700/20">
+                  <div key={i}
+                    onClick={() => toggle(setSelectedDisease, selectedDisease, d.disease + d.country)}
+                    className={`bg-gray-800/30 rounded-lg p-2 border cursor-pointer transition-all ${selectedDisease === d.disease + d.country ? "border-yellow-500/30 bg-gray-800/50" : "border-gray-700/20 hover:border-gray-600/30"}`}>
                     <div className="flex items-center justify-between mb-1">
                       <span className="text-[11px] font-semibold text-gray-200">{d.disease}</span>
-                      <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${
-                        d.trend === "rising" ? "bg-red-500/20 text-red-400" :
-                        d.trend === "declining" ? "bg-green-500/20 text-green-400" :
-                        "bg-yellow-500/20 text-yellow-400"
-                      }`}>
-                        {d.trend === "rising" ? "▲ Rising" : d.trend === "declining" ? "▼ Declining" : "— Stable"}
-                      </span>
+                      <div className="flex items-center gap-1">
+                        <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${
+                          d.trend === "rising" ? "bg-red-500/20 text-red-400" :
+                          d.trend === "declining" ? "bg-green-500/20 text-green-400" :
+                          "bg-yellow-500/20 text-yellow-400"
+                        }`}>
+                          {d.trend === "rising" ? "▲ Rising" : d.trend === "declining" ? "▼ Declining" : "— Stable"}
+                        </span>
+                        {selectedDisease === d.disease + d.country ? <ChevronUp size={10} className="text-gray-500" /> : <ChevronDown size={10} className="text-gray-500" />}
+                      </div>
                     </div>
                     <div className="flex items-center gap-3 text-[10px] text-gray-500">
                       <span><MapPin size={9} className="inline mr-0.5" />{d.country}</span>
@@ -729,6 +885,17 @@ export default function AfricaDeck() {
                         backgroundColor: d.trend === "rising" ? "#ef4444" : d.trend === "declining" ? "#22c55e" : "#eab308"
                       }} />
                     </div>
+                    {/* EXPANDED DETAILS */}
+                    {selectedDisease === d.disease + d.country && (
+                      <div className="mt-2 pt-2 border-t border-gray-700/50 space-y-0.5 animate-fadeIn">
+                        <DetailRow label="New Cases (24h)" value={`+${d.newCases24h.toLocaleString()}`} color={d.trend === "rising" ? "#ef4444" : "#eab308"} />
+                        <DetailRow label="Recoveries" value={d.recoveries.toLocaleString()} color="#22c55e" />
+                        <DetailRow label="Case Fatality Rate" value={`${((d.deaths / d.cases) * 100).toFixed(1)}%`} color="#ef4444" />
+                        <DetailRow label="WHO Alert" value={d.whoAlert ? "Yes — Active" : "No"} color={d.whoAlert ? "#ef4444" : "#6b7280"} />
+                        <DetailRow label="Vaccine Available" value={d.vaccineAvailable ? "Yes" : "No"} color={d.vaccineAvailable ? "#22c55e" : "#ef4444"} />
+                        <DetailRow label="Response Teams" value={`${d.responseTeams} teams deployed`} color="#3b82f6" />
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -739,14 +906,46 @@ export default function AfricaDeck() {
           {(activeFilter === "all" || activeFilter === "weather") && (
             <Widget title="Severe Weather Alerts" icon={AlertTriangle} color="#f43f5e" onRefresh={() => setWeatherAlerts(generateWeatherAlerts())}>
               <div className="space-y-2 max-h-80 overflow-y-auto pr-1 scrollbar-thin">
-                {weatherAlerts.map((alert, i) => (
-                  <div key={i} className="bg-gray-800/30 rounded-lg p-2 border-l-2" style={{ borderLeftColor: SEVERITY_COLORS[alert.severity] }}>
+                {weatherAlerts.map((alert) => (
+                  <div key={alert.id}
+                    onClick={() => toggle(setSelectedWeatherAlert, selectedWeatherAlert, alert.id)}
+                    className={`bg-gray-800/30 rounded-lg p-2 border-l-2 cursor-pointer transition-all ${selectedWeatherAlert === alert.id ? "bg-gray-800/50" : "hover:bg-gray-800/40"}`}
+                    style={{ borderLeftColor: SEVERITY_COLORS[alert.severity] }}>
                     <div className="flex items-center justify-between mb-0.5">
                       <span className="text-[11px] font-semibold text-gray-200">{alert.type}</span>
-                      <SeverityBadge severity={alert.severity} />
+                      <div className="flex items-center gap-1">
+                        <SeverityBadge severity={alert.severity} />
+                        {selectedWeatherAlert === alert.id ? <ChevronUp size={10} className="text-gray-500" /> : <ChevronDown size={10} className="text-gray-500" />}
+                      </div>
                     </div>
                     <p className="text-[10px] text-gray-500 mb-0.5">{alert.region}</p>
                     <p className="text-[10px] text-gray-400">{alert.detail}</p>
+                    {/* EXPANDED DETAILS */}
+                    {selectedWeatherAlert === alert.id && (
+                      <div className="mt-2 pt-2 border-t border-gray-700/50 space-y-0.5 animate-fadeIn">
+                        {alert.windSpeed && <DetailRow label="Wind Speed" value={alert.windSpeed} color="#ef4444" />}
+                        {alert.peakTemp && <DetailRow label="Peak Temperature" value={alert.peakTemp} color="#ef4444" />}
+                        {alert.riverLevel && <DetailRow label="River Level" value={alert.riverLevel} color="#3b82f6" />}
+                        {alert.rainfallDeficit && <DetailRow label="Rainfall Deficit" value={alert.rainfallDeficit} color="#eab308" />}
+                        {alert.visibility && <DetailRow label="Visibility" value={alert.visibility} />}
+                        {alert.swarmSize && <DetailRow label="Swarm Size" value={alert.swarmSize} color="#f97316" />}
+                        {alert.cropThreat && <DetailRow label="Crop Threat" value={alert.cropThreat} color="#ef4444" />}
+                        {alert.foodInsecurity && <DetailRow label="Food Insecurity" value={alert.foodInsecurity} color="#ef4444" />}
+                        <DetailRow label="Affected Population" value={alert.affectedPop} color="#eab308" />
+                        {alert.evacuations && <DetailRow label="Evacuations" value={alert.evacuations} color="#f97316" />}
+                        {alert.displacement && <DetailRow label="Displacement" value={alert.displacement} color="#f97316" />}
+                        {alert.landfall && <DetailRow label="Landfall" value={alert.landfall} color="#ef4444" />}
+                        {alert.flightsAffected && <DetailRow label="Flights Affected" value={alert.flightsAffected} />}
+                        <div className="pt-1">
+                          <span className="text-[9px] text-gray-500">Agencies:</span>
+                          <div className="flex flex-wrap gap-1 mt-0.5">
+                            {alert.agencies?.map((a, j) => (
+                              <span key={j} className="text-[9px] px-1.5 py-0.5 bg-rose-500/10 text-rose-400 border border-rose-500/20 rounded">{a}</span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -967,10 +1166,11 @@ export default function AfricaDeck() {
           100% { transform: translateX(-50%); }
         }
         .animate-marquee { animation: marquee 30s linear infinite; }
-        button { cursor: pointer; position: relative; z-index: 2; }
-        input { position: relative; z-index: 2; }
-        .pointer-events-none { pointer-events: none; }
-        [class*="hover:"] { cursor: pointer; }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(-4px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn { animation: fadeIn 0.2s ease-out; }
       `}</style>
     </div>
   );
