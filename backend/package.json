@@ -1,0 +1,18 @@
+{
+  "name": "africadeck-backend",
+  "version": "1.0.0",
+  "description": "AfricaDeck API server — proxies and aggregates OSINT data sources for Africa",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "node-cache": "^5.1.2",
+    "node-fetch": "^3.3.2"
+  }
+}
