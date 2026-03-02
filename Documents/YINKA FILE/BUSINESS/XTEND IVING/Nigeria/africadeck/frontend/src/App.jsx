@@ -839,7 +839,7 @@ export default function AfricaDeck() {
       {/* FOOTER */}
       <footer className="border-t border-gray-800 bg-gray-900/30 py-3">
         <div className="max-w-[1920px] mx-auto px-4 flex flex-wrap items-center justify-between gap-2 text-[10px] text-gray-600">
-          <div className="flex items-center gap-2"><span className="text-green-400 font-bold">NigeriaDeck</span><span>v2.0.0</span><span>|</span><span>Nigeria Intelligence Dashboard</span></div>
+          <div className="flex items-center gap-2"><span className="text-green-400 font-bold">NigeriaDeck-Olayinka Ayeni</span><span>v2.0.0</span><span>|</span><span>Nigeria Intelligence Dashboard</span></div>
           <div className="flex items-center gap-3"><span>Sources: ACLED, NCDC, NBS, CBN, NNPC, INEC, NiMet, NEMA</span><span>|</span><span>Last sync: {lastUpdate.toLocaleTimeString()}</span></div>
         </div>
       </footer>
