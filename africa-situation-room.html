@@ -1,1346 +1,2024 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AFRICA SITUATION ROOM — Middle East Conflict Impact</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
-
-  :root {
-    --bg-primary: #0a0e17;
-    --bg-secondary: #111827;
-    --bg-card: #1a2235;
-    --bg-card-hover: #1f2a40;
-    --accent-red: #ef4444;
-    --accent-orange: #f97316;
-    --accent-amber: #f59e0b;
-    --accent-green: #22c55e;
-    --accent-cyan: #06b6d4;
-    --accent-blue: #3b82f6;
-    --accent-purple: #a855f7;
-    --text-primary: #f1f5f9;
-    --text-secondary: #94a3b8;
-    --text-muted: #64748b;
-    --border: #1e293b;
-    --glow-red: rgba(239, 68, 68, 0.3);
-    --glow-cyan: rgba(6, 182, 212, 0.2);
-    --glow-amber: rgba(245, 158, 11, 0.2);
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    font-family: 'Inter', sans-serif;
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    overflow-x: hidden;
-    min-height: 100vh;
-  }
-
-  /* Scanline overlay */
-  body::after {
-    content: '';
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(0, 0, 0, 0.03) 2px,
-      rgba(0, 0, 0, 0.03) 4px
-    );
-    pointer-events: none;
-    z-index: 9999;
-  }
-
-  /* HEADER */
-  .header {
-    background: linear-gradient(180deg, rgba(17, 24, 39, 0.98) 0%, rgba(10, 14, 23, 0.95) 100%);
-    border-bottom: 1px solid var(--border);
-    padding: 12px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    backdrop-filter: blur(20px);
-  }
-
-  .header-left {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-
-  .status-beacon {
-    width: 10px; height: 10px;
-    background: var(--accent-red);
-    border-radius: 50%;
-    animation: pulse-beacon 2s ease-in-out infinite;
-    box-shadow: 0 0 10px var(--accent-red), 0 0 20px rgba(239,68,68,0.3);
-  }
-
-  @keyframes pulse-beacon {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.8); }
-  }
-
-  .header-title {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .header-subtitle {
-    font-size: 10px;
-    color: var(--text-muted);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-family: 'JetBrains Mono', monospace;
-  }
-
-  .header-right {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-  }
-
-  .live-badge {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(239, 68, 68, 0.15);
-    border: 1px solid rgba(239, 68, 68, 0.3);
-    padding: 4px 12px;
-    border-radius: 4px;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 10px;
-    font-weight: 600;
-    color: var(--accent-red);
-    letter-spacing: 2px;
-  }
-
-  .live-dot {
-    width: 6px; height: 6px;
-    background: var(--accent-red);
-    border-radius: 50%;
-    animation: pulse-beacon 1.5s ease-in-out infinite;
-  }
-
-  .clock {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    color: var(--accent-cyan);
-    letter-spacing: 1px;
-  }
-
-  /* THREAT LEVEL BAR */
-  .threat-bar {
-    background: linear-gradient(90deg, rgba(239,68,68,0.1), rgba(245,158,11,0.1));
-    border-bottom: 1px solid var(--border);
-    padding: 8px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 11px;
-  }
-
-  .threat-level {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: 'Orbitron', sans-serif;
-    font-weight: 600;
-    letter-spacing: 2px;
-    font-size: 10px;
-  }
-
-  .threat-indicator {
-    display: flex; gap: 3px;
-  }
-
-  .threat-segment {
-    width: 20px; height: 8px;
-    border-radius: 2px;
-    background: var(--border);
-    transition: background 0.3s;
-  }
-
-  .threat-segment.active-red { background: var(--accent-red); box-shadow: 0 0 6px var(--glow-red); }
-  .threat-segment.active-orange { background: var(--accent-orange); }
-  .threat-segment.active-amber { background: var(--accent-amber); }
-
-  .ticker {
-    flex: 1;
-    margin: 0 24px;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-
-  .ticker-content {
-    display: inline-block;
-    animation: ticker-scroll 60s linear infinite;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--text-secondary);
-  }
-
-  .ticker-content .highlight { color: var(--accent-amber); font-weight: 600; }
-  .ticker-content .sep { color: var(--text-muted); margin: 0 16px; }
-
-  @keyframes ticker-scroll {
-    0% { transform: translateX(100%); }
-    100% { transform: translateX(-100%); }
-  }
-
-  /* NAV TABS */
-  .nav-tabs {
-    display: flex;
-    gap: 0;
-    padding: 0 24px;
-    background: var(--bg-secondary);
-    border-bottom: 1px solid var(--border);
-  }
-
-  .nav-tab {
-    padding: 12px 24px;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    transition: all 0.3s;
-    background: none;
-    border-top: none; border-left: none; border-right: none;
-  }
-
-  .nav-tab:hover { color: var(--text-secondary); background: rgba(255,255,255,0.02); }
-  .nav-tab.active {
-    color: var(--accent-cyan);
-    border-bottom-color: var(--accent-cyan);
-    background: rgba(6, 182, 212, 0.05);
-  }
-
-  /* MAIN LAYOUT */
-  .main-layout {
-    display: grid;
-    grid-template-columns: 1fr 380px;
-    gap: 0;
-    min-height: calc(100vh - 140px);
-  }
-
-  /* MAP SECTION */
-  .map-section {
-    padding: 20px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .map-container {
-    flex: 1;
-    position: relative;
-    background: radial-gradient(ellipse at center, rgba(6,182,212,0.03) 0%, transparent 70%);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    overflow: hidden;
-    min-height: 500px;
-  }
-
-  .map-container svg {
-    width: 100%;
-    height: 100%;
-  }
-
-  .map-grid {
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-image:
-      linear-gradient(rgba(6,182,212,0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(6,182,212,0.05) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none;
-  }
-
-  /* Country paths */
-  .country {
-    fill: #1a2744;
-    stroke: #2a3a5c;
-    stroke-width: 0.5;
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-
-  .country:hover {
-    fill: #253557;
-    stroke: var(--accent-cyan);
-    stroke-width: 1;
-  }
-
-  .country.impact-critical {
-    fill: rgba(239, 68, 68, 0.25);
-    stroke: var(--accent-red);
-  }
-  .country.impact-high {
-    fill: rgba(245, 158, 11, 0.2);
-    stroke: var(--accent-amber);
-  }
-  .country.impact-moderate {
-    fill: rgba(249, 115, 22, 0.15);
-    stroke: var(--accent-orange);
-  }
-  .country.impact-low {
-    fill: rgba(34, 197, 94, 0.1);
-    stroke: var(--accent-green);
-  }
-
-  /* Hotspot markers */
-  .hotspot {
-    cursor: pointer;
-  }
-
-  .hotspot-ring {
-    fill: none;
-    stroke: var(--accent-red);
-    stroke-width: 1.5;
-    animation: ring-pulse 2s ease-out infinite;
-  }
-
-  @keyframes ring-pulse {
-    0% { r: 6; opacity: 1; }
-    100% { r: 18; opacity: 0; }
-  }
-
-  .hotspot-core {
-    fill: var(--accent-red);
-    filter: drop-shadow(0 0 4px var(--accent-red));
-  }
-
-  /* Shipping route */
-  .shipping-route {
-    fill: none;
-    stroke: var(--accent-amber);
-    stroke-width: 1.5;
-    stroke-dasharray: 6 4;
-    animation: dash-flow 1.5s linear infinite;
-    opacity: 0.6;
-  }
-
-  @keyframes dash-flow {
-    to { stroke-dashoffset: -10; }
-  }
-
-  /* Map legend */
-  .map-legend {
-    position: absolute;
-    bottom: 16px;
-    left: 16px;
-    background: rgba(10, 14, 23, 0.9);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 12px 16px;
-    backdrop-filter: blur(10px);
-  }
-
-  .legend-title {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 9px;
-    letter-spacing: 2px;
-    color: var(--text-muted);
-    margin-bottom: 8px;
-    text-transform: uppercase;
-  }
-
-  .legend-items { display: flex; flex-direction: column; gap: 5px; }
-
-  .legend-item {
-    display: flex; align-items: center; gap: 8px;
-    font-size: 10px; color: var(--text-secondary);
-  }
-
-  .legend-color {
-    width: 12px; height: 12px; border-radius: 2px;
-  }
-
-  /* Map info tooltip */
-  .map-tooltip {
-    display: none;
-    position: absolute;
-    background: rgba(10, 14, 23, 0.95);
-    border: 1px solid var(--accent-cyan);
-    border-radius: 6px;
-    padding: 12px 16px;
-    max-width: 280px;
-    z-index: 50;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 0 20px rgba(6, 182, 212, 0.1);
-  }
-
-  .map-tooltip.visible { display: block; }
-
-  .tooltip-title {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--accent-cyan);
-    margin-bottom: 6px;
-    letter-spacing: 1px;
-  }
-
-  .tooltip-text {
-    font-size: 11px;
-    color: var(--text-secondary);
-    line-height: 1.5;
-  }
-
-  .tooltip-stat {
-    display: flex; justify-content: space-between;
-    padding: 3px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    font-size: 11px;
-  }
-
-  .tooltip-stat-label { color: var(--text-muted); }
-  .tooltip-stat-value { color: var(--text-primary); font-weight: 600; font-family: 'JetBrains Mono', monospace; }
-  .tooltip-stat-value.critical { color: var(--accent-red); }
-  .tooltip-stat-value.warning { color: var(--accent-amber); }
-
-  /* SIDEBAR */
-  .sidebar {
-    border-left: 1px solid var(--border);
-    background: var(--bg-secondary);
-    overflow-y: auto;
-    max-height: calc(100vh - 140px);
-  }
-
-  .sidebar::-webkit-scrollbar { width: 4px; }
-  .sidebar::-webkit-scrollbar-track { background: var(--bg-secondary); }
-  .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
-  /* Data panels */
-  .panel {
-    border-bottom: 1px solid var(--border);
-    padding: 16px 20px;
-  }
-
-  .panel-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 12px;
-  }
-
-  .panel-title {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--text-muted);
-  }
-
-  .panel-badge {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9px;
-    padding: 2px 8px;
-    border-radius: 3px;
-    letter-spacing: 1px;
-  }
-
-  .badge-critical { background: rgba(239,68,68,0.15); color: var(--accent-red); border: 1px solid rgba(239,68,68,0.3); }
-  .badge-warning { background: rgba(245,158,11,0.15); color: var(--accent-amber); border: 1px solid rgba(245,158,11,0.3); }
-  .badge-info { background: rgba(6,182,212,0.15); color: var(--accent-cyan); border: 1px solid rgba(6,182,212,0.3); }
-
-  /* Stat cards */
-  .stat-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
-
-  .stat-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 10px 12px;
-    transition: all 0.3s;
-  }
-
-  .stat-card:hover {
-    border-color: rgba(6, 182, 212, 0.3);
-    background: var(--bg-card-hover);
-  }
-
-  .stat-label {
-    font-size: 9px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 4px;
-    font-family: 'JetBrains Mono', monospace;
-  }
-
-  .stat-value {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 18px;
-    font-weight: 700;
-  }
-
-  .stat-value.red { color: var(--accent-red); }
-  .stat-value.amber { color: var(--accent-amber); }
-  .stat-value.cyan { color: var(--accent-cyan); }
-  .stat-value.green { color: var(--accent-green); }
-
-  .stat-change {
-    font-size: 10px;
-    margin-top: 2px;
-    font-family: 'JetBrains Mono', monospace;
-  }
-
-  .stat-change.up { color: var(--accent-red); }
-  .stat-change.down { color: var(--accent-green); }
-
-  /* Event feed */
-  .event-feed { display: flex; flex-direction: column; gap: 8px; }
-
-  .event-item {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 10px 12px;
-    border-left: 3px solid;
-    transition: all 0.3s;
-    cursor: pointer;
-  }
-
-  .event-item:hover { background: var(--bg-card-hover); }
-
-  .event-item.critical { border-left-color: var(--accent-red); }
-  .event-item.warning { border-left-color: var(--accent-amber); }
-  .event-item.info { border-left-color: var(--accent-cyan); }
-
-  .event-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 4px;
-  }
-
-  .event-tag {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    padding: 1px 6px;
-    border-radius: 2px;
-  }
-
-  .event-tag.econ { background: rgba(245,158,11,0.15); color: var(--accent-amber); }
-  .event-tag.security { background: rgba(239,68,68,0.15); color: var(--accent-red); }
-  .event-tag.humanitarian { background: rgba(168,85,247,0.15); color: var(--accent-purple); }
-  .event-tag.diplomatic { background: rgba(6,182,212,0.15); color: var(--accent-cyan); }
-
-  .event-time {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9px;
-    color: var(--text-muted);
-  }
-
-  .event-title {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text-primary);
-    line-height: 1.4;
-  }
-
-  .event-region {
-    font-size: 10px;
-    color: var(--text-muted);
-    margin-top: 3px;
-  }
-
-  /* Bar chart */
-  .bar-chart { display: flex; flex-direction: column; gap: 8px; }
-
-  .bar-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .bar-label {
-    width: 80px;
-    font-size: 10px;
-    color: var(--text-secondary);
-    text-align: right;
-    flex-shrink: 0;
-  }
-
-  .bar-track {
-    flex: 1;
-    height: 8px;
-    background: rgba(255,255,255,0.05);
-    border-radius: 4px;
-    overflow: hidden;
-  }
-
-  .bar-fill {
-    height: 100%;
-    border-radius: 4px;
-    transition: width 1s ease;
-  }
-
-  .bar-fill.red { background: linear-gradient(90deg, var(--accent-red), #f87171); }
-  .bar-fill.amber { background: linear-gradient(90deg, var(--accent-amber), #fbbf24); }
-  .bar-fill.orange { background: linear-gradient(90deg, var(--accent-orange), #fb923c); }
-  .bar-fill.cyan { background: linear-gradient(90deg, var(--accent-cyan), #22d3ee); }
-
-  .bar-value {
-    width: 40px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    color: var(--text-muted);
-    flex-shrink: 0;
-  }
-
-  /* CONTENT SECTIONS (tabbed) */
-  .tab-content {
-    display: none;
-  }
-  .tab-content.active {
-    display: block;
-  }
-
-  /* DETAIL PANELS (below map) */
-  .detail-section {
-    padding: 20px;
-  }
-
-  .detail-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin-top: 16px;
-  }
-
-  .detail-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 16px;
-    transition: all 0.3s;
-  }
-
-  .detail-card:hover {
-    border-color: rgba(6,182,212,0.3);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-  }
-
-  .detail-card-icon {
-    font-size: 24px;
-    margin-bottom: 8px;
-  }
-
-  .detail-card-title {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    color: var(--accent-cyan);
-    margin-bottom: 8px;
-  }
-
-  .detail-card-text {
-    font-size: 12px;
-    color: var(--text-secondary);
-    line-height: 1.6;
-  }
-
-  .detail-card-stat {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 22px;
-    font-weight: 700;
-    margin: 6px 0;
-  }
-
-  /* Key figures ribbon */
-  .key-figures {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 12px;
-    padding: 16px 24px;
-    background: var(--bg-secondary);
-    border-bottom: 1px solid var(--border);
-  }
-
-  .key-figure {
-    text-align: center;
-    padding: 8px;
-  }
-
-  .key-figure-value {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-
-  .key-figure-label {
-    font-size: 9px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-family: 'JetBrains Mono', monospace;
-  }
-
-  /* Sources footer */
-  .sources-footer {
-    background: var(--bg-secondary);
-    border-top: 1px solid var(--border);
-    padding: 16px 24px;
-    font-size: 10px;
-    color: var(--text-muted);
-  }
-
-  .sources-footer a {
-    color: var(--accent-cyan);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  .sources-footer a:hover { color: var(--accent-blue); text-decoration: underline; }
-
-  .sources-title {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 9px;
-    letter-spacing: 2px;
-    margin-bottom: 8px;
-    color: var(--text-muted);
-  }
-
-  /* Responsive */
-  @media (max-width: 1024px) {
-    .main-layout { grid-template-columns: 1fr; }
-    .sidebar { max-height: none; border-left: none; border-top: 1px solid var(--border); }
-    .detail-grid { grid-template-columns: 1fr; }
-    .key-figures { grid-template-columns: repeat(3, 1fr); }
-  }
-
-  @media (max-width: 640px) {
-    .header { padding: 8px 12px; }
-    .header-title { font-size: 11px; letter-spacing: 1px; }
-    .key-figures { grid-template-columns: repeat(2, 1fr); }
-    .nav-tab { padding: 10px 12px; font-size: 8px; }
-  }
-
-  /* Animations */
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .animate-in {
-    animation: fadeInUp 0.5s ease forwards;
-  }
-
-  .delay-1 { animation-delay: 0.1s; opacity: 0; }
-  .delay-2 { animation-delay: 0.2s; opacity: 0; }
-  .delay-3 { animation-delay: 0.3s; opacity: 0; }
-  .delay-4 { animation-delay: 0.4s; opacity: 0; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nigeria LGA Intelligence Map</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-tertiary: #e9ecef;
+            --bg-card: #ffffff;
+            --text-primary: #1a1a2e;
+            --text-secondary: #6c757d;
+            --text-muted: #adb5bd;
+            --accent-primary: #0066ff;
+            --accent-green: #00b894;
+            --accent-red: #e17055;
+            --accent-amber: #fdcb6e;
+            --accent-purple: #6c5ce7;
+            --border-color: #dee2e6;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+            --radius: 12px;
+            --nc-color: #4361ee;
+            --ne-color: #7209b7;
+            --nw-color: #f72585;
+            --se-color: #00b894;
+            --ss-color: #e17055;
+            --sw-color: #fdcb6e;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100%;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #0066ff 0%, #6c5ce7 100%);
+            padding: 16px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            z-index: 10;
+        }
+
+        .header-left { display: flex; align-items: center; gap: 16px; }
+
+        .header-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+
+        .header-subtitle {
+            font-size: 12px;
+            color: rgba(255,255,255,0.7);
+            font-weight: 400;
+        }
+
+        .header-right { display: flex; align-items: center; gap: 20px; }
+
+        .live-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,255,255,0.15);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #00ff88;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+
+        .live-clock {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .api-status {
+            font-size: 11px;
+            color: rgba(255,255,255,0.6);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .api-status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #00ff88;
+        }
+
+        .api-status-dot.error { background: #ff4444; }
+
+        /* STATS RIBBON */
+        .stats-ribbon {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-around;
+            padding: 14px 28px;
+            gap: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .stat-label {
+            font-size: 10px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--accent-primary);
+        }
+
+        .stat-value.green { color: var(--accent-green); }
+        .stat-value.amber { color: #e67e22; }
+
+        /* SEARCH BAR */
+        .search-container {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 28px;
+            position: relative;
+        }
+
+        .search-bar {
+            width: 100%;
+            max-width: 500px;
+            padding: 12px 18px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(0,102,255,0.1);
+            background: #fff;
+        }
+
+        .search-bar::placeholder { color: var(--text-muted); }
+
+        .search-results {
+            position: absolute;
+            top: 58px;
+            left: 28px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            max-height: 300px;
+            overflow-y: auto;
+            width: 400px;
+            z-index: 1000;
+            display: none;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .search-results.active { display: block; }
+
+        .search-result-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--text-primary);
+            transition: background 0.15s;
+        }
+
+        .search-result-item:hover {
+            background: var(--bg-secondary);
+            color: var(--accent-primary);
+        }
+
+        .search-result-item:last-child { border-bottom: none; }
+
+        /* MAIN CONTENT */
+        .main-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            gap: 0;
+        }
+
+        /* MAP SECTION */
+        .map-section {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-secondary);
+            overflow: auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        .map-container {
+            width: 100%;
+            max-width: 620px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        svg { max-width: 100%; height: auto; }
+
+        .zone-legend {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 12px;
+            font-size: 11px;
+        }
+
+        .zone-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .zone-legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        /* RIGHT PANELS */
+        .right-panels {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-card);
+            overflow: hidden;
+            border-left: 1px solid var(--border-color);
+            min-width: 340px;
+        }
+
+        .panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            border-bottom: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            background: var(--bg-secondary);
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 14px 18px;
+        }
+
+        .lga-item {
+            padding: 12px 14px;
+            margin-bottom: 8px;
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--accent-primary);
+            border-radius: 8px;
+            font-size: 13px;
+            transition: all 0.2s ease;
+        }
+
+        .lga-item:hover {
+            background: #eef2ff;
+            border-left-color: var(--accent-green);
+            transform: translateX(3px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .lga-name {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .lga-detail {
+            color: var(--text-secondary);
+            font-size: 12px;
+            margin: 2px 0;
+        }
+
+        .lga-allocation {
+            display: flex;
+            align-items: center;
+            margin-top: 8px;
+            gap: 8px;
+        }
+
+        .allocation-bar {
+            flex: 1;
+            height: 6px;
+            background: var(--bg-tertiary);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .allocation-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-green));
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .allocation-value {
+            color: var(--accent-green);
+            font-weight: 700;
+            font-size: 12px;
+            min-width: 65px;
+            text-align: right;
+        }
+
+        /* STATE SUMMARY */
+        .state-summary { display: none; }
+        .state-summary.active { display: block; }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 13px;
+        }
+
+        .summary-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .summary-value {
+            color: var(--accent-primary);
+            font-weight: 700;
+        }
+
+        /* RICHEST PANEL */
+        .richest-item {
+            padding: 12px 14px;
+            margin-bottom: 8px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            font-size: 12px;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+        }
+
+        .richest-item:hover {
+            box-shadow: var(--shadow-sm);
+            border-color: var(--accent-amber);
+        }
+
+        .richest-rank {
+            color: var(--accent-red);
+            font-weight: 800;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .richest-name {
+            color: var(--text-primary);
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .richest-state {
+            color: var(--text-secondary);
+            font-size: 11px;
+            margin-bottom: 4px;
+        }
+
+        .richest-igr {
+            color: var(--accent-green);
+            font-weight: 700;
+        }
+
+        /* SCROLLBAR */
+        .panel-content::-webkit-scrollbar { width: 6px; }
+        .panel-content::-webkit-scrollbar-track { background: transparent; }
+        .panel-content::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+        .panel-content::-webkit-scrollbar-thumb:hover { background: var(--accent-primary); }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: all 0.15s;
+        }
+
+        .close-btn:hover {
+            color: var(--accent-red);
+            background: rgba(225,112,85,0.1);
+        }
+
+        .empty-state {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--text-muted);
+            text-align: center;
+            font-size: 13px;
+            padding: 20px;
+        }
+
+        /* UPDATE BANNER */
+        .update-banner {
+            display: none;
+            background: linear-gradient(90deg, #00b894, #0066ff);
+            color: white;
+            text-align: center;
+            padding: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            animation: slideDown 0.3s ease;
+        }
+
+        .update-banner.active { display: block; }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* LAST UPDATED */
+        .last-updated {
+            position: absolute;
+            bottom: 8px;
+            right: 16px;
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        /* Tooltip for auto-update info */
+        .refresh-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .refresh-btn:hover { background: rgba(255,255,255,0.3); }
+    </style>
 </head>
 <body>
-
-<!-- HEADER -->
-<header class="header">
-  <div class="header-left">
-    <div class="status-beacon"></div>
-    <div>
-      <div class="header-title">Africa Situation Room</div>
-      <div class="header-subtitle">Middle East Conflict Impact Monitor</div>
-    </div>
-  </div>
-  <div class="header-right">
-    <div class="live-badge"><div class="live-dot"></div>LIVE</div>
-    <div class="clock" id="clock">--:--:-- UTC</div>
-  </div>
-</header>
-
-<!-- THREAT LEVEL BAR -->
-<div class="threat-bar">
-  <div class="threat-level">
-    <span style="color: var(--accent-red);">THREAT LEVEL: ELEVATED</span>
-    <div class="threat-indicator">
-      <div class="threat-segment active-red"></div>
-      <div class="threat-segment active-red"></div>
-      <div class="threat-segment active-red"></div>
-      <div class="threat-segment active-orange"></div>
-      <div class="threat-segment"></div>
-    </div>
-  </div>
-  <div class="ticker">
-    <div class="ticker-content">
-      <span class="highlight">BREAKING:</span> Houthi attacks surpass 190+ incidents in Red Sea &mdash; shipping down 65%
-      <span class="sep">|</span>
-      <span class="highlight">ECONOMIC:</span> Brent crude +$7.5 geopolitical risk premium &mdash; $100+ if Strait of Hormuz blockaded
-      <span class="sep">|</span>
-      <span class="highlight">HUMANITARIAN:</span> 307 million Africans face hunger in 2024/2025
-      <span class="sep">|</span>
-      <span class="highlight">SECURITY:</span> Arms smuggling intercepted at East African ports &mdash; drone components seized
-      <span class="sep">|</span>
-      <span class="highlight">DIPLOMATIC:</span> Israel recognizes Somaliland (Dec 2025) &mdash; regional tensions escalate
-      <span class="sep">|</span>
-      <span class="highlight">TRADE:</span> Shipping rerouted via Cape of Good Hope &mdash; voyage times +10-14 days, costs +30%
-    </div>
-  </div>
-</div>
-
-<!-- KEY FIGURES -->
-<div class="key-figures">
-  <div class="key-figure animate-in delay-1">
-    <div class="key-figure-value" style="color: var(--accent-red);">307M</div>
-    <div class="key-figure-label">Africans facing hunger</div>
-  </div>
-  <div class="key-figure animate-in delay-2">
-    <div class="key-figure-value" style="color: var(--accent-amber);">-65%</div>
-    <div class="key-figure-label">Red Sea shipping decline</div>
-  </div>
-  <div class="key-figure animate-in delay-3">
-    <div class="key-figure-value" style="color: var(--accent-orange);">+30%</div>
-    <div class="key-figure-label">Shipping cost increase</div>
-  </div>
-  <div class="key-figure animate-in delay-4">
-    <div class="key-figure-value" style="color: var(--accent-cyan);">190+</div>
-    <div class="key-figure-label">Houthi attacks (2023-25)</div>
-  </div>
-  <div class="key-figure animate-in delay-4">
-    <div class="key-figure-value" style="color: var(--accent-purple);">80%</div>
-    <div class="key-figure-label">Sub-Saharan food imported</div>
-  </div>
-</div>
-
-<!-- NAV TABS -->
-<div class="nav-tabs">
-  <button class="nav-tab active" data-tab="overview" onclick="switchTab('overview')">Overview</button>
-  <button class="nav-tab" data-tab="economic" onclick="switchTab('economic')">Economic</button>
-  <button class="nav-tab" data-tab="humanitarian" onclick="switchTab('humanitarian')">Humanitarian</button>
-  <button class="nav-tab" data-tab="security" onclick="switchTab('security')">Security &amp; Geopolitics</button>
-</div>
-
-<!-- ===== OVERVIEW TAB ===== -->
-<div class="tab-content active" id="tab-overview">
-  <div class="main-layout">
-    <!-- MAP -->
-    <div class="map-section">
-      <div class="map-container" id="mapContainer">
-        <div class="map-grid"></div>
-        <svg viewBox="80 50 700 700" xmlns="http://www.w3.org/2000/svg" id="africaMap">
-          <!-- Simplified Africa map paths -->
-          <!-- North Africa -->
-          <path class="country impact-moderate" data-name="Morocco" data-info="Oil import dependency rising. Phosphate exports disrupted." d="M200,160 L240,145 L270,150 L265,175 L250,195 L225,200 L210,190 L195,175 Z"/>
-          <path class="country impact-moderate" data-name="Algeria" data-info="Energy exporter but food import costs rising sharply." d="M270,150 L330,135 L360,155 L355,200 L340,230 L300,230 L265,210 L265,175 Z"/>
-          <path class="country impact-moderate" data-name="Tunisia" data-info="Food price inflation hitting consumers. Wheat imports affected." d="M340,140 L355,135 L360,155 L350,160 L340,155 Z"/>
-          <path class="country impact-moderate" data-name="Libya" data-info="Oil production fluctuations. Competing factions realigning." d="M360,155 L420,140 L450,155 L445,195 L410,210 L370,210 L355,200 Z"/>
-          <path class="country impact-high" data-name="Egypt" data-info="Suez Canal revenue hit. Gaza border crisis. Food subsidies strained." d="M450,155 L485,145 L500,160 L495,200 L480,230 L460,245 L445,220 L445,195 Z"/>
-
-          <!-- West Africa -->
-          <path class="country impact-moderate" data-name="Mauritania" data-info="Rising fuel costs. Fishing sector disrupted." d="M195,200 L225,200 L250,210 L260,245 L240,275 L210,280 L195,255 Z"/>
-          <path class="country impact-low" data-name="Mali" data-info="Landlocked. Indirect trade cost increases via ports." d="M260,245 L300,230 L340,240 L345,280 L320,300 L280,295 L255,285 Z"/>
-          <path class="country impact-low" data-name="Niger" data-info="Food insecurity worsening. Aid diversion concerns." d="M340,240 L390,235 L415,250 L410,280 L385,295 L345,290 L345,280 Z"/>
-          <path class="country impact-critical" data-name="Nigeria" data-info="Africa's largest economy faces severe inflation from oil price volatility. 80%+ food import dependency. Naira depreciation accelerating. 133M+ in multidimensional poverty. Political instability risk heightened. Fuel subsidy removal compounded by global energy shocks." d="M320,295 L360,280 L400,290 L415,320 L405,355 L385,370 L355,375 L330,360 L310,335 L310,315 Z" style="stroke-width: 1.5;"/>
-          <path class="country impact-low" data-name="Senegal" data-info="Port disruptions minimal but food costs rising." d="M175,275 L210,280 L215,295 L195,305 L175,295 Z"/>
-          <path class="country impact-low" data-name="Guinea" data-info="Mining exports stable but consumer prices up." d="M185,305 L215,295 L230,310 L220,330 L195,325 Z"/>
-          <path class="country impact-low" data-name="Ivory Coast" data-info="Cocoa exports stable. Import costs rising." d="M230,320 L265,310 L280,330 L265,350 L240,345 L230,335 Z"/>
-          <path class="country impact-low" data-name="Ghana" data-info="Cedi under pressure. Fuel subsidy strain." d="M280,320 L305,315 L310,340 L295,355 L280,345 Z"/>
-          <path class="country impact-low" data-name="Cameroon" data-info="Oil revenues fluctuating. Food import costs up." d="M365,355 L390,350 L405,370 L395,400 L375,395 L365,375 Z"/>
-
-          <!-- Central Africa -->
-          <path class="country impact-low" data-name="Chad" data-info="Landlocked. Fuel and food costs rising." d="M410,280 L450,265 L470,290 L465,330 L440,345 L410,340 L405,310 Z"/>
-          <path class="country impact-low" data-name="Central African Rep." data-info="Humanitarian crisis compounded by aid diversion." d="M410,340 L450,335 L475,350 L470,375 L440,385 L415,375 Z"/>
-          <path class="country impact-moderate" data-name="DR Congo" data-info="Arms flow concerns. Mineral export disruptions. Proxy conflict risks." d="M415,385 L470,375 L500,400 L510,450 L490,480 L455,485 L430,460 L415,430 Z"/>
-
-          <!-- East Africa -->
-          <path class="country impact-critical" data-name="Sudan" data-info="Civil war + Iran proxy links. Aid diverted to Middle East. Famine conditions." d="M460,245 L510,235 L530,260 L525,300 L505,325 L475,330 L465,310 L465,280 Z"/>
-          <path class="country impact-high" data-name="Ethiopia" data-info="Red Sea access dispute. Eritrea tensions. Food insecurity for 20M+." d="M505,310 L545,300 L560,325 L550,360 L520,370 L500,350 L500,330 Z"/>
-          <path class="country impact-critical" data-name="Somalia" data-info="Houthi weapon routes. Al-Shabaab resurgence. Israel-Somaliland recognition crisis." d="M560,310 L590,305 L600,330 L585,365 L560,380 L550,360 L555,330 Z"/>
-          <path class="country impact-high" data-name="Eritrea" data-info="Red Sea militarization. Ethiopia tensions. Strategic corridor." d="M510,270 L545,265 L550,280 L535,290 L510,285 Z"/>
-          <path class="country impact-high" data-name="Djibouti" data-info="Critical port. Military bases. Shipping rerouting impact." d="M555,295 L570,290 L575,305 L560,310 Z"/>
-          <path class="country impact-high" data-name="Kenya" data-info="Mombasa port traffic down. Small arms influx. Food prices up 15%." d="M520,370 L555,380 L560,415 L540,430 L510,420 L505,395 Z"/>
-          <path class="country impact-moderate" data-name="Uganda" data-info="Landlocked. Rising transport costs via Kenya." d="M490,370 L520,370 L515,400 L495,405 L480,390 Z"/>
-          <path class="country impact-moderate" data-name="Tanzania" data-info="Dar es Salaam port affected. Cargo traffic down." d="M510,420 L545,430 L555,470 L530,490 L500,475 L495,445 Z"/>
-          <path class="country impact-low" data-name="Rwanda" data-info="Indirect effects via regional trade." d="M490,400 L505,398 L508,415 L495,418 Z"/>
-
-          <!-- Southern Africa -->
-          <path class="country impact-moderate" data-name="Mozambique" data-info="LNG exports affected. Shipping rerouting benefits Cape route." d="M530,490 L560,480 L570,530 L555,570 L535,555 L525,520 Z"/>
-          <path class="country impact-low" data-name="Zimbabwe" data-info="Fuel price increases. Food import costs rising." d="M490,500 L525,495 L530,530 L510,545 L490,535 Z"/>
-          <path class="country impact-moderate" data-name="South Africa" data-info="Cape shipping route boom. Rand volatility. ICJ involvement." d="M420,560 L470,545 L520,555 L535,590 L510,625 L465,635 L425,610 L410,585 Z"/>
-          <path class="country impact-low" data-name="Zambia" data-info="Copper exports stable but fuel costs rising." d="M460,460 L500,455 L510,485 L490,500 L465,495 Z"/>
-          <path class="country impact-low" data-name="Angola" data-info="Oil exporter. Price volatility creates budget uncertainty." d="M380,420 L430,415 L460,450 L455,490 L425,505 L395,480 Z"/>
-          <path class="country impact-low" data-name="Namibia" data-info="Uranium exports. Minor shipping disruption." d="M385,510 L425,505 L440,545 L420,570 L390,560 Z"/>
-          <path class="country impact-low" data-name="Botswana" data-info="Diamond exports stable. Fuel cost passthrough." d="M440,520 L475,510 L480,545 L460,555 L440,545 Z"/>
-          <path class="country impact-low" data-name="Madagascar" data-info="Vanilla exports stable. Shipping detours affect imports." d="M580,490 L605,485 L615,530 L600,560 L585,545 L575,510 Z"/>
-
-          <!-- Shipping routes (Red Sea & Cape) -->
-          <path class="shipping-route" d="M570,290 L590,240 L600,200 L580,170" title="Red Sea Route (Disrupted)"/>
-          <path class="shipping-route" style="stroke: var(--accent-green); opacity: 0.4;" d="M410,625 L380,610 L350,580 L330,530 L310,470 L300,400 L290,350" title="Cape Route (Alternative)"/>
-
-          <!-- Hotspot markers -->
-          <g class="hotspot" data-name="Red Sea Crisis Zone" data-info="190+ Houthi attacks since Nov 2023. Shipping down 65%.">
-            <circle class="hotspot-ring" cx="575" cy="260" r="6"/>
-            <circle class="hotspot-ring" cx="575" cy="260" r="6" style="animation-delay: 0.7s;"/>
-            <circle class="hotspot-core" cx="575" cy="260" r="4"/>
-          </g>
-
-          <g class="hotspot" data-name="Suez Canal" data-info="Revenue declining. 30% of global container trade affected.">
-            <circle class="hotspot-ring" cx="490" cy="175" r="6"/>
-            <circle class="hotspot-ring" cx="490" cy="175" r="6" style="animation-delay: 0.7s;"/>
-            <circle class="hotspot-core" cx="490" cy="175" r="4"/>
-          </g>
-
-          <g class="hotspot" data-name="Bab el-Mandeb Strait" data-info="Critical chokepoint. 8.8M barrels/day transit. Record low transits June 2025.">
-            <circle class="hotspot-ring" cx="560" cy="310" r="6"/>
-            <circle class="hotspot-ring" cx="560" cy="310" r="6" style="animation-delay: 0.7s;"/>
-            <circle class="hotspot-core" cx="560" cy="310" r="4"/>
-          </g>
-
-          <g class="hotspot" data-name="Horn of Africa Arms Corridor" data-info="Rising interceptions of small arms and drone components at East African ports.">
-            <circle class="hotspot-ring" cx="545" cy="365" r="5" style="stroke: var(--accent-amber);"/>
-            <circle class="hotspot-ring" cx="545" cy="365" r="5" style="stroke: var(--accent-amber); animation-delay: 0.7s;"/>
-            <circle class="hotspot-core" cx="545" cy="365" r="3" style="fill: var(--accent-amber);"/>
-          </g>
-
-          <g class="hotspot" data-name="Cape of Good Hope" data-info="Alternative shipping route. +10-14 days voyage. +30% operational costs.">
-            <circle class="hotspot-ring" cx="420" cy="620" r="5" style="stroke: var(--accent-green);"/>
-            <circle class="hotspot-ring" cx="420" cy="620" r="5" style="stroke: var(--accent-green); animation-delay: 0.7s;"/>
-            <circle class="hotspot-core" cx="420" cy="620" r="3" style="fill: var(--accent-green);"/>
-          </g>
-
-          <!-- Nigeria spotlight -->
-          <g class="hotspot" data-name="Nigeria — Critical Impact" data-info="Africa's largest economy. 133M+ in multidimensional poverty. Inflation rate 33%+. Naira lost 70% value since 2023. 80% food imported. Fuel subsidy removal + global energy shock = compounding crisis. Oil revenue volatility threatens federal budget. Political instability risk elevated.">
-            <circle class="hotspot-ring" cx="360" cy="330" r="6"/>
-            <circle class="hotspot-ring" cx="360" cy="330" r="6" style="animation-delay: 0.7s;"/>
-            <circle class="hotspot-core" cx="360" cy="330" r="5"/>
-          </g>
-          <text x="330" y="320" fill="var(--accent-red)" font-size="9" font-family="Orbitron, sans-serif" font-weight="700" letter-spacing="1">NIGERIA</text>
-
-          <!-- Labels for major hotspots -->
-          <text x="590" y="258" fill="var(--accent-red)" font-size="8" font-family="Orbitron, sans-serif" letter-spacing="1">RED SEA</text>
-          <text x="495" y="170" fill="var(--accent-red)" font-size="7" font-family="Orbitron, sans-serif" letter-spacing="1">SUEZ</text>
-          <text x="430" y="635" fill="var(--accent-green)" font-size="7" font-family="Orbitron, sans-serif" letter-spacing="1">CAPE ROUTE</text>
-        </svg>
-
-        <!-- Legend -->
-        <div class="map-legend">
-          <div class="legend-title">Impact Level</div>
-          <div class="legend-items">
-            <div class="legend-item"><div class="legend-color" style="background: rgba(239,68,68,0.4); border: 1px solid var(--accent-red);"></div>Critical</div>
-            <div class="legend-item"><div class="legend-color" style="background: rgba(245,158,11,0.3); border: 1px solid var(--accent-amber);"></div>High</div>
-            <div class="legend-item"><div class="legend-color" style="background: rgba(249,115,22,0.25); border: 1px solid var(--accent-orange);"></div>Moderate</div>
-            <div class="legend-item"><div class="legend-color" style="background: rgba(34,197,94,0.15); border: 1px solid var(--accent-green);"></div>Low</div>
-            <div class="legend-item" style="margin-top: 4px;"><div class="legend-color" style="background: var(--accent-red); border-radius: 50; width:8px; height:8px;"></div>Crisis Hotspot</div>
-            <div class="legend-item"><div class="legend-color" style="background: var(--accent-amber); border-radius: 50; width:8px; height:8px;"></div>Arms Corridor</div>
-          </div>
-        </div>
-
-        <!-- Tooltip -->
-        <div class="map-tooltip" id="mapTooltip">
-          <div class="tooltip-title" id="tooltipTitle"></div>
-          <div class="tooltip-text" id="tooltipText"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SIDEBAR -->
-    <div class="sidebar">
-      <!-- Conflict Overview -->
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title">Conflict Status</div>
-          <span class="panel-badge badge-critical">ACTIVE</span>
-        </div>
-        <div class="stat-grid">
-          <div class="stat-card">
-            <div class="stat-label">Active Theaters</div>
-            <div class="stat-value red">4</div>
-            <div class="stat-change up">Gaza, Lebanon, Yemen, Iran</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">African Nations Affected</div>
-            <div class="stat-value amber">40+</div>
-            <div class="stat-change up">Direct &amp; indirect</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Conflict Duration</div>
-            <div class="stat-value cyan" id="conflictDays">--</div>
-            <div class="stat-change">Since Oct 7, 2023</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Escalation Risk</div>
-            <div class="stat-value red">HIGH</div>
-            <div class="stat-change up">Strait of Hormuz threat</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Live Events Feed -->
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title">Impact Feed</div>
-          <span class="panel-badge badge-info">LATEST</span>
-        </div>
-        <div class="event-feed">
-          <div class="event-item critical">
-            <div class="event-meta">
-              <span class="event-tag security">SECURITY</span>
-              <span class="event-time">FEB 2026</span>
+    <div class="update-banner" id="updateBanner">New FAAC data available - Updating...</div>
+    <div class="container">
+        <div class="header">
+            <div class="header-left">
+                <div>
+                    <div class="header-title">Nigeria LGA Intelligence Map</div>
+                    <div class="header-subtitle">774 Local Government Areas across 36 States + FCT</div>
+                </div>
             </div>
-            <div class="event-title">Israel-US preemptive strikes on Iranian targets escalate conflict</div>
-            <div class="event-region">Global / Africa-wide impact</div>
-          </div>
-          <div class="event-item critical">
-            <div class="event-meta">
-              <span class="event-tag econ">NIGERIA</span>
-              <span class="event-time">2025-26</span>
+            <div class="header-right">
+                <div class="live-badge">
+                    <div class="live-dot"></div>
+                    <span>LIVE</span>
+                </div>
+                <div class="api-status">
+                    <div class="api-status-dot" id="apiStatusDot"></div>
+                    <span id="apiStatusText">API Connected</span>
+                </div>
+                <button class="refresh-btn" onclick="refreshData()">Refresh Data</button>
+                <div class="live-clock" id="liveClock">00:00:00</div>
             </div>
-            <div class="event-title">Nigeria inflation 33%+ — Naira lost 70% value — 133M in poverty as global shocks compound local crisis</div>
-            <div class="event-region">Nigeria — Africa's largest economy</div>
-          </div>
-          <div class="event-item warning">
-            <div class="event-meta">
-              <span class="event-tag econ">ECONOMIC</span>
-              <span class="event-time">2025 H2</span>
-            </div>
-            <div class="event-title">Brent crude carries $7.5 geopolitical risk premium — $100+ if Hormuz blockaded</div>
-            <div class="event-region">Sub-Saharan Africa oil importers</div>
-          </div>
-          <div class="event-item critical">
-            <div class="event-meta">
-              <span class="event-tag humanitarian">HUMANITARIAN</span>
-              <span class="event-time">2025</span>
-            </div>
-            <div class="event-title">Humanitarian aid diverted from Africa to Middle East — Palestine appeal 3rd largest globally</div>
-            <div class="event-region">Sudan, Somalia, DRC, Ethiopia</div>
-          </div>
-          <div class="event-item warning">
-            <div class="event-meta">
-              <span class="event-tag diplomatic">DIPLOMATIC</span>
-              <span class="event-time">DEC 2025</span>
-            </div>
-            <div class="event-title">Israel recognizes Somaliland — Somalia and regional tensions escalate</div>
-            <div class="event-region">Horn of Africa</div>
-          </div>
-          <div class="event-item warning">
-            <div class="event-meta">
-              <span class="event-tag security">SECURITY</span>
-              <span class="event-time">2025</span>
-            </div>
-            <div class="event-title">Small arms &amp; drone components intercepted at East African ports</div>
-            <div class="event-region">Somalia, Sudan, Kenya, DRC</div>
-          </div>
-          <div class="event-item info">
-            <div class="event-meta">
-              <span class="event-tag econ">TRADE</span>
-              <span class="event-time">2025</span>
-            </div>
-            <div class="event-title">Cape of Good Hope shipping surges as Red Sea rerouting adds 10-14 days</div>
-            <div class="event-region">East &amp; Southern Africa</div>
-          </div>
         </div>
-      </div>
 
-      <!-- Most Affected Regions -->
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title">Most Affected</div>
-          <span class="panel-badge badge-warning">RISK INDEX</span>
+        <div class="stats-ribbon">
+            <div class="stat-item">
+                <div class="stat-label">Total LGAs</div>
+                <div class="stat-value" id="statTotalLGAs">774</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">States + FCT</div>
+                <div class="stat-value">37</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Monthly FAAC</div>
+                <div class="stat-value green" id="statFAAC">Loading...</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Top LGA (IGR)</div>
+                <div class="stat-value amber" id="topLgaStat">Loading...</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Last Updated</div>
+                <div class="stat-value" id="statLastUpdate" style="font-size:13px; color: var(--text-secondary);">--</div>
+            </div>
         </div>
-        <div class="bar-chart">
-          <div class="bar-row">
-            <div class="bar-label">Horn of Africa</div>
-            <div class="bar-track"><div class="bar-fill red" style="width: 92%;"></div></div>
-            <div class="bar-value">92</div>
-          </div>
-          <div class="bar-row">
-            <div class="bar-label">North Africa</div>
-            <div class="bar-track"><div class="bar-fill amber" style="width: 74%;"></div></div>
-            <div class="bar-value">74</div>
-          </div>
-          <div class="bar-row">
-            <div class="bar-label">East Africa</div>
-            <div class="bar-track"><div class="bar-fill amber" style="width: 78%;"></div></div>
-            <div class="bar-value">78</div>
-          </div>
-          <div class="bar-row">
-            <div class="bar-label">West Africa</div>
-            <div class="bar-track"><div class="bar-fill orange" style="width: 55%;"></div></div>
-            <div class="bar-value">55</div>
-          </div>
-          <div class="bar-row">
-            <div class="bar-label">Central Africa</div>
-            <div class="bar-track"><div class="bar-fill orange" style="width: 48%;"></div></div>
-            <div class="bar-value">48</div>
-          </div>
-          <div class="bar-row">
-            <div class="bar-label">Southern Africa</div>
-            <div class="bar-track"><div class="bar-fill cyan" style="width: 35%;"></div></div>
-            <div class="bar-value">35</div>
-          </div>
+
+        <div class="search-container">
+            <input type="text" class="search-bar" id="searchBar" placeholder="Search any LGA, state, or zone...">
+            <div class="search-results" id="searchResults"></div>
         </div>
-      </div>
+
+        <div class="main-content">
+            <div class="map-section">
+                <div class="map-container" id="mapContainer"></div>
+                <div class="zone-legend" id="zoneLegend"></div>
+                <div class="last-updated" id="lastUpdatedMap"></div>
+            </div>
+
+            <div class="right-panels">
+                <div class="panel">
+                    <div class="panel-header">
+                        <span id="stateTitle">SELECT A STATE</span>
+                        <button class="close-btn" id="closeStateBtn" style="display:none;">&#10005;</button>
+                    </div>
+                    <div class="panel-content">
+                        <div class="state-summary" id="stateSummary"></div>
+                        <div id="lgaList"></div>
+                        <div class="empty-state" id="emptyState">Click on a state on the map to view its LGAs, allocations, and chairman details</div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">Top 20 Richest LGAs (by IGR)</div>
+                    <div class="panel-content" id="richestPanel"></div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
-<!-- ===== ECONOMIC TAB ===== -->
-<div class="tab-content" id="tab-economic">
-  <div class="detail-section">
-    <div class="detail-grid">
-      <div class="detail-card">
-        <div class="detail-card-icon">&#9981;</div>
-        <div class="detail-card-title">Oil &amp; Energy</div>
-        <div class="detail-card-stat" style="color: var(--accent-red);">+$7.5</div>
-        <div class="detail-card-text">Geopolitical risk premium per barrel of Brent crude (J.P. Morgan). If the Strait of Hormuz is blockaded, oil could surge past $100/barrel. Africa's oil-importing nations — including Kenya, Ethiopia, Tanzania — face crippling fuel cost increases that cascade into food and transport prices.</div>
-      </div>
-      <div class="detail-card">
-        <div class="detail-card-icon">&#128674;</div>
-        <div class="detail-card-title">Shipping &amp; Trade</div>
-        <div class="detail-card-stat" style="color: var(--accent-amber);">-65%</div>
-        <div class="detail-card-text">Decline in Bab el-Mandeb transits by June 2025. Rerouting via the Cape of Good Hope adds 10-14 days and over 30% in operational costs. East African ports (Mombasa, Djibouti, Dar es Salaam) face declining cargo, reduced customs revenue, and rising unemployment.</div>
-      </div>
-      <div class="detail-card">
-        <div class="detail-card-icon">&#127854;</div>
-        <div class="detail-card-title">Food Prices &amp; Inflation</div>
-        <div class="detail-card-stat" style="color: var(--accent-orange);">80%</div>
-        <div class="detail-card-text">Of Sub-Saharan Africa's food is imported. Rising energy and shipping costs directly inflate food prices. Countries like Nigeria and Sudan — already battling high inflation — face renewed price surges that threaten political stability. The IMF's forecast of falling inflation by 2026 is at risk.</div>
-      </div>
-      <div class="detail-card">
-        <div class="detail-card-icon">&#128200;</div>
-        <div class="detail-card-title">Investment &amp; Growth</div>
-        <div class="detail-card-stat" style="color: var(--accent-amber);">&#8595;</div>
-        <div class="detail-card-text">Declining FDI and remittance inflows due to global risk aversion. Diaspora investment waning. Both Israel and Iran have stalled diplomatic and economic overtures to Africa — aid and investment that the continent was banking on. Pro-growth policies are being sidelined.</div>
-      </div>
-      <div class="detail-card">
-        <div class="detail-card-icon">&#9875;</div>
-        <div class="detail-card-title">Port Economics</div>
-        <div class="detail-card-stat" style="color: var(--accent-red);">5x</div>
-        <div class="detail-card-text">Spot freight rates on Asia-to-Europe routes increased fivefold in 2024. Insurance and security premiums for East African shipping have skyrocketed. Djibouti, a critical logistics hub with military bases, faces complex pressures from multiple stakeholders.</div>
-      </div>
-      <div class="detail-card" style="border: 1px solid rgba(239,68,68,0.3); background: linear-gradient(135deg, var(--bg-card), rgba(239,68,68,0.05));">
-        <div class="detail-card-icon">&#127475;&#127468;</div>
-        <div class="detail-card-title" style="color: var(--accent-red);">Nigeria Spotlight</div>
-        <div class="detail-card-stat" style="color: var(--accent-red);">33%+</div>
-        <div class="detail-card-text">Africa's largest economy is a pressure point. Inflation above 33%. The Naira has lost ~70% of its value since 2023. 133M+ Nigerians live in multidimensional poverty. Fuel subsidy removal (June 2023) tripled petrol prices — then global energy shocks from the Israel-Iran conflict compounded the crisis. 80%+ of food is imported. Oil revenue — Nigeria's fiscal lifeline — swings wildly with geopolitical risk premiums. Political instability risk is elevated.</div>
-      </div>
-      <div class="detail-card">
-        <div class="detail-card-icon">&#128176;</div>
-        <div class="detail-card-title">Currency Pressure</div>
-        <div class="detail-card-stat" style="color: var(--accent-amber);">&#8595;&#8595;</div>
-        <div class="detail-card-text">African currencies face depreciation pressure as dollar-denominated oil imports rise. Nigeria's naira, Kenya's shilling, and Egypt's pound are especially vulnerable. Foreign reserve depletion accelerates as nations scramble to cover import bills.</div>
-      </div>
-    </div>
-  </div>
-</div>
+    <script>
+        // ===== COMPLETE STATES DATA =====
+        const statesData = {
+            ABIA: {
+                name: "Abia", capital: "Umuahia", zone: "South-East",
+                lgas: [
+                    { name: "Aba North", hq: "Aba", faac: 480, chairman: "Data pending" },
+                    { name: "Aba South", hq: "Aba", faac: 520, chairman: "Data pending" },
+                    { name: "Arochukwu", hq: "Arochukwu", faac: 280, chairman: "Data pending" },
+                    { name: "Bende", hq: "Bende", faac: 320, chairman: "Data pending" },
+                    { name: "Ikwuano", hq: "Ikwuano", faac: 350, chairman: "Data pending" },
+                    { name: "Isiala Ngwa North", hq: "Owaza", faac: 380, chairman: "Data pending" },
+                    { name: "Isiala Ngwa South", hq: "Ihitte Uboma", faac: 390, chairman: "Data pending" },
+                    { name: "Isuikwuato", hq: "Isuikwuato", faac: 310, chairman: "Data pending" },
+                    { name: "Obi Ngwa", hq: "Umuneochi", faac: 340, chairman: "Data pending" },
+                    { name: "Ohafia", hq: "Ohafia", faac: 290, chairman: "Data pending" },
+                    { name: "Osisioma", hq: "Aba", faac: 400, chairman: "Data pending" },
+                    { name: "Ugwunagbo", hq: "Ihechiowa", faac: 300, chairman: "Data pending" },
+                    { name: "Ukwa East", hq: "Ukwa", faac: 360, chairman: "Data pending" },
+                    { name: "Ukwa West", hq: "Umuopara", faac: 370, chairman: "Data pending" },
+                    { name: "Umuahia North", hq: "Umuahia", faac: 420, chairman: "Data pending" },
+                    { name: "Umuahia South", hq: "Umuahia", faac: 430, chairman: "Data pending" },
+                    { name: "Umu Nneochi", hq: "Umuneochi", faac: 310, chairman: "Data pending" }
+                ]
+            },
+            ADAMAWA: {
+                name: "Adamawa", capital: "Yola", zone: "North-East",
+                lgas: [
+                    { name: "Demsa", hq: "Demsa", faac: 280, chairman: "Data pending" },
+                    { name: "Fufore", hq: "Fufore", faac: 290, chairman: "Data pending" },
+                    { name: "Ganye", hq: "Ganye", faac: 270, chairman: "Data pending" },
+                    { name: "Gayuk", hq: "Gayuk", faac: 250, chairman: "Data pending" },
+                    { name: "Gombi", hq: "Gombi", faac: 260, chairman: "Data pending" },
+                    { name: "Grie", hq: "Grie", faac: 240, chairman: "Data pending" },
+                    { name: "Hong", hq: "Hong", faac: 270, chairman: "Data pending" },
+                    { name: "Jada", hq: "Jada", faac: 250, chairman: "Data pending" },
+                    { name: "Lamurde", hq: "Lamurde", faac: 280, chairman: "Data pending" },
+                    { name: "Madagali", hq: "Madagali", faac: 260, chairman: "Data pending" },
+                    { name: "Maiha", hq: "Maiha", faac: 270, chairman: "Data pending" },
+                    { name: "Mayo Belwa", hq: "Mayo Belwa", faac: 290, chairman: "Data pending" },
+                    { name: "Michika", hq: "Michika", faac: 240, chairman: "Data pending" },
+                    { name: "Mubi North", hq: "Mubi", faac: 300, chairman: "Data pending" },
+                    { name: "Mubi South", hq: "Mubi", faac: 290, chairman: "Data pending" },
+                    { name: "Numan", hq: "Numan", faac: 310, chairman: "Data pending" },
+                    { name: "Shelleng", hq: "Shelleng", faac: 250, chairman: "Data pending" },
+                    { name: "Song", hq: "Song", faac: 240, chairman: "Data pending" },
+                    { name: "Toungo", hq: "Toungo", faac: 260, chairman: "Data pending" },
+                    { name: "Yola North", hq: "Yola", faac: 340, chairman: "Data pending" },
+                    { name: "Yola South", hq: "Yola", faac: 350, chairman: "Data pending" }
+                ]
+            },
+            AKWA_IBOM: {
+                name: "Akwa Ibom", capital: "Uyo", zone: "South-South",
+                lgas: [
+                    { name: "Abak", hq: "Abak", faac: 380, chairman: "Data pending" },
+                    { name: "Eastern Obolo", hq: "Eastern Obolo", faac: 360, chairman: "Data pending" },
+                    { name: "Eket", hq: "Eket", faac: 520, chairman: "Data pending" },
+                    { name: "Esit Eket", hq: "Esit Eket", faac: 410, chairman: "Data pending" },
+                    { name: "Essien Udim", hq: "Essien Udim", faac: 400, chairman: "Data pending" },
+                    { name: "Etim Ekpo", hq: "Etim Ekpo", faac: 350, chairman: "Data pending" },
+                    { name: "Etinan", hq: "Etinan", faac: 390, chairman: "Data pending" },
+                    { name: "Ibeno", hq: "Ibeno", faac: 440, chairman: "Data pending" },
+                    { name: "Ibesikpo Asutan", hq: "Ibesikpo", faac: 370, chairman: "Data pending" },
+                    { name: "Ibiono Ibom", hq: "Ibiono", faac: 380, chairman: "Data pending" },
+                    { name: "Ika", hq: "Ika", faac: 340, chairman: "Data pending" },
+                    { name: "Ikono", hq: "Ikono", faac: 350, chairman: "Data pending" },
+                    { name: "Ikot Abasi", hq: "Ikot Abasi", faac: 430, chairman: "Data pending" },
+                    { name: "Ikot Ekpene", hq: "Ikot Ekpene", faac: 420, chairman: "Data pending" },
+                    { name: "Ini", hq: "Ini", faac: 330, chairman: "Data pending" },
+                    { name: "Itu", hq: "Itu", faac: 360, chairman: "Data pending" },
+                    { name: "Mbo", hq: "Mbo", faac: 340, chairman: "Data pending" },
+                    { name: "Mkpat Enin", hq: "Mkpat Enin", faac: 450, chairman: "Data pending" },
+                    { name: "Nsit Atai", hq: "Nsit Atai", faac: 350, chairman: "Data pending" },
+                    { name: "Nsit Ibom", hq: "Nsit Ibom", faac: 360, chairman: "Data pending" },
+                    { name: "Nsit Ubium", hq: "Nsit Ubium", faac: 370, chairman: "Data pending" },
+                    { name: "Obot Akara", hq: "Obot Akara", faac: 340, chairman: "Data pending" },
+                    { name: "Okobo", hq: "Okobo", faac: 350, chairman: "Data pending" },
+                    { name: "Onna", hq: "Onna", faac: 460, chairman: "Data pending" },
+                    { name: "Oron", hq: "Oron", faac: 380, chairman: "Data pending" },
+                    { name: "Oruk Anam", hq: "Oruk Anam", faac: 370, chairman: "Data pending" },
+                    { name: "Udung Uko", hq: "Udung Uko", faac: 320, chairman: "Data pending" },
+                    { name: "Ukanafun", hq: "Ukanafun", faac: 360, chairman: "Data pending" },
+                    { name: "Uruan", hq: "Uruan", faac: 380, chairman: "Data pending" },
+                    { name: "Urue Offong/Oruko", hq: "Urue Offong", faac: 340, chairman: "Data pending" },
+                    { name: "Uyo", hq: "Uyo", faac: 550, chairman: "Data pending" }
+                ]
+            },
+            ANAMBRA: {
+                name: "Anambra", capital: "Awka", zone: "South-East",
+                lgas: [
+                    { name: "Aguata", hq: "Aguata", faac: 380, chairman: "Data pending" },
+                    { name: "Anambra East", hq: "Anambra East", faac: 340, chairman: "Data pending" },
+                    { name: "Anambra West", hq: "Anambra West", faac: 330, chairman: "Data pending" },
+                    { name: "Anaocha", hq: "Neni", faac: 350, chairman: "Data pending" },
+                    { name: "Awka North", hq: "Awka", faac: 360, chairman: "Data pending" },
+                    { name: "Awka South", hq: "Awka", faac: 420, chairman: "Data pending" },
+                    { name: "Ayamelum", hq: "Ayamelum", faac: 310, chairman: "Data pending" },
+                    { name: "Dunukofia", hq: "Dunukofia", faac: 320, chairman: "Data pending" },
+                    { name: "Ekwusigo", hq: "Ekwusigo", faac: 330, chairman: "Data pending" },
+                    { name: "Idemili North", hq: "Ogidi", faac: 440, chairman: "Data pending" },
+                    { name: "Idemili South", hq: "Idemili South", faac: 420, chairman: "Data pending" },
+                    { name: "Ihiala", hq: "Ihiala", faac: 360, chairman: "Data pending" },
+                    { name: "Njikoka", hq: "Njikoka", faac: 350, chairman: "Data pending" },
+                    { name: "Nnewi North", hq: "Nnewi", faac: 460, chairman: "Data pending" },
+                    { name: "Nnewi South", hq: "Nnewi South", faac: 380, chairman: "Data pending" },
+                    { name: "Ogbaru", hq: "Ogbaru", faac: 340, chairman: "Data pending" },
+                    { name: "Onitsha North", hq: "Onitsha", faac: 520, chairman: "Data pending" },
+                    { name: "Onitsha South", hq: "Onitsha", faac: 480, chairman: "Data pending" },
+                    { name: "Orumba North", hq: "Orumba North", faac: 310, chairman: "Data pending" },
+                    { name: "Orumba South", hq: "Orumba South", faac: 320, chairman: "Data pending" },
+                    { name: "Oyi", hq: "Oyi", faac: 330, chairman: "Data pending" }
+                ]
+            },
+            BAUCHI: {
+                name: "Bauchi", capital: "Bauchi", zone: "North-East",
+                lgas: [
+                    { name: "Alkaleri", hq: "Alkaleri", faac: 340, chairman: "Data pending" },
+                    { name: "Bauchi", hq: "Bauchi", faac: 480, chairman: "Data pending" },
+                    { name: "Bogoro", hq: "Bogoro", faac: 290, chairman: "Data pending" },
+                    { name: "Damban", hq: "Damban", faac: 300, chairman: "Data pending" },
+                    { name: "Darazo", hq: "Darazo", faac: 310, chairman: "Data pending" },
+                    { name: "Dass", hq: "Dass", faac: 280, chairman: "Data pending" },
+                    { name: "Gamawa", hq: "Gamawa", faac: 320, chairman: "Data pending" },
+                    { name: "Ganjuwa", hq: "Ganjuwa", faac: 310, chairman: "Data pending" },
+                    { name: "Giade", hq: "Giade", faac: 290, chairman: "Data pending" },
+                    { name: "Itas/Gadau", hq: "Itas", faac: 310, chairman: "Data pending" },
+                    { name: "Jama'are", hq: "Jama'are", faac: 300, chairman: "Data pending" },
+                    { name: "Katagum", hq: "Katagum", faac: 330, chairman: "Data pending" },
+                    { name: "Kirfi", hq: "Kirfi", faac: 280, chairman: "Data pending" },
+                    { name: "Misau", hq: "Misau", faac: 310, chairman: "Data pending" },
+                    { name: "Ningi", hq: "Ningi", faac: 320, chairman: "Data pending" },
+                    { name: "Shira", hq: "Shira", faac: 300, chairman: "Data pending" },
+                    { name: "Tafawa Balewa", hq: "Tafawa Balewa", faac: 330, chairman: "Data pending" },
+                    { name: "Toro", hq: "Toro", faac: 340, chairman: "Data pending" },
+                    { name: "Warji", hq: "Warji", faac: 280, chairman: "Data pending" },
+                    { name: "Zaki", hq: "Zaki", faac: 310, chairman: "Data pending" }
+                ]
+            },
+            BAYELSA: {
+                name: "Bayelsa", capital: "Yenagoa", zone: "South-South",
+                lgas: [
+                    { name: "Brass", hq: "Brass", faac: 420, chairman: "Data pending" },
+                    { name: "Ekeremor", hq: "Ekeremor", faac: 400, chairman: "Data pending" },
+                    { name: "Kolokuma/Opokuma", hq: "Kolokuma", faac: 380, chairman: "Data pending" },
+                    { name: "Nembe", hq: "Nembe", faac: 450, chairman: "Data pending" },
+                    { name: "Ogbia", hq: "Ogbia", faac: 460, chairman: "Data pending" },
+                    { name: "Sagbama", hq: "Sagbama", faac: 390, chairman: "Data pending" },
+                    { name: "Southern Ijaw", hq: "Southern Ijaw", faac: 410, chairman: "Data pending" },
+                    { name: "Yenagoa", hq: "Yenagoa", faac: 520, chairman: "Data pending" }
+                ]
+            },
+            BENUE: {
+                name: "Benue", capital: "Makurdi", zone: "North-Central",
+                lgas: [
+                    { name: "Ado", hq: "Ado", faac: 310, chairman: "Data pending" },
+                    { name: "Agatu", hq: "Agatu", faac: 280, chairman: "Data pending" },
+                    { name: "Apa", hq: "Apa", faac: 290, chairman: "Data pending" },
+                    { name: "Buruku", hq: "Buruku", faac: 300, chairman: "Data pending" },
+                    { name: "Gboko", hq: "Gboko", faac: 380, chairman: "Data pending" },
+                    { name: "Guma", hq: "Guma", faac: 310, chairman: "Data pending" },
+                    { name: "Gwer East", hq: "Gwer East", faac: 290, chairman: "Data pending" },
+                    { name: "Gwer West", hq: "Gwer West", faac: 300, chairman: "Data pending" },
+                    { name: "Katsina-Ala", hq: "Katsina-Ala", faac: 340, chairman: "Data pending" },
+                    { name: "Konshisha", hq: "Konshisha", faac: 310, chairman: "Data pending" },
+                    { name: "Kwande", hq: "Kwande", faac: 320, chairman: "Data pending" },
+                    { name: "Logo", hq: "Logo", faac: 290, chairman: "Data pending" },
+                    { name: "Makurdi", hq: "Makurdi", faac: 420, chairman: "Data pending" },
+                    { name: "Obi", hq: "Obi", faac: 280, chairman: "Data pending" },
+                    { name: "Ogbadibo", hq: "Ogbadibo", faac: 290, chairman: "Data pending" },
+                    { name: "Ohimini", hq: "Ohimini", faac: 280, chairman: "Data pending" },
+                    { name: "Oju", hq: "Oju", faac: 300, chairman: "Data pending" },
+                    { name: "Okpokwu", hq: "Okpokwu", faac: 290, chairman: "Data pending" },
+                    { name: "Otukpo", hq: "Otukpo", faac: 370, chairman: "Data pending" },
+                    { name: "Tarka", hq: "Tarka", faac: 280, chairman: "Data pending" },
+                    { name: "Ukum", hq: "Ukum", faac: 310, chairman: "Data pending" },
+                    { name: "Ushongo", hq: "Ushongo", faac: 300, chairman: "Data pending" },
+                    { name: "Vandeikya", hq: "Vandeikya", faac: 330, chairman: "Data pending" }
+                ]
+            },
+            BORNO: {
+                name: "Borno", capital: "Maiduguri", zone: "North-East",
+                lgas: [
+                    { name: "Abadam", hq: "Abadam", faac: 260, chairman: "Data pending" },
+                    { name: "Askira/Uba", hq: "Askira", faac: 280, chairman: "Data pending" },
+                    { name: "Bama", hq: "Bama", faac: 310, chairman: "Data pending" },
+                    { name: "Bayo", hq: "Bayo", faac: 260, chairman: "Data pending" },
+                    { name: "Biu", hq: "Biu", faac: 320, chairman: "Data pending" },
+                    { name: "Chibok", hq: "Chibok", faac: 270, chairman: "Data pending" },
+                    { name: "Damboa", hq: "Damboa", faac: 290, chairman: "Data pending" },
+                    { name: "Dikwa", hq: "Dikwa", faac: 300, chairman: "Data pending" },
+                    { name: "Gubio", hq: "Gubio", faac: 270, chairman: "Data pending" },
+                    { name: "Guzamala", hq: "Guzamala", faac: 260, chairman: "Data pending" },
+                    { name: "Gwoza", hq: "Gwoza", faac: 280, chairman: "Data pending" },
+                    { name: "Hawul", hq: "Hawul", faac: 290, chairman: "Data pending" },
+                    { name: "Jere", hq: "Jere", faac: 340, chairman: "Data pending" },
+                    { name: "Kaga", hq: "Kaga", faac: 270, chairman: "Data pending" },
+                    { name: "Kala/Balge", hq: "Kala", faac: 250, chairman: "Data pending" },
+                    { name: "Konduga", hq: "Konduga", faac: 290, chairman: "Data pending" },
+                    { name: "Kukawa", hq: "Kukawa", faac: 260, chairman: "Data pending" },
+                    { name: "Kwaya Kusar", hq: "Kwaya Kusar", faac: 270, chairman: "Data pending" },
+                    { name: "Mafa", hq: "Mafa", faac: 280, chairman: "Data pending" },
+                    { name: "Magumeri", hq: "Magumeri", faac: 270, chairman: "Data pending" },
+                    { name: "Maiduguri", hq: "Maiduguri", faac: 480, chairman: "Data pending" },
+                    { name: "Marte", hq: "Marte", faac: 260, chairman: "Data pending" },
+                    { name: "Mobbar", hq: "Mobbar", faac: 270, chairman: "Data pending" },
+                    { name: "Monguno", hq: "Monguno", faac: 280, chairman: "Data pending" },
+                    { name: "Ngala", hq: "Ngala", faac: 290, chairman: "Data pending" },
+                    { name: "Nganzai", hq: "Nganzai", faac: 260, chairman: "Data pending" },
+                    { name: "Shani", hq: "Shani", faac: 270, chairman: "Data pending" }
+                ]
+            },
+            CROSS_RIVER: {
+                name: "Cross River", capital: "Calabar", zone: "South-South",
+                lgas: [
+                    { name: "Abi", hq: "Abi", faac: 320, chairman: "Data pending" },
+                    { name: "Akamkpa", hq: "Akamkpa", faac: 340, chairman: "Data pending" },
+                    { name: "Akpabuyo", hq: "Akpabuyo", faac: 330, chairman: "Data pending" },
+                    { name: "Bakassi", hq: "Bakassi", faac: 280, chairman: "Data pending" },
+                    { name: "Bekwarra", hq: "Bekwarra", faac: 300, chairman: "Data pending" },
+                    { name: "Biase", hq: "Biase", faac: 310, chairman: "Data pending" },
+                    { name: "Boki", hq: "Boki", faac: 330, chairman: "Data pending" },
+                    { name: "Calabar Municipal", hq: "Calabar", faac: 450, chairman: "Data pending" },
+                    { name: "Calabar South", hq: "Calabar", faac: 420, chairman: "Data pending" },
+                    { name: "Etung", hq: "Etung", faac: 290, chairman: "Data pending" },
+                    { name: "Ikom", hq: "Ikom", faac: 340, chairman: "Data pending" },
+                    { name: "Obanliku", hq: "Obanliku", faac: 310, chairman: "Data pending" },
+                    { name: "Obubra", hq: "Obubra", faac: 320, chairman: "Data pending" },
+                    { name: "Obudu", hq: "Obudu", faac: 330, chairman: "Data pending" },
+                    { name: "Odukpani", hq: "Odukpani", faac: 340, chairman: "Data pending" },
+                    { name: "Ogoja", hq: "Ogoja", faac: 350, chairman: "Data pending" },
+                    { name: "Yakurr", hq: "Yakurr", faac: 310, chairman: "Data pending" },
+                    { name: "Yala", hq: "Yala", faac: 320, chairman: "Data pending" }
+                ]
+            },
+            DELTA: {
+                name: "Delta", capital: "Asaba", zone: "South-South",
+                lgas: [
+                    { name: "Aniocha North", hq: "Aniocha", faac: 380, chairman: "Data pending" },
+                    { name: "Aniocha South", hq: "Ogwashi-Uku", faac: 390, chairman: "Data pending" },
+                    { name: "Bomadi", hq: "Bomadi", faac: 350, chairman: "Data pending" },
+                    { name: "Burutu", hq: "Burutu", faac: 380, chairman: "Data pending" },
+                    { name: "Ethiope East", hq: "Isiokolo", faac: 400, chairman: "Data pending" },
+                    { name: "Ethiope West", hq: "Oghara", faac: 410, chairman: "Data pending" },
+                    { name: "Ika North East", hq: "Agbor", faac: 390, chairman: "Data pending" },
+                    { name: "Ika South", hq: "Agbor", faac: 380, chairman: "Data pending" },
+                    { name: "Isoko North", hq: "Ozoro", faac: 370, chairman: "Data pending" },
+                    { name: "Isoko South", hq: "Oleh", faac: 380, chairman: "Data pending" },
+                    { name: "Ndokwa East", hq: "Aboh", faac: 360, chairman: "Data pending" },
+                    { name: "Ndokwa West", hq: "Kwale", faac: 370, chairman: "Data pending" },
+                    { name: "Okpe", hq: "Sapele", faac: 400, chairman: "Data pending" },
+                    { name: "Oshimili North", hq: "Akwukwu-Igbo", faac: 380, chairman: "Data pending" },
+                    { name: "Oshimili South", hq: "Asaba", faac: 450, chairman: "Data pending" },
+                    { name: "Patani", hq: "Patani", faac: 340, chairman: "Data pending" },
+                    { name: "Sapele", hq: "Sapele", faac: 410, chairman: "Data pending" },
+                    { name: "Udu", hq: "Udu", faac: 390, chairman: "Data pending" },
+                    { name: "Ughelli North", hq: "Ughelli", faac: 430, chairman: "Data pending" },
+                    { name: "Ughelli South", hq: "Ughelli", faac: 400, chairman: "Data pending" },
+                    { name: "Ukwuani", hq: "Obiaruku", faac: 370, chairman: "Data pending" },
+                    { name: "Uvwie", hq: "Effurun", faac: 460, chairman: "Data pending" },
+                    { name: "Warri North", hq: "Koko", faac: 380, chairman: "Data pending" },
+                    { name: "Warri South", hq: "Warri", faac: 480, chairman: "Data pending" },
+                    { name: "Warri South West", hq: "Ogbe-Ijoh", faac: 390, chairman: "Data pending" }
+                ]
+            },
+            EBONYI: {
+                name: "Ebonyi", capital: "Abakaliki", zone: "South-East",
+                lgas: [
+                    { name: "Abakaliki", hq: "Abakaliki", faac: 400, chairman: "Data pending" },
+                    { name: "Afikpo North", hq: "Afikpo", faac: 360, chairman: "Data pending" },
+                    { name: "Afikpo South", hq: "Afikpo South", faac: 340, chairman: "Data pending" },
+                    { name: "Ebonyi", hq: "Ebonyi", faac: 310, chairman: "Data pending" },
+                    { name: "Ezza North", hq: "Ezza North", faac: 320, chairman: "Data pending" },
+                    { name: "Ezza South", hq: "Ezza South", faac: 330, chairman: "Data pending" },
+                    { name: "Ikwo", hq: "Ikwo", faac: 350, chairman: "Data pending" },
+                    { name: "Ishielu", hq: "Ishielu", faac: 310, chairman: "Data pending" },
+                    { name: "Ivo", hq: "Ivo", faac: 300, chairman: "Data pending" },
+                    { name: "Izzi", hq: "Izzi", faac: 320, chairman: "Data pending" },
+                    { name: "Ohaozara", hq: "Ohaozara", faac: 310, chairman: "Data pending" },
+                    { name: "Ohaukwu", hq: "Ohaukwu", faac: 300, chairman: "Data pending" },
+                    { name: "Onicha", hq: "Onicha", faac: 290, chairman: "Data pending" }
+                ]
+            },
+            EDO: {
+                name: "Edo", capital: "Benin City", zone: "South-South",
+                lgas: [
+                    { name: "Akoko-Edo", hq: "Igarra", faac: 380, chairman: "Data pending" },
+                    { name: "Egor", hq: "Egor", faac: 420, chairman: "Data pending" },
+                    { name: "Esan Central", hq: "Irrua", faac: 340, chairman: "Data pending" },
+                    { name: "Esan North-East", hq: "Uromi", faac: 350, chairman: "Data pending" },
+                    { name: "Esan South-East", hq: "Ubiaja", faac: 330, chairman: "Data pending" },
+                    { name: "Esan West", hq: "Ekpoma", faac: 360, chairman: "Data pending" },
+                    { name: "Etsako Central", hq: "Fugar", faac: 310, chairman: "Data pending" },
+                    { name: "Etsako East", hq: "Agenebode", faac: 320, chairman: "Data pending" },
+                    { name: "Etsako West", hq: "Auchi", faac: 370, chairman: "Data pending" },
+                    { name: "Igueben", hq: "Igueben", faac: 300, chairman: "Data pending" },
+                    { name: "Ikpoba-Okha", hq: "Benin City", faac: 450, chairman: "Data pending" },
+                    { name: "Oredo", hq: "Benin City", faac: 480, chairman: "Data pending" },
+                    { name: "Orhionmwon", hq: "Abudu", faac: 340, chairman: "Data pending" },
+                    { name: "Ovia North-East", hq: "Okada", faac: 360, chairman: "Data pending" },
+                    { name: "Ovia South-West", hq: "Igbanke", faac: 340, chairman: "Data pending" },
+                    { name: "Owan East", hq: "Afuze", faac: 320, chairman: "Data pending" },
+                    { name: "Owan West", hq: "Sabongida-Ora", faac: 310, chairman: "Data pending" },
+                    { name: "Uhunmwonde", hq: "Ehor", faac: 330, chairman: "Data pending" }
+                ]
+            },
+            EKITI: {
+                name: "Ekiti", capital: "Ado-Ekiti", zone: "South-West",
+                lgas: [
+                    { name: "Ado Ekiti", hq: "Ado-Ekiti", faac: 420, chairman: "Data pending" },
+                    { name: "Efon", hq: "Efon-Alaaye", faac: 280, chairman: "Data pending" },
+                    { name: "Ekiti East", hq: "Omuo", faac: 300, chairman: "Data pending" },
+                    { name: "Ekiti South-West", hq: "Ilawe", faac: 310, chairman: "Data pending" },
+                    { name: "Ekiti West", hq: "Aramoko", faac: 320, chairman: "Data pending" },
+                    { name: "Emure", hq: "Emure", faac: 280, chairman: "Data pending" },
+                    { name: "Gbonyin", hq: "Ode", faac: 290, chairman: "Data pending" },
+                    { name: "Ido Osi", hq: "Ido", faac: 310, chairman: "Data pending" },
+                    { name: "Ijero", hq: "Ijero", faac: 300, chairman: "Data pending" },
+                    { name: "Ikere", hq: "Ikere", faac: 340, chairman: "Data pending" },
+                    { name: "Ikole", hq: "Ikole", faac: 310, chairman: "Data pending" },
+                    { name: "Ilejemeje", hq: "Iyin", faac: 270, chairman: "Data pending" },
+                    { name: "Irepodun/Ifelodun", hq: "Igede", faac: 300, chairman: "Data pending" },
+                    { name: "Ise/Orun", hq: "Ise", faac: 290, chairman: "Data pending" },
+                    { name: "Moba", hq: "Otun", faac: 310, chairman: "Data pending" },
+                    { name: "Oye", hq: "Oye", faac: 320, chairman: "Data pending" }
+                ]
+            },
+            ENUGU: {
+                name: "Enugu", capital: "Enugu", zone: "South-East",
+                lgas: [
+                    { name: "Aninri", hq: "Aninri", faac: 300, chairman: "Data pending" },
+                    { name: "Awgu", hq: "Awgu", faac: 310, chairman: "Data pending" },
+                    { name: "Enugu East", hq: "Enugu", faac: 420, chairman: "Data pending" },
+                    { name: "Enugu North", hq: "Enugu", faac: 440, chairman: "Data pending" },
+                    { name: "Enugu South", hq: "Enugu", faac: 430, chairman: "Data pending" },
+                    { name: "Ezeagu", hq: "Ezeagu", faac: 310, chairman: "Data pending" },
+                    { name: "Igbo Etiti", hq: "Ogbede", faac: 320, chairman: "Data pending" },
+                    { name: "Igbo Eze North", hq: "Enugu-Ezike", faac: 340, chairman: "Data pending" },
+                    { name: "Igbo Eze South", hq: "Ibagwa-Aka", faac: 310, chairman: "Data pending" },
+                    { name: "Isi Uzo", hq: "Ikem", faac: 290, chairman: "Data pending" },
+                    { name: "Nkanu East", hq: "Nkanu", faac: 300, chairman: "Data pending" },
+                    { name: "Nkanu West", hq: "Agbani", faac: 310, chairman: "Data pending" },
+                    { name: "Nsukka", hq: "Nsukka", faac: 380, chairman: "Data pending" },
+                    { name: "Oji River", hq: "Oji River", faac: 290, chairman: "Data pending" },
+                    { name: "Udenu", hq: "Obollo-Afor", faac: 300, chairman: "Data pending" },
+                    { name: "Udi", hq: "Udi", faac: 320, chairman: "Data pending" },
+                    { name: "Uzo-Uwani", hq: "Uzo-Uwani", faac: 280, chairman: "Data pending" }
+                ]
+            },
+            GOMBE: {
+                name: "Gombe", capital: "Gombe", zone: "North-East",
+                lgas: [
+                    { name: "Akko", hq: "Akko", faac: 340, chairman: "Data pending" },
+                    { name: "Balanga", hq: "Balanga", faac: 310, chairman: "Data pending" },
+                    { name: "Billiri", hq: "Billiri", faac: 300, chairman: "Data pending" },
+                    { name: "Dukku", hq: "Dukku", faac: 320, chairman: "Data pending" },
+                    { name: "Funakaye", hq: "Funakaye", faac: 310, chairman: "Data pending" },
+                    { name: "Gombe", hq: "Gombe", faac: 430, chairman: "Data pending" },
+                    { name: "Kaltungo", hq: "Kaltungo", faac: 290, chairman: "Data pending" },
+                    { name: "Kwami", hq: "Kwami", faac: 300, chairman: "Data pending" },
+                    { name: "Nafada", hq: "Nafada", faac: 280, chairman: "Data pending" },
+                    { name: "Shongom", hq: "Shongom", faac: 290, chairman: "Data pending" },
+                    { name: "Yamaltu/Deba", hq: "Yamaltu", faac: 320, chairman: "Data pending" }
+                ]
+            },
+            IMO: {
+                name: "Imo", capital: "Owerri", zone: "South-East",
+                lgas: [
+                    { name: "Aboh Mbaise", hq: "Aboh Mbaise", faac: 340, chairman: "Data pending" },
+                    { name: "Ahiazu Mbaise", hq: "Ahiazu", faac: 320, chairman: "Data pending" },
+                    { name: "Ehime Mbano", hq: "Ehime Mbano", faac: 310, chairman: "Data pending" },
+                    { name: "Ezinihitte", hq: "Itu", faac: 300, chairman: "Data pending" },
+                    { name: "Ideato North", hq: "Urualla", faac: 330, chairman: "Data pending" },
+                    { name: "Ideato South", hq: "Dikenafai", faac: 310, chairman: "Data pending" },
+                    { name: "Ihitte/Uboma", hq: "Isinweke", faac: 290, chairman: "Data pending" },
+                    { name: "Ikeduru", hq: "Iho", faac: 300, chairman: "Data pending" },
+                    { name: "Isiala Mbano", hq: "Umuelemai", faac: 310, chairman: "Data pending" },
+                    { name: "Isu", hq: "Umundugba", faac: 280, chairman: "Data pending" },
+                    { name: "Mbaitoli", hq: "Nwaorieubi", faac: 320, chairman: "Data pending" },
+                    { name: "Ngor Okpala", hq: "Umuneke", faac: 300, chairman: "Data pending" },
+                    { name: "Njaba", hq: "Nnenasa", faac: 290, chairman: "Data pending" },
+                    { name: "Nkwerre", hq: "Nkwerre", faac: 280, chairman: "Data pending" },
+                    { name: "Nwangele", hq: "Nwangele", faac: 290, chairman: "Data pending" },
+                    { name: "Obowo", hq: "Obowo", faac: 300, chairman: "Data pending" },
+                    { name: "Oguta", hq: "Oguta", faac: 330, chairman: "Data pending" },
+                    { name: "Ohaji/Egbema", hq: "Ohaji", faac: 360, chairman: "Data pending" },
+                    { name: "Okigwe", hq: "Okigwe", faac: 340, chairman: "Data pending" },
+                    { name: "Onuimo", hq: "Okwe", faac: 280, chairman: "Data pending" },
+                    { name: "Orlu", hq: "Orlu", faac: 350, chairman: "Data pending" },
+                    { name: "Orsu", hq: "Awo-Idemili", faac: 290, chairman: "Data pending" },
+                    { name: "Oru East", hq: "Omuma", faac: 310, chairman: "Data pending" },
+                    { name: "Oru West", hq: "Mgbidi", faac: 300, chairman: "Data pending" },
+                    { name: "Owerri Municipal", hq: "Owerri", faac: 430, chairman: "Data pending" },
+                    { name: "Owerri North", hq: "Owerri", faac: 380, chairman: "Data pending" },
+                    { name: "Owerri West", hq: "Umuguma", faac: 360, chairman: "Data pending" }
+                ]
+            },
+            JIGAWA: {
+                name: "Jigawa", capital: "Dutse", zone: "North-West",
+                lgas: [
+                    { name: "Auyo", hq: "Auyo", faac: 290, chairman: "Data pending" },
+                    { name: "Babura", hq: "Babura", faac: 300, chairman: "Data pending" },
+                    { name: "Biriniwa", hq: "Biriniwa", faac: 280, chairman: "Data pending" },
+                    { name: "Birnin Kudu", hq: "Birnin Kudu", faac: 340, chairman: "Data pending" },
+                    { name: "Buji", hq: "Buji", faac: 270, chairman: "Data pending" },
+                    { name: "Dutse", hq: "Dutse", faac: 380, chairman: "Data pending" },
+                    { name: "Gagarawa", hq: "Gagarawa", faac: 260, chairman: "Data pending" },
+                    { name: "Garki", hq: "Garki", faac: 280, chairman: "Data pending" },
+                    { name: "Gumel", hq: "Gumel", faac: 310, chairman: "Data pending" },
+                    { name: "Guri", hq: "Guri", faac: 270, chairman: "Data pending" },
+                    { name: "Gwaram", hq: "Gwaram", faac: 300, chairman: "Data pending" },
+                    { name: "Gwiwa", hq: "Gwiwa", faac: 280, chairman: "Data pending" },
+                    { name: "Hadejia", hq: "Hadejia", faac: 330, chairman: "Data pending" },
+                    { name: "Jahun", hq: "Jahun", faac: 310, chairman: "Data pending" },
+                    { name: "Kafin Hausa", hq: "Kafin Hausa", faac: 300, chairman: "Data pending" },
+                    { name: "Kaugama", hq: "Kaugama", faac: 280, chairman: "Data pending" },
+                    { name: "Kazaure", hq: "Kazaure", faac: 320, chairman: "Data pending" },
+                    { name: "Kirika Samma", hq: "Kirika Samma", faac: 270, chairman: "Data pending" },
+                    { name: "Kiyawa", hq: "Kiyawa", faac: 290, chairman: "Data pending" },
+                    { name: "Maigatari", hq: "Maigatari", faac: 300, chairman: "Data pending" },
+                    { name: "Malam Madori", hq: "Malam Madori", faac: 280, chairman: "Data pending" },
+                    { name: "Miga", hq: "Miga", faac: 270, chairman: "Data pending" },
+                    { name: "Ringim", hq: "Ringim", faac: 310, chairman: "Data pending" },
+                    { name: "Roni", hq: "Roni", faac: 280, chairman: "Data pending" },
+                    { name: "Sule Tankarkar", hq: "Sule Tankarkar", faac: 270, chairman: "Data pending" },
+                    { name: "Taura", hq: "Taura", faac: 290, chairman: "Data pending" },
+                    { name: "Yankwashi", hq: "Yankwashi", faac: 260, chairman: "Data pending" }
+                ]
+            },
+            KADUNA: {
+                name: "Kaduna", capital: "Kaduna", zone: "North-Central",
+                lgas: [
+                    { name: "Birnin Gwari", hq: "Birnin Gwari", faac: 340, chairman: "Data pending" },
+                    { name: "Chikun", hq: "Chikun", faac: 380, chairman: "Data pending" },
+                    { name: "Giwa", hq: "Giwa", faac: 320, chairman: "Data pending" },
+                    { name: "Igabi", hq: "Igabi", faac: 370, chairman: "Data pending" },
+                    { name: "Ikara", hq: "Ikara", faac: 310, chairman: "Data pending" },
+                    { name: "Jaba", hq: "Kwoi", faac: 290, chairman: "Data pending" },
+                    { name: "Jema'a", hq: "Kafanchan", faac: 340, chairman: "Data pending" },
+                    { name: "Kachia", hq: "Kachia", faac: 310, chairman: "Data pending" },
+                    { name: "Kaduna North", hq: "Kaduna", faac: 450, chairman: "Data pending" },
+                    { name: "Kaduna South", hq: "Kaduna", faac: 440, chairman: "Data pending" },
+                    { name: "Kagarko", hq: "Kagarko", faac: 300, chairman: "Data pending" },
+                    { name: "Kajuru", hq: "Kajuru", faac: 280, chairman: "Data pending" },
+                    { name: "Kaura", hq: "Kaura", faac: 290, chairman: "Data pending" },
+                    { name: "Kauru", hq: "Kauru", faac: 280, chairman: "Data pending" },
+                    { name: "Kubau", hq: "Kubau", faac: 320, chairman: "Data pending" },
+                    { name: "Kudan", hq: "Kudan", faac: 300, chairman: "Data pending" },
+                    { name: "Lere", hq: "Lere", faac: 330, chairman: "Data pending" },
+                    { name: "Makarfi", hq: "Makarfi", faac: 290, chairman: "Data pending" },
+                    { name: "Sabon Gari", hq: "Sabon Gari", faac: 380, chairman: "Data pending" },
+                    { name: "Sanga", hq: "Sanga", faac: 280, chairman: "Data pending" },
+                    { name: "Soba", hq: "Soba", faac: 310, chairman: "Data pending" },
+                    { name: "Zangon Kataf", hq: "Zangon Kataf", faac: 330, chairman: "Data pending" },
+                    { name: "Zaria", hq: "Zaria", faac: 420, chairman: "Data pending" }
+                ]
+            },
+            KANO: {
+                name: "Kano", capital: "Kano", zone: "North-West",
+                lgas: [
+                    { name: "Ajingi", hq: "Ajingi", faac: 290, chairman: "Data pending" },
+                    { name: "Albasu", hq: "Albasu", faac: 280, chairman: "Data pending" },
+                    { name: "Bagwai", hq: "Bagwai", faac: 270, chairman: "Data pending" },
+                    { name: "Bebeji", hq: "Bebeji", faac: 280, chairman: "Data pending" },
+                    { name: "Bichi", hq: "Bichi", faac: 310, chairman: "Data pending" },
+                    { name: "Bunkure", hq: "Bunkure", faac: 270, chairman: "Data pending" },
+                    { name: "Dala", hq: "Dala", faac: 350, chairman: "Data pending" },
+                    { name: "Dambatta", hq: "Dambatta", faac: 310, chairman: "Data pending" },
+                    { name: "Dawakin Kudu", hq: "Dawakin Kudu", faac: 290, chairman: "Data pending" },
+                    { name: "Dawakin Tofa", hq: "Dawakin Tofa", faac: 280, chairman: "Data pending" },
+                    { name: "Doguwa", hq: "Doguwa", faac: 270, chairman: "Data pending" },
+                    { name: "Fagge", hq: "Fagge", faac: 340, chairman: "Data pending" },
+                    { name: "Gabasawa", hq: "Gabasawa", faac: 280, chairman: "Data pending" },
+                    { name: "Garko", hq: "Garko", faac: 270, chairman: "Data pending" },
+                    { name: "Garun Mallam", hq: "Garun Mallam", faac: 260, chairman: "Data pending" },
+                    { name: "Gaya", hq: "Gaya", faac: 310, chairman: "Data pending" },
+                    { name: "Gezawa", hq: "Gezawa", faac: 280, chairman: "Data pending" },
+                    { name: "Gwale", hq: "Gwale", faac: 340, chairman: "Data pending" },
+                    { name: "Gwarzo", hq: "Gwarzo", faac: 300, chairman: "Data pending" },
+                    { name: "Kabo", hq: "Kabo", faac: 280, chairman: "Data pending" },
+                    { name: "Kano Municipal", hq: "Kano", faac: 480, chairman: "Data pending" },
+                    { name: "Karaye", hq: "Karaye", faac: 290, chairman: "Data pending" },
+                    { name: "Kibiya", hq: "Kibiya", faac: 270, chairman: "Data pending" },
+                    { name: "Kiru", hq: "Kiru", faac: 290, chairman: "Data pending" },
+                    { name: "Kumbotso", hq: "Kumbotso", faac: 320, chairman: "Data pending" },
+                    { name: "Kunchi", hq: "Kunchi", faac: 270, chairman: "Data pending" },
+                    { name: "Kura", hq: "Kura", faac: 280, chairman: "Data pending" },
+                    { name: "Madobi", hq: "Madobi", faac: 270, chairman: "Data pending" },
+                    { name: "Makoda", hq: "Makoda", faac: 280, chairman: "Data pending" },
+                    { name: "Minjibir", hq: "Minjibir", faac: 290, chairman: "Data pending" },
+                    { name: "Nassarawa", hq: "Nassarawa", faac: 340, chairman: "Data pending" },
+                    { name: "Rano", hq: "Rano", faac: 280, chairman: "Data pending" },
+                    { name: "Rimin Gado", hq: "Rimin Gado", faac: 270, chairman: "Data pending" },
+                    { name: "Rogo", hq: "Rogo", faac: 280, chairman: "Data pending" },
+                    { name: "Shanono", hq: "Shanono", faac: 270, chairman: "Data pending" },
+                    { name: "Sumaila", hq: "Sumaila", faac: 290, chairman: "Data pending" },
+                    { name: "Takai", hq: "Takai", faac: 280, chairman: "Data pending" },
+                    { name: "Tarauni", hq: "Tarauni", faac: 350, chairman: "Data pending" },
+                    { name: "Tofa", hq: "Tofa", faac: 270, chairman: "Data pending" },
+                    { name: "Tsanyawa", hq: "Tsanyawa", faac: 280, chairman: "Data pending" },
+                    { name: "Tudun Wada", hq: "Tudun Wada", faac: 290, chairman: "Data pending" },
+                    { name: "Ungogo", hq: "Ungogo", faac: 330, chairman: "Data pending" },
+                    { name: "Warawa", hq: "Warawa", faac: 270, chairman: "Data pending" },
+                    { name: "Wudil", hq: "Wudil", faac: 280, chairman: "Data pending" }
+                ]
+            },
+            KATSINA: {
+                name: "Katsina", capital: "Katsina", zone: "North-West",
+                lgas: [
+                    { name: "Bakori", hq: "Bakori", faac: 290, chairman: "Data pending" },
+                    { name: "Batagarawa", hq: "Batagarawa", faac: 310, chairman: "Data pending" },
+                    { name: "Batsari", hq: "Batsari", faac: 280, chairman: "Data pending" },
+                    { name: "Baure", hq: "Baure", faac: 290, chairman: "Data pending" },
+                    { name: "Bindawa", hq: "Bindawa", faac: 280, chairman: "Data pending" },
+                    { name: "Charanchi", hq: "Charanchi", faac: 270, chairman: "Data pending" },
+                    { name: "Dan Musa", hq: "Dan Musa", faac: 280, chairman: "Data pending" },
+                    { name: "Dandume", hq: "Dandume", faac: 290, chairman: "Data pending" },
+                    { name: "Danja", hq: "Danja", faac: 270, chairman: "Data pending" },
+                    { name: "Daura", hq: "Daura", faac: 340, chairman: "Data pending" },
+                    { name: "Dutsi", hq: "Dutsi", faac: 280, chairman: "Data pending" },
+                    { name: "Dutsin Ma", hq: "Dutsin Ma", faac: 310, chairman: "Data pending" },
+                    { name: "Faskari", hq: "Faskari", faac: 290, chairman: "Data pending" },
+                    { name: "Funtua", hq: "Funtua", faac: 340, chairman: "Data pending" },
+                    { name: "Ingawa", hq: "Ingawa", faac: 280, chairman: "Data pending" },
+                    { name: "Jibia", hq: "Jibia", faac: 290, chairman: "Data pending" },
+                    { name: "Kafur", hq: "Kafur", faac: 280, chairman: "Data pending" },
+                    { name: "Kaita", hq: "Kaita", faac: 270, chairman: "Data pending" },
+                    { name: "Kankara", hq: "Kankara", faac: 300, chairman: "Data pending" },
+                    { name: "Kankia", hq: "Kankia", faac: 280, chairman: "Data pending" },
+                    { name: "Katsina", hq: "Katsina", faac: 420, chairman: "Data pending" },
+                    { name: "Kurfi", hq: "Kurfi", faac: 270, chairman: "Data pending" },
+                    { name: "Kusada", hq: "Kusada", faac: 260, chairman: "Data pending" },
+                    { name: "Mai'adua", hq: "Mai'adua", faac: 300, chairman: "Data pending" },
+                    { name: "Malumfashi", hq: "Malumfashi", faac: 310, chairman: "Data pending" },
+                    { name: "Mani", hq: "Mani", faac: 290, chairman: "Data pending" },
+                    { name: "Mashi", hq: "Mashi", faac: 280, chairman: "Data pending" },
+                    { name: "Matazu", hq: "Matazu", faac: 270, chairman: "Data pending" },
+                    { name: "Musawa", hq: "Musawa", faac: 280, chairman: "Data pending" },
+                    { name: "Rimi", hq: "Rimi", faac: 290, chairman: "Data pending" },
+                    { name: "Sabuwa", hq: "Sabuwa", faac: 270, chairman: "Data pending" },
+                    { name: "Safana", hq: "Safana", faac: 280, chairman: "Data pending" },
+                    { name: "Sandamu", hq: "Sandamu", faac: 270, chairman: "Data pending" },
+                    { name: "Zango", hq: "Zango", faac: 280, chairman: "Data pending" }
+                ]
+            },
+            KEBBI: {
+                name: "Kebbi", capital: "Birnin Kebbi", zone: "North-West",
+                lgas: [
+                    { name: "Aleiro", hq: "Aleiro", faac: 280, chairman: "Data pending" },
+                    { name: "Arewa Dandi", hq: "Arewa", faac: 290, chairman: "Data pending" },
+                    { name: "Argungu", hq: "Argungu", faac: 330, chairman: "Data pending" },
+                    { name: "Augie", hq: "Augie", faac: 280, chairman: "Data pending" },
+                    { name: "Bagudo", hq: "Bagudo", faac: 310, chairman: "Data pending" },
+                    { name: "Birnin Kebbi", hq: "Birnin Kebbi", faac: 380, chairman: "Data pending" },
+                    { name: "Bunza", hq: "Bunza", faac: 290, chairman: "Data pending" },
+                    { name: "Dandi", hq: "Dandi", faac: 280, chairman: "Data pending" },
+                    { name: "Fakai", hq: "Fakai", faac: 270, chairman: "Data pending" },
+                    { name: "Gwandu", hq: "Gwandu", faac: 310, chairman: "Data pending" },
+                    { name: "Jega", hq: "Jega", faac: 320, chairman: "Data pending" },
+                    { name: "Kalgo", hq: "Kalgo", faac: 270, chairman: "Data pending" },
+                    { name: "Koko/Besse", hq: "Koko", faac: 300, chairman: "Data pending" },
+                    { name: "Maiyama", hq: "Maiyama", faac: 280, chairman: "Data pending" },
+                    { name: "Ngaski", hq: "Ngaski", faac: 290, chairman: "Data pending" },
+                    { name: "Sakaba", hq: "Sakaba", faac: 270, chairman: "Data pending" },
+                    { name: "Shanga", hq: "Shanga", faac: 280, chairman: "Data pending" },
+                    { name: "Suru", hq: "Suru", faac: 290, chairman: "Data pending" },
+                    { name: "Wasagu/Danko", hq: "Wasagu", faac: 280, chairman: "Data pending" },
+                    { name: "Yauri", hq: "Yauri", faac: 310, chairman: "Data pending" },
+                    { name: "Zuru", hq: "Zuru", faac: 300, chairman: "Data pending" }
+                ]
+            },
+            KOGI: {
+                name: "Kogi", capital: "Lokoja", zone: "North-Central",
+                lgas: [
+                    { name: "Adavi", hq: "Adavi", faac: 320, chairman: "Data pending" },
+                    { name: "Ajaokuta", hq: "Ajaokuta", faac: 350, chairman: "Data pending" },
+                    { name: "Ankpa", hq: "Ankpa", faac: 330, chairman: "Data pending" },
+                    { name: "Bassa", hq: "Bassa", faac: 290, chairman: "Data pending" },
+                    { name: "Dekina", hq: "Dekina", faac: 340, chairman: "Data pending" },
+                    { name: "Ibaji", hq: "Ibaji", faac: 280, chairman: "Data pending" },
+                    { name: "Idah", hq: "Idah", faac: 310, chairman: "Data pending" },
+                    { name: "Igalamela-Odolu", hq: "Igalamela", faac: 300, chairman: "Data pending" },
+                    { name: "Ijumu", hq: "Ijumu", faac: 290, chairman: "Data pending" },
+                    { name: "Kabba/Bunu", hq: "Kabba", faac: 330, chairman: "Data pending" },
+                    { name: "Kogi", hq: "Kogi", faac: 280, chairman: "Data pending" },
+                    { name: "Lokoja", hq: "Lokoja", faac: 420, chairman: "Data pending" },
+                    { name: "Mopa-Muro", hq: "Mopa", faac: 270, chairman: "Data pending" },
+                    { name: "Ofu", hq: "Ofu", faac: 290, chairman: "Data pending" },
+                    { name: "Ogori/Magongo", hq: "Ogori", faac: 270, chairman: "Data pending" },
+                    { name: "Okehi", hq: "Okehi", faac: 310, chairman: "Data pending" },
+                    { name: "Okene", hq: "Okene", faac: 380, chairman: "Data pending" },
+                    { name: "Olamaboro", hq: "Olamaboro", faac: 280, chairman: "Data pending" },
+                    { name: "Omala", hq: "Omala", faac: 290, chairman: "Data pending" },
+                    { name: "Yagba East", hq: "Yagba East", faac: 280, chairman: "Data pending" },
+                    { name: "Yagba West", hq: "Yagba West", faac: 270, chairman: "Data pending" }
+                ]
+            },
+            KWARA: {
+                name: "Kwara", capital: "Ilorin", zone: "North-Central",
+                lgas: [
+                    { name: "Asa", hq: "Asa", faac: 310, chairman: "Data pending" },
+                    { name: "Baruten", hq: "Baruten", faac: 300, chairman: "Data pending" },
+                    { name: "Edu", hq: "Lafiagi", faac: 310, chairman: "Data pending" },
+                    { name: "Ekiti", hq: "Ekiti", faac: 280, chairman: "Data pending" },
+                    { name: "Ifelodun", hq: "Share", faac: 320, chairman: "Data pending" },
+                    { name: "Ilorin East", hq: "Ilorin", faac: 400, chairman: "Data pending" },
+                    { name: "Ilorin South", hq: "Ilorin", faac: 410, chairman: "Data pending" },
+                    { name: "Ilorin West", hq: "Ilorin", faac: 420, chairman: "Data pending" },
+                    { name: "Irepodun", hq: "Omu-Aran", faac: 310, chairman: "Data pending" },
+                    { name: "Isin", hq: "Owu-Isin", faac: 280, chairman: "Data pending" },
+                    { name: "Kaiama", hq: "Kaiama", faac: 290, chairman: "Data pending" },
+                    { name: "Moro", hq: "Moro", faac: 300, chairman: "Data pending" },
+                    { name: "Offa", hq: "Offa", faac: 340, chairman: "Data pending" },
+                    { name: "Oke Ero", hq: "Oke Ero", faac: 270, chairman: "Data pending" },
+                    { name: "Oyun", hq: "Oyun", faac: 290, chairman: "Data pending" },
+                    { name: "Pategi", hq: "Pategi", faac: 300, chairman: "Data pending" }
+                ]
+            },
+            LAGOS: {
+                name: "Lagos", capital: "Ikeja", zone: "South-West",
+                lgas: [
+                    { name: "Agege", hq: "Agege", faac: 680, chairman: "Ganiu Egunjobi" },
+                    { name: "Ajeromi-Ifelodun", hq: "Ajeromi", faac: 720, chairman: "Ayoola Fatai" },
+                    { name: "Alimosho", hq: "Alimosho", faac: 950, chairman: "Sulaiman Jelili" },
+                    { name: "Amuwo-Odofin", hq: "Festac", faac: 780, chairman: "Valentine Buraimoh" },
+                    { name: "Apapa", hq: "Apapa", faac: 1200, chairman: "Oluwaseun Gabriel" },
+                    { name: "Badagry", hq: "Badagry", faac: 650, chairman: "Data pending" },
+                    { name: "Epe", hq: "Epe", faac: 620, chairman: "Data pending" },
+                    { name: "Eti-Osa", hq: "Victoria Island", faac: 2400, chairman: "Data pending" },
+                    { name: "Ibeju-Lekki", hq: "Ibeju", faac: 580, chairman: "Data pending" },
+                    { name: "Ifako-Ijaiye", hq: "Ifako", faac: 640, chairman: "Data pending" },
+                    { name: "Ikeja", hq: "Ikeja", faac: 1800, chairman: "Data pending" },
+                    { name: "Ikorodu", hq: "Ikorodu", faac: 720, chairman: "Data pending" },
+                    { name: "Kosofe", hq: "Kosofe", faac: 750, chairman: "Data pending" },
+                    { name: "Lagos Island", hq: "Lagos Island", faac: 1600, chairman: "Data pending" },
+                    { name: "Lagos Mainland", hq: "Yaba", faac: 820, chairman: "Data pending" },
+                    { name: "Mushin", hq: "Mushin", faac: 700, chairman: "Data pending" },
+                    { name: "Ojo", hq: "Ojo", faac: 680, chairman: "Data pending" },
+                    { name: "Oshodi-Isolo", hq: "Oshodi", faac: 760, chairman: "Data pending" },
+                    { name: "Shomolu", hq: "Shomolu", faac: 690, chairman: "Data pending" },
+                    { name: "Surulere", hq: "Surulere", faac: 850, chairman: "Data pending" }
+                ]
+            },
+            NASARAWA: {
+                name: "Nasarawa", capital: "Lafia", zone: "North-Central",
+                lgas: [
+                    { name: "Akwanga", hq: "Akwanga", faac: 330, chairman: "Data pending" },
+                    { name: "Awe", hq: "Awe", faac: 290, chairman: "Data pending" },
+                    { name: "Doma", hq: "Doma", faac: 310, chairman: "Data pending" },
+                    { name: "Karu", hq: "Karu", faac: 380, chairman: "Data pending" },
+                    { name: "Keana", hq: "Keana", faac: 280, chairman: "Data pending" },
+                    { name: "Keffi", hq: "Keffi", faac: 350, chairman: "Data pending" },
+                    { name: "Kokona", hq: "Kokona", faac: 300, chairman: "Data pending" },
+                    { name: "Lafia", hq: "Lafia", faac: 400, chairman: "Data pending" },
+                    { name: "Nasarawa", hq: "Nasarawa", faac: 340, chairman: "Data pending" },
+                    { name: "Nasarawa Egon", hq: "Nasarawa Egon", faac: 310, chairman: "Data pending" },
+                    { name: "Obi", hq: "Obi", faac: 280, chairman: "Data pending" },
+                    { name: "Toto", hq: "Toto", faac: 300, chairman: "Data pending" },
+                    { name: "Wamba", hq: "Wamba", faac: 290, chairman: "Data pending" }
+                ]
+            },
+            NIGER: {
+                name: "Niger", capital: "Minna", zone: "North-Central",
+                lgas: [
+                    { name: "Agaie", hq: "Agaie", faac: 290, chairman: "Data pending" },
+                    { name: "Agwara", hq: "Agwara", faac: 280, chairman: "Data pending" },
+                    { name: "Bida", hq: "Bida", faac: 380, chairman: "Data pending" },
+                    { name: "Borgu", hq: "New Bussa", faac: 310, chairman: "Data pending" },
+                    { name: "Bosso", hq: "Bosso", faac: 340, chairman: "Data pending" },
+                    { name: "Chanchaga", hq: "Minna", faac: 400, chairman: "Data pending" },
+                    { name: "Edatti", hq: "Edatti", faac: 280, chairman: "Data pending" },
+                    { name: "Gbako", hq: "Gbako", faac: 290, chairman: "Data pending" },
+                    { name: "Gurara", hq: "Gurara", faac: 300, chairman: "Data pending" },
+                    { name: "Katcha", hq: "Katcha", faac: 280, chairman: "Data pending" },
+                    { name: "Kontagora", hq: "Kontagora", faac: 340, chairman: "Data pending" },
+                    { name: "Lapai", hq: "Lapai", faac: 310, chairman: "Data pending" },
+                    { name: "Lavun", hq: "Lavun", faac: 300, chairman: "Data pending" },
+                    { name: "Magama", hq: "Magama", faac: 280, chairman: "Data pending" },
+                    { name: "Mariga", hq: "Mariga", faac: 290, chairman: "Data pending" },
+                    { name: "Mashegu", hq: "Mashegu", faac: 280, chairman: "Data pending" },
+                    { name: "Mokwa", hq: "Mokwa", faac: 320, chairman: "Data pending" },
+                    { name: "Munya", hq: "Munya", faac: 280, chairman: "Data pending" },
+                    { name: "Paikoro", hq: "Paikoro", faac: 300, chairman: "Data pending" },
+                    { name: "Rafi", hq: "Rafi", faac: 310, chairman: "Data pending" },
+                    { name: "Rijau", hq: "Rijau", faac: 290, chairman: "Data pending" },
+                    { name: "Shiroro", hq: "Shiroro", faac: 320, chairman: "Data pending" },
+                    { name: "Suleja", hq: "Suleja", faac: 380, chairman: "Data pending" },
+                    { name: "Tafa", hq: "Tafa", faac: 340, chairman: "Data pending" },
+                    { name: "Wushishi", hq: "Wushishi", faac: 290, chairman: "Data pending" }
+                ]
+            },
+            OGUN: {
+                name: "Ogun", capital: "Abeokuta", zone: "South-West",
+                lgas: [
+                    { name: "Abeokuta North", hq: "Abeokuta", faac: 420, chairman: "Data pending" },
+                    { name: "Abeokuta South", hq: "Abeokuta", faac: 430, chairman: "Data pending" },
+                    { name: "Ado-Odo/Ota", hq: "Ota", faac: 480, chairman: "Data pending" },
+                    { name: "Ewekoro", hq: "Ewekoro", faac: 350, chairman: "Data pending" },
+                    { name: "Ifo", hq: "Ifo", faac: 380, chairman: "Data pending" },
+                    { name: "Ijebu East", hq: "Ijebu-Ife", faac: 340, chairman: "Data pending" },
+                    { name: "Ijebu North", hq: "Ijebu-Igbo", faac: 360, chairman: "Data pending" },
+                    { name: "Ijebu North East", hq: "Atan", faac: 310, chairman: "Data pending" },
+                    { name: "Ijebu Ode", hq: "Ijebu-Ode", faac: 400, chairman: "Data pending" },
+                    { name: "Ikenne", hq: "Ikenne", faac: 340, chairman: "Data pending" },
+                    { name: "Imeko Afon", hq: "Imeko", faac: 290, chairman: "Data pending" },
+                    { name: "Ipokia", hq: "Ipokia", faac: 320, chairman: "Data pending" },
+                    { name: "Obafemi Owode", hq: "Owode", faac: 370, chairman: "Data pending" },
+                    { name: "Odeda", hq: "Odeda", faac: 320, chairman: "Data pending" },
+                    { name: "Odogbolu", hq: "Odogbolu", faac: 330, chairman: "Data pending" },
+                    { name: "Ogun Waterside", hq: "Abigi", faac: 310, chairman: "Data pending" },
+                    { name: "Remo North", hq: "Isara", faac: 320, chairman: "Data pending" },
+                    { name: "Sagamu", hq: "Sagamu", faac: 410, chairman: "Data pending" },
+                    { name: "Yewa North", hq: "Ayetoro", faac: 340, chairman: "Data pending" },
+                    { name: "Yewa South", hq: "Ilaro", faac: 350, chairman: "Data pending" }
+                ]
+            },
+            ONDO: {
+                name: "Ondo", capital: "Akure", zone: "South-West",
+                lgas: [
+                    { name: "Akoko North-East", hq: "Ikare", faac: 340, chairman: "Data pending" },
+                    { name: "Akoko North-West", hq: "Okeagbe", faac: 310, chairman: "Data pending" },
+                    { name: "Akoko South-East", hq: "Isua", faac: 290, chairman: "Data pending" },
+                    { name: "Akoko South-West", hq: "Oka", faac: 300, chairman: "Data pending" },
+                    { name: "Akure North", hq: "Iju/Itaogbolu", faac: 350, chairman: "Data pending" },
+                    { name: "Akure South", hq: "Akure", faac: 430, chairman: "Data pending" },
+                    { name: "Ese Odo", hq: "Igbekebo", faac: 310, chairman: "Data pending" },
+                    { name: "Idanre", hq: "Idanre", faac: 300, chairman: "Data pending" },
+                    { name: "Ifedore", hq: "Igbara-Oke", faac: 290, chairman: "Data pending" },
+                    { name: "Ilaje", hq: "Igbokoda", faac: 360, chairman: "Data pending" },
+                    { name: "Ile Oluji/Okeigbo", hq: "Ile-Oluji", faac: 300, chairman: "Data pending" },
+                    { name: "Irele", hq: "Irele", faac: 290, chairman: "Data pending" },
+                    { name: "Odigbo", hq: "Ore", faac: 340, chairman: "Data pending" },
+                    { name: "Okitipupa", hq: "Okitipupa", faac: 330, chairman: "Data pending" },
+                    { name: "Ondo East", hq: "Ondo", faac: 300, chairman: "Data pending" },
+                    { name: "Ondo West", hq: "Ondo", faac: 370, chairman: "Data pending" },
+                    { name: "Ose", hq: "Ifon", faac: 290, chairman: "Data pending" },
+                    { name: "Owo", hq: "Owo", faac: 350, chairman: "Data pending" }
+                ]
+            },
+            OSUN: {
+                name: "Osun", capital: "Osogbo", zone: "South-West",
+                lgas: [
+                    { name: "Aiyedaade", hq: "Gbongan", faac: 310, chairman: "Data pending" },
+                    { name: "Aiyedire", hq: "Ikirun", faac: 280, chairman: "Data pending" },
+                    { name: "Atakunmosa East", hq: "Iperindo", faac: 280, chairman: "Data pending" },
+                    { name: "Atakunmosa West", hq: "Osu", faac: 270, chairman: "Data pending" },
+                    { name: "Boluwaduro", hq: "Otan-Ayegbaju", faac: 270, chairman: "Data pending" },
+                    { name: "Boripe", hq: "Iragbiji", faac: 290, chairman: "Data pending" },
+                    { name: "Ede North", hq: "Ede", faac: 320, chairman: "Data pending" },
+                    { name: "Ede South", hq: "Ede", faac: 310, chairman: "Data pending" },
+                    { name: "Egbedore", hq: "Awo", faac: 280, chairman: "Data pending" },
+                    { name: "Ejigbo", hq: "Ejigbo", faac: 300, chairman: "Data pending" },
+                    { name: "Ife Central", hq: "Ile-Ife", faac: 350, chairman: "Data pending" },
+                    { name: "Ife East", hq: "Oke-Ogbo", faac: 320, chairman: "Data pending" },
+                    { name: "Ife North", hq: "Ipetumodu", faac: 300, chairman: "Data pending" },
+                    { name: "Ife South", hq: "Ifetedo", faac: 290, chairman: "Data pending" },
+                    { name: "Ifedayo", hq: "Oke-Ila", faac: 260, chairman: "Data pending" },
+                    { name: "Ifelodun", hq: "Ikirun", faac: 300, chairman: "Data pending" },
+                    { name: "Ila", hq: "Ila Orangun", faac: 290, chairman: "Data pending" },
+                    { name: "Ilesa East", hq: "Ilesa", faac: 320, chairman: "Data pending" },
+                    { name: "Ilesa West", hq: "Ilesa", faac: 310, chairman: "Data pending" },
+                    { name: "Irepodun", hq: "Ikirun", faac: 290, chairman: "Data pending" },
+                    { name: "Irewole", hq: "Ikire", faac: 310, chairman: "Data pending" },
+                    { name: "Isokan", hq: "Apomu", faac: 280, chairman: "Data pending" },
+                    { name: "Iwo", hq: "Iwo", faac: 340, chairman: "Data pending" },
+                    { name: "Obokun", hq: "Ibokun", faac: 280, chairman: "Data pending" },
+                    { name: "Odo Otin", hq: "Okuku", faac: 290, chairman: "Data pending" },
+                    { name: "Ola Oluwa", hq: "Bode Osi", faac: 280, chairman: "Data pending" },
+                    { name: "Olorunda", hq: "Osogbo", faac: 350, chairman: "Data pending" },
+                    { name: "Oriade", hq: "Ijesha-Isu", faac: 290, chairman: "Data pending" },
+                    { name: "Orolu", hq: "Ifon Osun", faac: 280, chairman: "Data pending" },
+                    { name: "Osogbo", hq: "Osogbo", faac: 380, chairman: "Data pending" }
+                ]
+            },
+            OYO: {
+                name: "Oyo", capital: "Ibadan", zone: "South-West",
+                lgas: [
+                    { name: "Afijio", hq: "Jobele", faac: 300, chairman: "Data pending" },
+                    { name: "Akinyele", hq: "Moniya", faac: 340, chairman: "Data pending" },
+                    { name: "Atiba", hq: "Oyo", faac: 330, chairman: "Data pending" },
+                    { name: "Atisbo", hq: "Ago-Are", faac: 290, chairman: "Data pending" },
+                    { name: "Egbeda", hq: "Egbeda", faac: 350, chairman: "Data pending" },
+                    { name: "Ibadan North", hq: "Agodi", faac: 480, chairman: "Data pending" },
+                    { name: "Ibadan North-East", hq: "Iwo Road", faac: 420, chairman: "Data pending" },
+                    { name: "Ibadan North-West", hq: "Onireke", faac: 410, chairman: "Data pending" },
+                    { name: "Ibadan South-East", hq: "Mapo", faac: 390, chairman: "Data pending" },
+                    { name: "Ibadan South-West", hq: "Oluyole", faac: 400, chairman: "Data pending" },
+                    { name: "Ibarapa Central", hq: "Igbo-Ora", faac: 290, chairman: "Data pending" },
+                    { name: "Ibarapa East", hq: "Eruwa", faac: 300, chairman: "Data pending" },
+                    { name: "Ibarapa North", hq: "Ayete", faac: 280, chairman: "Data pending" },
+                    { name: "Ido", hq: "Ido", faac: 310, chairman: "Data pending" },
+                    { name: "Irepo", hq: "Kisi", faac: 290, chairman: "Data pending" },
+                    { name: "Iseyin", hq: "Iseyin", faac: 330, chairman: "Data pending" },
+                    { name: "Itesiwaju", hq: "Otu", faac: 280, chairman: "Data pending" },
+                    { name: "Iwajowa", hq: "Iwere-Ile", faac: 270, chairman: "Data pending" },
+                    { name: "Kajola", hq: "Okeho", faac: 290, chairman: "Data pending" },
+                    { name: "Lagelu", hq: "Iyana-Offa", faac: 330, chairman: "Data pending" },
+                    { name: "Ogbomosho North", hq: "Ogbomosho", faac: 360, chairman: "Data pending" },
+                    { name: "Ogbomosho South", hq: "Ogbomosho", faac: 340, chairman: "Data pending" },
+                    { name: "Ogo Oluwa", hq: "Ajaawa", faac: 280, chairman: "Data pending" },
+                    { name: "Oluyole", hq: "Idi-Ayunre", faac: 350, chairman: "Data pending" },
+                    { name: "Ona Ara", hq: "Akanran", faac: 320, chairman: "Data pending" },
+                    { name: "Orelope", hq: "Igboho", faac: 290, chairman: "Data pending" },
+                    { name: "Ori Ire", hq: "Ikoyi", faac: 280, chairman: "Data pending" },
+                    { name: "Oyo East", hq: "Oyo", faac: 310, chairman: "Data pending" },
+                    { name: "Oyo West", hq: "Oyo", faac: 320, chairman: "Data pending" },
+                    { name: "Saki East", hq: "Ago-Amodu", faac: 290, chairman: "Data pending" },
+                    { name: "Saki West", hq: "Saki", faac: 340, chairman: "Data pending" },
+                    { name: "Surulere", hq: "Iresadu", faac: 280, chairman: "Data pending" },
+                    { name: "Oluyole", hq: "Idi-Ayunre", faac: 350, chairman: "Data pending" }
+                ]
+            },
+            PLATEAU: {
+                name: "Plateau", capital: "Jos", zone: "North-Central",
+                lgas: [
+                    { name: "Barkin Ladi", hq: "Barkin Ladi", faac: 310, chairman: "Data pending" },
+                    { name: "Bassa", hq: "Bassa", faac: 300, chairman: "Data pending" },
+                    { name: "Bokkos", hq: "Bokkos", faac: 290, chairman: "Data pending" },
+                    { name: "Jos East", hq: "Angware", faac: 320, chairman: "Data pending" },
+                    { name: "Jos North", hq: "Jos", faac: 440, chairman: "Data pending" },
+                    { name: "Jos South", hq: "Bukuru", faac: 420, chairman: "Data pending" },
+                    { name: "Kanam", hq: "Kanam", faac: 310, chairman: "Data pending" },
+                    { name: "Kanke", hq: "Kanke", faac: 280, chairman: "Data pending" },
+                    { name: "Langtang North", hq: "Langtang", faac: 300, chairman: "Data pending" },
+                    { name: "Langtang South", hq: "Shendam", faac: 290, chairman: "Data pending" },
+                    { name: "Mangu", hq: "Mangu", faac: 320, chairman: "Data pending" },
+                    { name: "Mikang", hq: "Mikang", faac: 270, chairman: "Data pending" },
+                    { name: "Pankshin", hq: "Pankshin", faac: 310, chairman: "Data pending" },
+                    { name: "Qua'an Pan", hq: "Qua'an Pan", faac: 290, chairman: "Data pending" },
+                    { name: "Riyom", hq: "Riyom", faac: 280, chairman: "Data pending" },
+                    { name: "Shendam", hq: "Shendam", faac: 320, chairman: "Data pending" },
+                    { name: "Wase", hq: "Wase", faac: 300, chairman: "Data pending" }
+                ]
+            },
+            RIVERS: {
+                name: "Rivers", capital: "Port Harcourt", zone: "South-South",
+                lgas: [
+                    { name: "Abua/Odual", hq: "Abua", faac: 420, chairman: "Data pending" },
+                    { name: "Ahoada East", hq: "Ahoada", faac: 400, chairman: "Data pending" },
+                    { name: "Ahoada West", hq: "Akinima", faac: 390, chairman: "Data pending" },
+                    { name: "Akuku-Toru", hq: "Abonnema", faac: 410, chairman: "Data pending" },
+                    { name: "Andoni", hq: "Andoni", faac: 380, chairman: "Data pending" },
+                    { name: "Asari-Toru", hq: "Buguma", faac: 400, chairman: "Data pending" },
+                    { name: "Bonny", hq: "Bonny", faac: 520, chairman: "Data pending" },
+                    { name: "Degema", hq: "Degema", faac: 410, chairman: "Data pending" },
+                    { name: "Eleme", hq: "Eleme", faac: 460, chairman: "Data pending" },
+                    { name: "Emohua", hq: "Emohua", faac: 390, chairman: "Data pending" },
+                    { name: "Etche", hq: "Okehi", faac: 380, chairman: "Data pending" },
+                    { name: "Gokana", hq: "Kpor", faac: 410, chairman: "Data pending" },
+                    { name: "Ikwerre", hq: "Isiokpo", faac: 400, chairman: "Data pending" },
+                    { name: "Khana", hq: "Bori", faac: 390, chairman: "Data pending" },
+                    { name: "Obio/Akpor", hq: "Rumuodomaya", faac: 580, chairman: "Data pending" },
+                    { name: "Ogba/Egbema/Ndoni", hq: "Omoku", faac: 450, chairman: "Data pending" },
+                    { name: "Ogu/Bolo", hq: "Ogu", faac: 370, chairman: "Data pending" },
+                    { name: "Okrika", hq: "Okrika", faac: 400, chairman: "Data pending" },
+                    { name: "Omuma", hq: "Omuma", faac: 370, chairman: "Data pending" },
+                    { name: "Opobo/Nkoro", hq: "Opobo", faac: 390, chairman: "Data pending" },
+                    { name: "Oyigbo", hq: "Oyigbo", faac: 400, chairman: "Data pending" },
+                    { name: "Port Harcourt", hq: "Port Harcourt", faac: 620, chairman: "Data pending" },
+                    { name: "Tai", hq: "Tai", faac: 380, chairman: "Data pending" }
+                ]
+            },
+            SOKOTO: {
+                name: "Sokoto", capital: "Sokoto", zone: "North-West",
+                lgas: [
+                    { name: "Binji", hq: "Binji", faac: 280, chairman: "Data pending" },
+                    { name: "Bodinga", hq: "Bodinga", faac: 290, chairman: "Data pending" },
+                    { name: "Dange Shuni", hq: "Dange", faac: 300, chairman: "Data pending" },
+                    { name: "Gada", hq: "Gada", faac: 280, chairman: "Data pending" },
+                    { name: "Goronyo", hq: "Goronyo", faac: 290, chairman: "Data pending" },
+                    { name: "Gudu", hq: "Gudu", faac: 270, chairman: "Data pending" },
+                    { name: "Gwadabawa", hq: "Gwadabawa", faac: 290, chairman: "Data pending" },
+                    { name: "Illela", hq: "Illela", faac: 300, chairman: "Data pending" },
+                    { name: "Isa", hq: "Isa", faac: 280, chairman: "Data pending" },
+                    { name: "Kebbe", hq: "Kebbe", faac: 270, chairman: "Data pending" },
+                    { name: "Kware", hq: "Kware", faac: 280, chairman: "Data pending" },
+                    { name: "Rabah", hq: "Rabah", faac: 290, chairman: "Data pending" },
+                    { name: "Sabon Birni", hq: "Sabon Birni", faac: 280, chairman: "Data pending" },
+                    { name: "Shagari", hq: "Shagari", faac: 270, chairman: "Data pending" },
+                    { name: "Silame", hq: "Silame", faac: 260, chairman: "Data pending" },
+                    { name: "Sokoto North", hq: "Sokoto", faac: 380, chairman: "Data pending" },
+                    { name: "Sokoto South", hq: "Sokoto", faac: 370, chairman: "Data pending" },
+                    { name: "Tambuwal", hq: "Tambuwal", faac: 300, chairman: "Data pending" },
+                    { name: "Tangaza", hq: "Tangaza", faac: 280, chairman: "Data pending" },
+                    { name: "Tureta", hq: "Tureta", faac: 270, chairman: "Data pending" },
+                    { name: "Wamako", hq: "Wamako", faac: 310, chairman: "Data pending" },
+                    { name: "Wurno", hq: "Wurno", faac: 280, chairman: "Data pending" },
+                    { name: "Yabo", hq: "Yabo", faac: 270, chairman: "Data pending" }
+                ]
+            },
+            TARABA: {
+                name: "Taraba", capital: "Jalingo", zone: "North-East",
+                lgas: [
+                    { name: "Ardo Kola", hq: "Ardo Kola", faac: 290, chairman: "Data pending" },
+                    { name: "Bali", hq: "Bali", faac: 310, chairman: "Data pending" },
+                    { name: "Donga", hq: "Donga", faac: 300, chairman: "Data pending" },
+                    { name: "Gashaka", hq: "Serti", faac: 270, chairman: "Data pending" },
+                    { name: "Gassol", hq: "Mutum Biyu", faac: 290, chairman: "Data pending" },
+                    { name: "Ibi", hq: "Ibi", faac: 300, chairman: "Data pending" },
+                    { name: "Jalingo", hq: "Jalingo", faac: 380, chairman: "Data pending" },
+                    { name: "Karim Lamido", hq: "Karim Lamido", faac: 280, chairman: "Data pending" },
+                    { name: "Kurmi", hq: "Baissa", faac: 270, chairman: "Data pending" },
+                    { name: "Lau", hq: "Lau", faac: 280, chairman: "Data pending" },
+                    { name: "Sardauna", hq: "Gembu", faac: 290, chairman: "Data pending" },
+                    { name: "Takum", hq: "Takum", faac: 310, chairman: "Data pending" },
+                    { name: "Ussa", hq: "Lissam", faac: 280, chairman: "Data pending" },
+                    { name: "Wukari", hq: "Wukari", faac: 320, chairman: "Data pending" },
+                    { name: "Yorro", hq: "Yorro", faac: 270, chairman: "Data pending" },
+                    { name: "Zing", hq: "Zing", faac: 290, chairman: "Data pending" }
+                ]
+            },
+            YOBE: {
+                name: "Yobe", capital: "Damaturu", zone: "North-East",
+                lgas: [
+                    { name: "Bade", hq: "Bade", faac: 290, chairman: "Data pending" },
+                    { name: "Bursari", hq: "Bursari", faac: 300, chairman: "Data pending" },
+                    { name: "Damaturu", hq: "Damaturu", faac: 360, chairman: "Data pending" },
+                    { name: "Fika", hq: "Fika", faac: 310, chairman: "Data pending" },
+                    { name: "Fune", hq: "Fune", faac: 300, chairman: "Data pending" },
+                    { name: "Geidam", hq: "Geidam", faac: 310, chairman: "Data pending" },
+                    { name: "Gujba", hq: "Gujba", faac: 320, chairman: "Data pending" },
+                    { name: "Gulani", hq: "Gulani", faac: 300, chairman: "Data pending" },
+                    { name: "Jakusko", hq: "Jakusko", faac: 290, chairman: "Data pending" },
+                    { name: "Karasuwa", hq: "Karasuwa", faac: 310, chairman: "Data pending" },
+                    { name: "Machina", hq: "Machina", faac: 300, chairman: "Data pending" },
+                    { name: "Nangere", hq: "Nangere", faac: 310, chairman: "Data pending" },
+                    { name: "Nguru", hq: "Nguru", faac: 330, chairman: "Data pending" },
+                    { name: "Potiskum", hq: "Potiskum", faac: 370, chairman: "Data pending" },
+                    { name: "Tarmuwa", hq: "Tarmuwa", faac: 300, chairman: "Data pending" },
+                    { name: "Yunusari", hq: "Yunusari", faac: 310, chairman: "Data pending" },
+                    { name: "Yusufari", hq: "Yusufari", faac: 300, chairman: "Data pending" }
+                ]
+            }
+        };
 
-<!-- ===== HUMANITARIAN TAB ===== -->
-<div class="tab-content" id="tab-humanitarian">
-  <div class="detail-section">
-    <div class="detail-grid">
-      <div class="detail-card">
-        <div class="detail-card-icon">&#127859;</div>
-        <div class="detail-card-title">Food Insecurity</div>
-        <div class="detail-card-stat" style="color: var(--accent-red);">307M</div>
-        <div class="detail-card-text">Africans faced hunger in 2024 according to the UN's State of Food Security report. Higher energy prices translate to increased costs for food production, processing, and transportation. Africa is caught between rising domestic needs and a global food system under strain.</div>
-      </div>
-      <div class="detail-card">
-        <div class="detail-card-icon">&#127973;</div>
-        <div class="detail-card-title">Aid Diversion</div>
-        <div class="detail-card-stat" style="color: var(--accent-amber);">3rd</div>
-        <div class="detail-card-text">The Occupied Palestinian Territory Flash Appeal is the third largest worldwide, demanding enormous humanitarian funding. This intense focus diverts resources from Africa — Sudan, DRC, Somalia, and Ethiopia compete for a shrinking pool of international aid.</div>
-      </div>
-      <div class="detail-card">
-        <div class="detail-card-icon">&#128694;</div>
-        <div class="detail-card-title">Displacement</div>
-        <div class="detail-card-stat" style="color: var(--accent-orange);">20M+</div>
-        <div class="detail-card-text">Ethiopians face food insecurity. Sudan's civil war — compounded by alleged Iran-faction ties — has produced one of the world's largest displacement crises. Regional spillover into Chad, South Sudan, and Egypt strains host communities already under economic pressure.</div>
-      </div>
-      <div class="detail-card">
-        <div class="detail-card-icon">&#9888;</div>
-        <div class="detail-card-title">Sudan Crisis</div>
-        <div class="detail-card-stat" style="color: var(--accent-red);">FAMINE</div>
-        <div class="detail-card-text">Sudan faces famine conditions as civil war rages and international attention shifts to the Middle East. Alleged ties between Iran and Sudanese military factions risk drawing the country deeper into the broader Israel-Iran confrontation. Humanitarian access remains severely limited.</div>
-      </div>
-      <div class="detail-card">
-        <div class="detail-card-icon">&#128138;</div>
-        <div class="detail-card-title">Health Systems</div>
-        <div class="detail-card-stat" style="color: var(--accent-amber);">&#8595;</div>
-        <div class="detail-card-text">Rising costs for pharmaceutical imports and medical supplies. Shipping disruptions delay critical medication deliveries. Countries already dealing with malaria, HIV/AIDS, and TB outbreaks face compounded challenges as health budgets are squeezed by rising import costs.</div>
-      </div>
-      <div class="detail-card">
-        <div class="detail-card-icon">&#127758;</div>
-        <div class="detail-card-title">Climate + Conflict</div>
-        <div class="detail-card-stat" style="color: var(--accent-orange);">COMPOUND</div>
-        <div class="detail-card-text">Food insecurity is no longer tied to one failed harvest or one conflict — it is overlapping crises hitting vulnerable communities hardest. Droughts, floods, and climate shocks combine with trade disruptions and war to create compounding humanitarian emergencies across the continent.</div>
-      </div>
-    </div>
-  </div>
-</div>
+        // Add remaining states
+        statesData.ZAMFARA = {
+            name: "Zamfara", capital: "Gusau", zone: "North-West",
+            lgas: [
+                { name: "Anka", hq: "Anka", faac: 310, chairman: "Data pending" },
+                { name: "Bakura", hq: "Bakura", faac: 300, chairman: "Data pending" },
+                { name: "Birnin Magaji/Kiyaw", hq: "Birnin Magaji", faac: 320, chairman: "Data pending" },
+                { name: "Bukkuyum", hq: "Bukkuyum", faac: 310, chairman: "Data pending" },
+                { name: "Bungudu", hq: "Bungudu", faac: 320, chairman: "Data pending" },
+                { name: "Gummi", hq: "Gummi", faac: 310, chairman: "Data pending" },
+                { name: "Gusau", hq: "Gusau", faac: 380, chairman: "Data pending" },
+                { name: "Kaura Namoda", hq: "Kaura Namoda", faac: 340, chairman: "Data pending" },
+                { name: "Maradun", hq: "Maradun", faac: 330, chairman: "Data pending" },
+                { name: "Maru", hq: "Maru", faac: 320, chairman: "Data pending" },
+                { name: "Shinkafi", hq: "Shinkafi", faac: 310, chairman: "Data pending" },
+                { name: "Talata Mafara", hq: "Talata Mafara", faac: 320, chairman: "Data pending" },
+                { name: "Tsafe", hq: "Tsafe", faac: 330, chairman: "Data pending" },
+                { name: "Zurmi", hq: "Zurmi", faac: 310, chairman: "Data pending" }
+            ]
+        };
 
-<!-- ===== SECURITY & GEOPOLITICS TAB ===== -->
-<div class="tab-content" id="tab-security">
-  <div class="detail-section">
-    <div class="detail-grid">
-      <div class="detail-card">
-        <div class="detail-card-icon">&#128163;</div>
-        <div class="detail-card-title">Arms Proliferation</div>
-        <div class="detail-card-stat" style="color: var(--accent-red);">&#8593;&#8593;</div>
-        <div class="detail-card-text">Rising interceptions of small arms and drone components at East African ports as Red Sea arms corridors are rerouted. In South Sudan and northern Kenya, this trend complicates disarmament efforts and risks revitalizing dormant militant networks.</div>
-      </div>
-      <div class="detail-card">
-        <div class="detail-card-icon">&#9872;</div>
-        <div class="detail-card-title">Proxy Networks</div>
-        <div class="detail-card-stat" style="color: var(--accent-red);">EXPANDING</div>
-        <div class="detail-card-text">Houthis and Hezbollah, backed by Iran, leverage the Red Sea and Arabian Sea as corridors for arms and ideological influence. This intensifies the threat of militant resurgence across Somalia, Sudan, and the eastern DRC. State-aligned and autonomous proxy forces are spreading.</div>
-      </div>
-      <div class="detail-card">
-        <div class="detail-card-icon">&#127987;</div>
-        <div class="detail-card-title">Somaliland Recognition</div>
-        <div class="detail-card-stat" style="color: var(--accent-amber);">CRISIS</div>
-        <div class="detail-card-text">Israel's recognition of Somaliland (Dec 26, 2025) has created a new fault line. Israel has aligned with the UAE-led axis supporting separatist actors across the Horn of Africa. Somalia maintains Somaliland is sovereign territory — regional diplomatic order is destabilized.</div>
-      </div>
-      <div class="detail-card">
-        <div class="detail-card-icon">&#128274;</div>
-        <div class="detail-card-title">Ethiopia-Eritrea Tensions</div>
-        <div class="detail-card-stat" style="color: var(--accent-amber);">CRITICAL</div>
-        <div class="detail-card-text">Ethiopia's push for Red Sea access stokes fears of war with Eritrea. Addis Ababa's claims over Eritrea's port of Assab in 2025 prompted both countries to mobilize forces and back rebel groups along their shared border. A new Horn of Africa war looms.</div>
-      </div>
-      <div class="detail-card">
-        <div class="detail-card-icon">&#127760;</div>
-        <div class="detail-card-title">Diplomatic Realignment</div>
-        <div class="detail-card-stat" style="color: var(--accent-cyan);">40 vs 20</div>
-        <div class="detail-card-text">Israel has diplomatic ties with 40 African nations vs Iran's 20. Both countries' diplomatic overtures into Africa are stalled for the conflict's duration. African governments are reassessing alliances — the war forces uncomfortable choices between competing powers.</div>
-      </div>
-      <div class="detail-card">
-        <div class="detail-card-icon">&#128736;</div>
-        <div class="detail-card-title">Red Sea Militarization</div>
-        <div class="detail-card-stat" style="color: var(--accent-red);">190+</div>
-        <div class="detail-card-text">Houthi attacks since November 2023 have hit roughly 100 vessels. Houthi strikes on Israeli soil surged 120% in 2025. Israel responded with airstrikes on Houthi infrastructure. The Red Sea has become one of the world's most dangerous waterways — with Africa caught in the crossfire.</div>
-      </div>
-    </div>
-  </div>
-</div>
+        statesData.FCT = {
+            name: "FCT", capital: "Abuja", zone: "North-Central",
+            lgas: [
+                { name: "Abaji", hq: "Abaji", faac: 650, chairman: "Data pending" },
+                { name: "Abuja Municipal (AMAC)", hq: "Abuja", faac: 1500, chairman: "Data pending" },
+                { name: "Bwari", hq: "Bwari", faac: 700, chairman: "Data pending" },
+                { name: "Gwagwalada", hq: "Gwagwalada", faac: 680, chairman: "Data pending" },
+                { name: "Kuje", hq: "Kuje", faac: 640, chairman: "Data pending" },
+                { name: "Kwali", hq: "Kwali", faac: 620, chairman: "Data pending" }
+            ]
+        };
 
-<!-- SOURCES FOOTER -->
-<div class="sources-footer">
-  <div class="sources-title">Data Sources &amp; References</div>
-  <p style="line-height: 1.8;">
-    <a href="https://www.tandfonline.com/doi/full/10.1080/25765949.2025.2553258" target="_blank">Beyond the Battlefield: Economic and Geopolitical Reverberations (Taylor & Francis)</a> &bull;
-    <a href="https://masharikirpc.org/israel-iran-war-and-its-implications-on-future-security-in-the-eastern-africa-region/" target="_blank">Israel-Iran War: Implications on Eastern Africa (Mashariki RPC)</a> &bull;
-    <a href="https://trendtype.com/insights/israel-iran-war-impact-on-africa/" target="_blank">Israel-Iran Crisis Impact on African Consumer Markets (Trendtype)</a> &bull;
-    <a href="https://www.inonafrica.com/2025/07/16/the-iran-israel-conflict-brings-strategic-and-economic-problems-to-africa/" target="_blank">Iran-Israel Conflict: Strategic Problems for Africa (IN ON Africa)</a> &bull;
-    <a href="https://www.geopoliticalmonitor.com/how-the-iran-israel-war-impacts-north-africa/" target="_blank">How the Iran-Israel War Impacts North Africa (Geopolitical Monitor)</a> &bull;
-    <a href="https://acleddata.com/report/regional-power-struggles-fuel-simmering-tensions-across-red-sea" target="_blank">Red Sea Tensions (ACLED)</a> &bull;
-    <a href="https://africanarguments.org/2026/01/the-horn-and-the-gulf-how-a-new-geopolitical-confluence-is-emerging/" target="_blank">The Horn and the Gulf (African Arguments)</a> &bull;
-    <a href="https://www.brookings.edu/articles/the-middle-east-conflict-is-threatening-to-cripple-a-fragile-global-economy/" target="_blank">Middle East Conflict Threatens Global Economy (Brookings)</a> &bull;
-    <a href="https://www.atlanticcouncil.org/blogs/menasource/what-will-2026-bring-for-the-middle-east-and-north-africa/" target="_blank">What Will 2026 Bring (Atlantic Council)</a>
-  </p>
-  <p style="margin-top: 8px; color: var(--text-muted);">Africa Situation Room &copy; 2026. Built for awareness and analysis. Data compiled from open-source intelligence and research institutions.</p>
-  <p style="margin-top: 4px; color: var(--text-muted);">All data is from publicly available research reports. This is an informational resource — not investment or policy advice.</p>
-</div>
+        // RICHEST LGAs DATA
+        const richestLGAs = [
+            { rank: 1, name: "Ikeja", state: "Lagos", igr: "45B/yr", zone: "South-West" },
+            { rank: 2, name: "Eti Osa", state: "Lagos", igr: "40B/yr", zone: "South-West" },
+            { rank: 3, name: "Lagos Island", state: "Lagos", igr: "38B/yr", zone: "South-West" },
+            { rank: 4, name: "Apapa", state: "Lagos", igr: "35B/yr", zone: "South-West" },
+            { rank: 5, name: "Port Harcourt", state: "Rivers", igr: "33B/yr", zone: "South-South" },
+            { rank: 6, name: "AMAC", state: "FCT", igr: "30B/yr", zone: "North-Central" },
+            { rank: 7, name: "Alimosho", state: "Lagos", igr: "28B/yr", zone: "South-West" },
+            { rank: 8, name: "Eket", state: "Akwa Ibom", igr: "28B/yr", zone: "South-South" },
+            { rank: 9, name: "Onitsha North", state: "Anambra", igr: "27B/yr", zone: "South-East" },
+            { rank: 10, name: "Obio/Akpor", state: "Rivers", igr: "25B/yr", zone: "South-South" },
+            { rank: 11, name: "Surulere", state: "Lagos", igr: "22B/yr", zone: "South-West" },
+            { rank: 12, name: "Kosofe", state: "Lagos", igr: "20B/yr", zone: "South-West" },
+            { rank: 13, name: "Mushin", state: "Lagos", igr: "18B/yr", zone: "South-West" },
+            { rank: 14, name: "Ibadan North", state: "Oyo", igr: "15B/yr", zone: "South-West" },
+            { rank: 15, name: "Oshodi-Isolo", state: "Lagos", igr: "14B/yr", zone: "South-West" },
+            { rank: 16, name: "Uvwie", state: "Delta", igr: "13B/yr", zone: "South-South" },
+            { rank: 17, name: "Oredo", state: "Edo", igr: "12B/yr", zone: "South-South" },
+            { rank: 18, name: "Uyo", state: "Akwa Ibom", igr: "11B/yr", zone: "South-South" },
+            { rank: 19, name: "Calabar Municipal", state: "Cross River", igr: "10B/yr", zone: "South-South" },
+            { rank: 20, name: "Aba South", state: "Abia", igr: "9B/yr", zone: "South-East" }
+        ];
 
-<script>
-  // Clock
-  function updateClock() {
-    const now = new Date();
-    const utc = now.toUTCString().split(' ')[4];
-    document.getElementById('clock').textContent = utc + ' UTC';
-  }
-  setInterval(updateClock, 1000);
-  updateClock();
+        // ===== API & AUTO-UPDATE ENGINE =====
+        let lastUpdateTime = null;
+        let apiConnected = false;
+        let selectedState = null;
 
-  // Conflict days counter
-  function updateConflictDays() {
-    const start = new Date('2023-10-07');
-    const now = new Date();
-    const days = Math.floor((now - start) / (1000 * 60 * 60 * 24));
-    document.getElementById('conflictDays').textContent = days + 'd';
-  }
-  updateConflictDays();
+        const API_ENDPOINTS = {
+            states: 'https://nga-api.vercel.app/api/states',
+            lgas: 'https://nga-api.vercel.app/api/lgas',
+            faac: 'https://budeshi.ng/api/v1/faac'
+        };
 
-  // Tab switching
-  function switchTab(tabId) {
-    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-    document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
-    document.getElementById('tab-' + tabId).classList.add('active');
-    document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
-  }
+        // Attempt to fetch live data from APIs
+        async function fetchLiveData() {
+            const statusDot = document.getElementById('apiStatusDot');
+            const statusText = document.getElementById('apiStatusText');
+            
+            try {
+                // Try fetching state/LGA data from Nigeria API
+                const response = await fetch(API_ENDPOINTS.states, { 
+                    signal: AbortSignal.timeout(8000),
+                    mode: 'cors'
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    apiConnected = true;
+                    statusDot.className = 'api-status-dot';
+                    statusText.textContent = 'API Connected';
+                    
+                    // Merge any new data into our statesData
+                    if (Array.isArray(data)) {
+                        data.forEach(apiState => {
+                            const key = apiState.name ? apiState.name.toUpperCase().replace(/\s+/g, '_') : null;
+                            if (key && statesData[key]) {
+                                // Update capital if available
+                                if (apiState.capital) statesData[key].capital = apiState.capital;
+                                // Merge LGA data if available
+                                if (apiState.lgas && Array.isArray(apiState.lgas)) {
+                                    apiState.lgas.forEach(apiLga => {
+                                        const existingLga = statesData[key].lgas.find(
+                                            l => l.name.toLowerCase() === apiLga.name?.toLowerCase()
+                                        );
+                                        if (existingLga && apiLga.chairman) {
+                                            existingLga.chairman = apiLga.chairman;
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+                    
+                    lastUpdateTime = new Date();
+                    showUpdateBanner('Live data synced successfully');
+                    updateLastUpdated();
+                    return true;
+                }
+            } catch (err) {
+                console.log('Primary API unavailable, using cached data:', err.message);
+            }
 
-  // Map tooltip
-  const tooltip = document.getElementById('mapTooltip');
-  const tooltipTitle = document.getElementById('tooltipTitle');
-  const tooltipText = document.getElementById('tooltipText');
-  const mapContainer = document.getElementById('mapContainer');
+            // Try secondary FAAC endpoint
+            try {
+                const faacResp = await fetch(API_ENDPOINTS.faac, {
+                    signal: AbortSignal.timeout(8000),
+                    mode: 'cors'
+                });
+                if (faacResp.ok) {
+                    const faacData = await faacResp.json();
+                    apiConnected = true;
+                    statusDot.className = 'api-status-dot';
+                    statusText.textContent = 'FAAC API Connected';
+                    lastUpdateTime = new Date();
+                    updateLastUpdated();
+                    return true;
+                }
+            } catch (err) {
+                console.log('FAAC API unavailable:', err.message);
+            }
 
-  function showTooltip(e, name, info) {
-    tooltipTitle.textContent = name;
-    tooltipText.textContent = info;
-    tooltip.classList.add('visible');
+            // Fallback - use cached data
+            apiConnected = false;
+            statusDot.className = 'api-status-dot error';
+            statusText.textContent = 'Using cached data';
+            lastUpdateTime = new Date();
+            updateLastUpdated();
+            return false;
+        }
 
-    const rect = mapContainer.getBoundingClientRect();
-    let x = e.clientX - rect.left + 15;
-    let y = e.clientY - rect.top - 10;
+        function showUpdateBanner(message) {
+            const banner = document.getElementById('updateBanner');
+            banner.textContent = message;
+            banner.classList.add('active');
+            setTimeout(() => banner.classList.remove('active'), 3000);
+        }
 
-    if (x + 280 > rect.width) x = x - 300;
-    if (y + 100 > rect.height) y = y - 100;
+        function updateLastUpdated() {
+            const timeStr = lastUpdateTime ? lastUpdateTime.toLocaleString('en-NG', {
+                dateStyle: 'medium', timeStyle: 'short'
+            }) : '--';
+            document.getElementById('statLastUpdate').textContent = timeStr;
+            const mapUpdated = document.getElementById('lastUpdatedMap');
+            if (mapUpdated) mapUpdated.textContent = 'Last synced: ' + timeStr;
+        }
 
-    tooltip.style.left = x + 'px';
-    tooltip.style.top = y + 'px';
-  }
+        function refreshData() {
+            showUpdateBanner('Refreshing data...');
+            fetchLiveData().then(() => {
+                computeStats();
+                if (selectedState) selectState(selectedState);
+                displayRichestLGAs();
+            });
+        }
 
-  function hideTooltip() {
-    tooltip.classList.remove('visible');
-  }
+        // Auto-refresh every 5 minutes
+        setInterval(() => {
+            fetchLiveData().then(() => {
+                computeStats();
+                if (selectedState) selectState(selectedState);
+            });
+        }, 5 * 60 * 1000);
 
-  // Country hover
-  document.querySelectorAll('.country').forEach(path => {
-    path.addEventListener('mousemove', (e) => {
-      showTooltip(e, path.dataset.name, path.dataset.info);
-    });
-    path.addEventListener('mouseleave', hideTooltip);
-  });
+        // ===== UTILITY FUNCTIONS =====
+        function updateClock() {
+            const now = new Date();
+            const h = String(now.getHours()).padStart(2, '0');
+            const m = String(now.getMinutes()).padStart(2, '0');
+            const s = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('liveClock').textContent = h + ':' + m + ':' + s;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
 
-  // Hotspot hover
-  document.querySelectorAll('.hotspot').forEach(g => {
-    g.addEventListener('mousemove', (e) => {
-      showTooltip(e, g.dataset.name, g.dataset.info);
-    });
-    g.addEventListener('mouseleave', hideTooltip);
-  });
+        function computeStats() {
+            let totalLGAs = 0;
+            let totalFAAC = 0;
+            for (const key in statesData) {
+                totalLGAs += statesData[key].lgas.length;
+                totalFAAC += statesData[key].lgas.reduce((s, l) => s + l.faac, 0);
+            }
+            document.getElementById('statTotalLGAs').textContent = totalLGAs.toLocaleString();
+            document.getElementById('statFAAC').textContent = '\u20A6' + (totalFAAC / 1000).toFixed(1) + 'B';
+            document.getElementById('topLgaStat').textContent = 'Ikeja, Lagos';
+        }
 
-  // Animate bars on scroll
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.querySelectorAll('.bar-fill').forEach(bar => {
-          const width = bar.style.width;
-          bar.style.width = '0%';
-          setTimeout(() => { bar.style.width = width; }, 100);
+        function getAllLGAs() {
+            let all = [];
+            for (const key in statesData) {
+                statesData[key].lgas.forEach(lga => {
+                    all.push({ ...lga, state: statesData[key].name, stateKey: key, zone: statesData[key].zone });
+                });
+            }
+            return all;
+        }
+
+        // ===== SEARCH =====
+        const searchBar = document.getElementById('searchBar');
+        const searchResults = document.getElementById('searchResults');
+
+        searchBar.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            searchResults.innerHTML = '';
+            if (query.length < 2) { searchResults.classList.remove('active'); return; }
+
+            const results = getAllLGAs().filter(l =>
+                l.name.toLowerCase().includes(query) ||
+                l.state.toLowerCase().includes(query) ||
+                l.zone.toLowerCase().includes(query)
+            ).slice(0, 15);
+
+            if (results.length > 0) {
+                searchResults.classList.add('active');
+                results.forEach(lga => {
+                    const div = document.createElement('div');
+                    div.className = 'search-result-item';
+                    div.innerHTML = '<strong>' + lga.name + '</strong> &mdash; ' + lga.state + ' <span style="color:var(--text-muted);font-size:11px">(' + lga.zone + ')</span>';
+                    div.onclick = () => { selectState(lga.stateKey); searchBar.value = ''; searchResults.classList.remove('active'); };
+                    searchResults.appendChild(div);
+                });
+            } else {
+                searchResults.classList.remove('active');
+            }
         });
-      }
-    });
-  }, { threshold: 0.3 });
 
-  document.querySelectorAll('.bar-chart').forEach(chart => observer.observe(chart));
-</script>
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.search-container')) searchResults.classList.remove('active');
+        });
 
+        // ===== DISPLAY RICHEST LGAs =====
+        function displayRichestLGAs() {
+            const panel = document.getElementById('richestPanel');
+            panel.innerHTML = '';
+            richestLGAs.forEach(lga => {
+                const div = document.createElement('div');
+                div.className = 'richest-item';
+                div.innerHTML =
+                    '<div class="richest-rank">#' + lga.rank + '</div>' +
+                    '<div class="richest-name">' + lga.name + '</div>' +
+                    '<div class="richest-state">' + lga.state + ' | ' + lga.zone + '</div>' +
+                    '<div class="richest-igr">\u20A6' + lga.igr + '</div>';
+                panel.appendChild(div);
+            });
+        }
+
+        // ===== SELECT STATE =====
+        function selectState(stateKey) {
+            selectedState = stateKey;
+            const state = statesData[stateKey];
+            document.getElementById('stateTitle').textContent = state.name.toUpperCase() + ' \u2014 ' + state.lgas.length + ' LGAs';
+            document.getElementById('closeStateBtn').style.display = 'inline-block';
+            const emptyEl = document.getElementById('emptyState');
+            if (emptyEl) emptyEl.style.display = 'none';
+
+            const summaryDiv = document.getElementById('stateSummary');
+            const totalFAAC = state.lgas.reduce((s, l) => s + l.faac, 0);
+            summaryDiv.className = 'state-summary active';
+            summaryDiv.innerHTML =
+                '<div class="summary-row"><span class="summary-label">Capital</span><span class="summary-value">' + state.capital + '</span></div>' +
+                '<div class="summary-row"><span class="summary-label">Zone</span><span class="summary-value">' + state.zone + '</span></div>' +
+                '<div class="summary-row"><span class="summary-label">Total LGAs</span><span class="summary-value">' + state.lgas.length + '</span></div>' +
+                '<div class="summary-row"><span class="summary-label">Monthly FAAC</span><span class="summary-value">\u20A6' + (totalFAAC / 1000).toFixed(1) + 'B</span></div>' +
+                '<hr style="border:none;border-top:1px solid var(--border-color);margin:10px 0;">';
+
+            const lgaList = document.getElementById('lgaList');
+            lgaList.innerHTML = '';
+            state.lgas.forEach(lga => {
+                const maxFAAC = Math.max(...state.lgas.map(l => l.faac));
+                const pct = (lga.faac / maxFAAC) * 100;
+                const div = document.createElement('div');
+                div.className = 'lga-item';
+                div.innerHTML =
+                    '<div class="lga-name">' + lga.name + '</div>' +
+                    '<div class="lga-detail">HQ: ' + lga.hq + '</div>' +
+                    '<div class="lga-detail">Chairman: ' + lga.chairman + '</div>' +
+                    '<div class="lga-allocation">' +
+                        '<div class="allocation-bar"><div class="allocation-fill" style="width:' + pct + '%"></div></div>' +
+                        '<div class="allocation-value">\u20A6' + lga.faac + 'M</div>' +
+                    '</div>';
+                lgaList.appendChild(div);
+            });
+
+            // Highlight on map
+            document.querySelectorAll('.state-circle').forEach(c => {
+                const sk = c.getAttribute('data-state');
+                if (sk === stateKey) {
+                    c.setAttribute('fill', '#0066ff');
+                    c.setAttribute('stroke', '#0066ff');
+                    c.setAttribute('r', '22');
+                } else {
+                    const def = statePositions[sk];
+                    c.setAttribute('fill', def ? def.color : '#dee2e6');
+                    c.setAttribute('stroke', '#adb5bd');
+                    c.setAttribute('r', '18');
+                }
+            });
+        }
+
+        document.getElementById('closeStateBtn').addEventListener('click', () => {
+            selectedState = null;
+            document.getElementById('stateTitle').textContent = 'SELECT A STATE';
+            document.getElementById('closeStateBtn').style.display = 'none';
+            document.getElementById('stateSummary').className = 'state-summary';
+            document.getElementById('lgaList').innerHTML = '';
+            const emptyEl = document.getElementById('emptyState');
+            if (emptyEl) emptyEl.style.display = 'flex';
+            // Reset map circles
+            document.querySelectorAll('.state-circle').forEach(c => {
+                const sk = c.getAttribute('data-state');
+                const def = statePositions[sk];
+                if (def) {
+                    c.setAttribute('fill', def.color);
+                    c.setAttribute('stroke', '#adb5bd');
+                    c.setAttribute('r', '18');
+                }
+            });
+        });
+
+        // ===== ZONE COLORS =====
+        const zoneColors = {
+            'North-Central': '#4361ee',
+            'North-East': '#7209b7',
+            'North-West': '#f72585',
+            'South-East': '#00b894',
+            'South-South': '#e17055',
+            'South-West': '#fdcb6e'
+        };
+
+        // ===== MAP GENERATION =====
+        const statePositions = {
+            ABIA: { x: 370, y: 260, zone: 'South-East' },
+            ADAMAWA: { x: 420, y: 120, zone: 'North-East' },
+            AKWA_IBOM: { x: 410, y: 300, zone: 'South-South' },
+            ANAMBRA: { x: 350, y: 240, zone: 'South-East' },
+            BAUCHI: { x: 280, y: 140, zone: 'North-East' },
+            BAYELSA: { x: 320, y: 310, zone: 'South-South' },
+            BENUE: { x: 320, y: 200, zone: 'North-Central' },
+            BORNO: { x: 350, y: 80, zone: 'North-East' },
+            CROSS_RIVER: { x: 430, y: 280, zone: 'South-South' },
+            DELTA: { x: 330, y: 280, zone: 'South-South' },
+            EBONYI: { x: 390, y: 240, zone: 'South-East' },
+            EDO: { x: 310, y: 260, zone: 'South-South' },
+            EKITI: { x: 270, y: 250, zone: 'South-West' },
+            ENUGU: { x: 380, y: 220, zone: 'South-East' },
+            GOMBE: { x: 320, y: 140, zone: 'North-East' },
+            IMO: { x: 340, y: 260, zone: 'South-East' },
+            JIGAWA: { x: 240, y: 100, zone: 'North-West' },
+            KADUNA: { x: 240, y: 160, zone: 'North-Central' },
+            KANO: { x: 220, y: 110, zone: 'North-West' },
+            KATSINA: { x: 200, y: 80, zone: 'North-West' },
+            KEBBI: { x: 160, y: 120, zone: 'North-West' },
+            KOGI: { x: 310, y: 210, zone: 'North-Central' },
+            KWARA: { x: 260, y: 220, zone: 'North-Central' },
+            LAGOS: { x: 220, y: 300, zone: 'South-West' },
+            NASARAWA: { x: 320, y: 180, zone: 'North-Central' },
+            NIGER: { x: 210, y: 170, zone: 'North-Central' },
+            OGUN: { x: 240, y: 290, zone: 'South-West' },
+            ONDO: { x: 275, y: 280, zone: 'South-West' },
+            OSUN: { x: 260, y: 260, zone: 'South-West' },
+            OYO: { x: 240, y: 250, zone: 'South-West' },
+            PLATEAU: { x: 300, y: 170, zone: 'North-Central' },
+            RIVERS: { x: 360, y: 300, zone: 'South-South' },
+            SOKOTO: { x: 140, y: 90, zone: 'North-West' },
+            TARABA: { x: 380, y: 150, zone: 'North-East' },
+            YOBE: { x: 300, y: 100, zone: 'North-East' },
+            ZAMFARA: { x: 180, y: 100, zone: 'North-West' },
+            FCT: { x: 290, y: 190, zone: 'North-Central' }
+        };
+
+        // Set colors
+        for (const key in statePositions) {
+            statePositions[key].color = zoneColors[statePositions[key].zone] || '#dee2e6';
+        }
+
+        function generateMap() {
+            const container = document.getElementById('mapContainer');
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('width', '580');
+            svg.setAttribute('height', '380');
+            svg.setAttribute('viewBox', '100 40 380 300');
+            svg.style.background = 'transparent';
+
+            // Nigeria outline (simplified)
+            const outline = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            outline.setAttribute('x', '110');
+            outline.setAttribute('y', '50');
+            outline.setAttribute('width', '360');
+            outline.setAttribute('height', '280');
+            outline.setAttribute('fill', 'none');
+            outline.setAttribute('stroke', 'none');
+            svg.appendChild(outline);
+
+            for (const [key, pos] of Object.entries(statePositions)) {
+                const state = statesData[key];
+                if (!state) continue;
+
+                const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                g.style.cursor = 'pointer';
+
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', pos.x);
+                circle.setAttribute('cy', pos.y);
+                circle.setAttribute('r', '18');
+                circle.setAttribute('fill', pos.color);
+                circle.setAttribute('stroke', '#adb5bd');
+                circle.setAttribute('stroke-width', '1.5');
+                circle.setAttribute('class', 'state-circle');
+                circle.setAttribute('data-state', key);
+                circle.style.transition = 'all 0.2s ease';
+                circle.style.filter = 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))';
+
+                // LGA count inside circle
+                const countText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                countText.setAttribute('x', pos.x);
+                countText.setAttribute('y', pos.y + 4);
+                countText.setAttribute('text-anchor', 'middle');
+                countText.setAttribute('fill', '#fff');
+                countText.setAttribute('font-size', '10');
+                countText.setAttribute('font-weight', '700');
+                countText.setAttribute('pointer-events', 'none');
+                countText.textContent = state.lgas.length;
+
+                const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                label.setAttribute('x', pos.x);
+                label.setAttribute('y', pos.y + 34);
+                label.setAttribute('text-anchor', 'middle');
+                label.setAttribute('fill', '#495057');
+                label.setAttribute('font-size', '8');
+                label.setAttribute('font-weight', '600');
+                label.setAttribute('pointer-events', 'none');
+                label.textContent = state.name;
+
+                g.addEventListener('mouseenter', () => {
+                    if (selectedState !== key) {
+                        circle.setAttribute('stroke', '#0066ff');
+                        circle.setAttribute('stroke-width', '3');
+                        circle.setAttribute('r', '21');
+                        circle.style.filter = 'drop-shadow(0 4px 8px rgba(0,102,255,0.3))';
+                    }
+                });
+                g.addEventListener('mouseleave', () => {
+                    if (selectedState !== key) {
+                        circle.setAttribute('stroke', '#adb5bd');
+                        circle.setAttribute('stroke-width', '1.5');
+                        circle.setAttribute('r', '18');
+                        circle.style.filter = 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))';
+                    }
+                });
+                g.addEventListener('click', () => selectState(key));
+
+                g.appendChild(circle);
+                g.appendChild(countText);
+                g.appendChild(label);
+                svg.appendChild(g);
+            }
+
+            container.appendChild(svg);
+
+            // Generate zone legend
+            const legend = document.getElementById('zoneLegend');
+            for (const [zone, color] of Object.entries(zoneColors)) {
+                const item = document.createElement('div');
+                item.className = 'zone-legend-item';
+                item.innerHTML = '<div class="zone-legend-dot" style="background:' + color + '"></div>' + zone;
+                legend.appendChild(item);
+            }
+        }
+
+        // ===== INITIALIZE =====
+        window.addEventListener('DOMContentLoaded', () => {
+            generateMap();
+            displayRichestLGAs();
+            computeStats();
+            fetchLiveData();
+        });
+    </script>
 </body>
 </html>
